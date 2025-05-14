@@ -24,6 +24,9 @@ public class UserEntity extends BaseEntity{
     )
     private List<RoleEntity>role = new ArrayList<>();
 
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL,fetch = FetchType.LAZY)
+    private List<WorkoutEntity> workouts = new ArrayList<>();
+
     public String getUsername() {
         return username;
     }
@@ -48,6 +51,24 @@ public class UserEntity extends BaseEntity{
 
     public UserEntity setPassword(String password) {
         this.password = password;
+        return this;
+    }
+
+    public List<RoleEntity> getRole() {
+        return role;
+    }
+
+    public UserEntity setRole(List<RoleEntity> role) {
+        this.role = role;
+        return this;
+    }
+
+    public List<WorkoutEntity> getWorkouts() {
+        return workouts;
+    }
+
+    public UserEntity setWorkouts(List<WorkoutEntity> workouts) {
+        this.workouts = workouts;
         return this;
     }
 
