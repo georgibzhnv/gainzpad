@@ -4,8 +4,6 @@ spring:
     username: root
     password: your_password
     driver-class-name: com.mysql.cj.jdbc.Driver
-    hikari:
-      maximum-pool-size: 10
   jpa:
     hibernate:
       ddl-auto: create-drop
