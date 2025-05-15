@@ -16,14 +16,12 @@ public class UserEntity extends BaseEntity{
     private String email;
     private String password;
 
-    @ManyToMany(
+    @OneToMany(
+            cascade = CascadeType.ALL,
+            orphanRemoval = true,
             fetch = FetchType.EAGER
     )
-    @JoinTable(
-            name = "users_roles",
-            joinColumns = @JoinColumn(name = "user_id"),
-            inverseJoinColumns = @JoinColumn(name = "role_id")
-    )
+    @JoinColumn(name = "user_id")
     private Set<RoleEntity> role = new HashSet<>();
 
     public String getUsername() {

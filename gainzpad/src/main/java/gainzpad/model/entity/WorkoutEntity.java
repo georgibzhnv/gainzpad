@@ -1,53 +1,39 @@
 package gainzpad.model.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
+
+import java.util.Set;
 
 @Entity
 @Table(name = "workouts")
 public class WorkoutEntity extends BaseEntity{
 
-    private String exerciseName;
-    private int sets;
-    private int reps;
-    private double weight;
+    private String workoutName;
+    @ManyToMany(
+            fetch = FetchType.EAGER
+    )
+    @JoinTable(
+            name = "workouts_exercises",
+            joinColumns = @JoinColumn(name = "workout_id"),
+            inverseJoinColumns = @JoinColumn(name = "exercise_id")
+    )
+    private Set<ExerciseEntity> exercises;
 
-    public String getExerciseName() {
-        return exerciseName;
+    public String getWorkoutName() {
+        return workoutName;
     }
 
-    public WorkoutEntity setExerciseName(String exerciseName) {
-        this.exerciseName = exerciseName;
+    public WorkoutEntity setWorkoutName(String workoutName) {
+        this.workoutName = workoutName;
         return this;
     }
 
-    public int getSets() {
-        return sets;
+    public Set<ExerciseEntity> getExercises() {
+        return exercises;
     }
 
-    public WorkoutEntity setSets(int sets) {
-        this.sets = sets;
+    public WorkoutEntity setExercises(Set<ExerciseEntity> exercises) {
+        this.exercises = exercises;
         return this;
     }
-
-    public int getReps() {
-        return reps;
-    }
-
-    public WorkoutEntity setReps(int reps) {
-        this.reps = reps;
-        return this;
-    }
-
-    public double getWeight() {
-        return weight;
-    }
-
-    public WorkoutEntity setWeight(double weight) {
-        this.weight = weight;
-        return this;
-    }
-
 }

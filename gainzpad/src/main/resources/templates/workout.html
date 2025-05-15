@@ -1,22 +1,21 @@
 <!DOCTYPE html>
-<html lang="bg">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Тренировка</title>
-
-    <!-- Използване на WebJars за Bootstrap CSS -->
-    <link rel="stylesheet" href="@{webjars/bootstrap/5.3.5/css/bootstrap.min.css}">
-
-    <!-- Връзка към нашите собствени стилове -->
-    <link rel="stylesheet" href="@{static/css/styles.css}">
-</head>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/head :: head"></head>
 <body>
-<div class="container mt-4">
-    <div class="workout-header">
-        <h3>Дъмбел Ред (Dumbbell Row)</h3>
-        <p>Добави бележки тук...</p>
 
+<div th:replace="fragments/navbar :: navbar('workouts')">Navbar here</div>
+
+<div class="container mt-4">
+    <div th:object="${workout}"
+         th:each="workout : ${workouts}"
+         class="my-3 border-secondary card">
+        <div class="card-header">
+            <div class="d-flex justify-content-between">
+                <div class="col-10">
+                    <span th:text="*{exerciseName}">Exercise Name</span>
+                </div>
+            </div>
+        </div>
         <!-- Таймер: Потребителят може да настрои време -->
         <div>
             <h4>Настрой време за почивка</h4>
@@ -133,5 +132,6 @@
         }, 1000); // Обновяваме на всеки 1 секунда
     }
 </script>
+<div th:replace="fragments/bootstrap-js :: bootstrap-js"></div>
 </body>
 </html>
