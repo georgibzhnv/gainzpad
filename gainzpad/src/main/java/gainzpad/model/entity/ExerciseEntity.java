@@ -1,23 +1,23 @@
 package gainzpad.model.entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
+
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "exercises")
 public class ExerciseEntity extends BaseEntity{
 
-    @NotBlank
     @Column(unique = true)
     private String name;
-    @NotBlank
     private int sets;
-    @NotBlank
     private int reps;
-    @NotBlank
     private double weight;
+    @OneToMany(mappedBy = "exercise", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<WorkoutExercise> workoutExercises = new HashSet<>();
+
 
     public String getName() {
         return name;
@@ -52,6 +52,15 @@ public class ExerciseEntity extends BaseEntity{
 
     public ExerciseEntity setWeight(double weight) {
         this.weight = weight;
+        return this;
+    }
+
+    public Set<WorkoutExercise> getWorkoutExercises() {
+        return workoutExercises;
+    }
+
+    public ExerciseEntity setWorkoutExercises(Set<WorkoutExercise> workoutExercises) {
+        this.workoutExercises = workoutExercises;
         return this;
     }
 }

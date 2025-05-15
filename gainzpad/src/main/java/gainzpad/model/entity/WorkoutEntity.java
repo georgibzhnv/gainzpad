@@ -2,6 +2,7 @@ package gainzpad.model.entity;
 
 import jakarta.persistence.*;
 
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
@@ -9,15 +10,10 @@ import java.util.Set;
 public class WorkoutEntity extends BaseEntity{
 
     private String workoutName;
-    @ManyToMany(
-            fetch = FetchType.EAGER
-    )
-    @JoinTable(
-            name = "workouts_exercises",
-            joinColumns = @JoinColumn(name = "workout_id"),
-            inverseJoinColumns = @JoinColumn(name = "exercise_id")
-    )
-    private Set<ExerciseEntity> exercises;
+
+    @OneToMany(mappedBy = "workout", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<WorkoutExercise> workoutExercises = new HashSet<>();
+
 
     public String getWorkoutName() {
         return workoutName;
@@ -28,12 +24,12 @@ public class WorkoutEntity extends BaseEntity{
         return this;
     }
 
-    public Set<ExerciseEntity> getExercises() {
-        return exercises;
+    public Set<WorkoutExercise> getWorkoutExercises() {
+        return workoutExercises;
     }
 
-    public WorkoutEntity setExercises(Set<ExerciseEntity> exercises) {
-        this.exercises = exercises;
+    public WorkoutEntity setWorkoutExercises(Set<WorkoutExercise> workoutExercises) {
+        this.workoutExercises = workoutExercises;
         return this;
     }
 }

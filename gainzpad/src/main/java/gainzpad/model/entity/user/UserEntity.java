@@ -1,15 +1,14 @@
-package gainzpad.model.entity;
+package gainzpad.model.entity.user;
 
+import gainzpad.model.entity.BaseEntity;
 import jakarta.persistence.*;
 
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 @Entity
 @Table(name = "users")
-public class UserEntity extends BaseEntity{
+public class UserEntity extends BaseEntity {
 
     private String username;
     @Column(unique = true)

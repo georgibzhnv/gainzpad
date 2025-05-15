@@ -1,6 +1,6 @@
 //package gainzpad.model.user;
 //
-//import gainzpad.model.entity.UserEntity;
+//import gainzpad.model.entity.user.UserEntity;
 //import gainzpad.repository.UserRepository;
 //import org.slf4j.LoggerFactory;
 //import org.slf4j.Logger;

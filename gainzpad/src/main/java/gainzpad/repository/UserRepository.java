@@ -1,6 +1,6 @@
 package gainzpad.repository;
 
-import gainzpad.model.entity.UserEntity;
+import gainzpad.model.entity.user.UserEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

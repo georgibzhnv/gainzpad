@@ -17,7 +17,9 @@ public class WorkoutController {
     }
 
     @GetMapping
-    public String workout(Model model){
-        return null;
+    public String getAllWorkouts(Model model){
+
+        model.addAttribute("workouts",workoutService.getAll());
+        return "workouts/list";
     }
 }

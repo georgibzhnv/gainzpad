@@ -1,9 +1,9 @@
 package gainzpad.repository;
 
-import gainzpad.model.entity.user.RoleEntity;
+import gainzpad.model.entity.ExerciseEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface RoleRepository extends JpaRepository<RoleEntity,Long> {
+public interface ExerciseRepository extends JpaRepository<ExerciseEntity,Long> {
 }

@@ -1,15 +1,5 @@
 package gainzpad;
 
-import gainzpad.model.entity.RoleEntity;
-import gainzpad.model.entity.UserEntity;
-import gainzpad.model.enums.UserRoleEnum;
-import gainzpad.repository.RoleRepository;
-import gainzpad.repository.UserRepository;
-import org.springframework.boot.CommandLineRunner;
-import org.springframework.stereotype.Component;
-
-import java.util.List;
-
 //@Component
 //public class DBInit implements CommandLineRunner {
 //

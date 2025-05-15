@@ -1,12 +1,13 @@
-package gainzpad.model.entity;
+package gainzpad.model.entity.user;
 
+import gainzpad.model.entity.BaseEntity;
 import gainzpad.model.enums.UserRoleEnum;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 
 @Entity
 @Table(name = "roles")
-public class RoleEntity extends BaseEntity{
+public class RoleEntity extends BaseEntity {
 
     @NotNull
     @Column(unique = true)
