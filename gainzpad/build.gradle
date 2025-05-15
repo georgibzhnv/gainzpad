@@ -18,6 +18,7 @@ repositories {
 }
 
 dependencies {
+    implementation("org.springframework.boot:spring-boot-starter-validation:3.4.5")
     implementation 'org.springdoc:springdoc-openapi-ui:1.6.0'
     implementation("io.swagger.core.v3:swagger-core:2.2.30")
     implementation("org.mapstruct:mapstruct:1.6.3")
@@ -30,6 +31,14 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.thymeleaf.extras:thymeleaf-extras-springsecurity6'
+
+    // WebJars dependencies with specific versions
+    compileOnly "org.webjars:webjars-locator:0.52"       // Example version
+    compileOnly "org.webjars:jquery:3.7.1"               // Example version
+    compileOnly "org.webjars:popper.js:2.11.7"            // Example version
+    compileOnly "org.webjars:bootstrap:5.3.5"             // Example version
+
+
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'org.springframework.amqp:spring-rabbit-test'
     testImplementation 'org.springframework.security:spring-security-test'

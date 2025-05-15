@@ -14,10 +14,6 @@ public class WorkoutEntity extends BaseEntity{
     private int reps;
     private double weight;
 
-    @ManyToOne
-    @JoinColumn(name = "user_id")
-    private UserEntity user;
-
     public String getExerciseName() {
         return exerciseName;
     }
@@ -54,12 +50,4 @@ public class WorkoutEntity extends BaseEntity{
         return this;
     }
 
-    public UserEntity getUser() {
-        return user;
-    }
-
-    public WorkoutEntity setUser(UserEntity user) {
-        this.user = user;
-        return this;
-    }
 }

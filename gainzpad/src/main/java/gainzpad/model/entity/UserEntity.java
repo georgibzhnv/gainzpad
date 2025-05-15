@@ -3,7 +3,9 @@ package gainzpad.model.entity;
 import jakarta.persistence.*;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "users")
@@ -22,10 +24,7 @@ public class UserEntity extends BaseEntity{
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id")
     )
-    private List<RoleEntity>role = new ArrayList<>();
-
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL,fetch = FetchType.LAZY)
-    private List<WorkoutEntity> workouts = new ArrayList<>();
+    private Set<RoleEntity> role = new HashSet<>();
 
     public String getUsername() {
         return username;
@@ -54,21 +53,12 @@ public class UserEntity extends BaseEntity{
         return this;
     }
 
-    public List<RoleEntity> getRole() {
+    public Set<RoleEntity> getRole() {
         return role;
     }
 
-    public UserEntity setRole(List<RoleEntity> role) {
+    public UserEntity setRole(Set<RoleEntity> role) {
         this.role = role;
-        return this;
-    }
-
-    public List<WorkoutEntity> getWorkouts() {
-        return workouts;
-    }
-
-    public UserEntity setWorkouts(List<WorkoutEntity> workouts) {
-        this.workouts = workouts;
         return this;
     }
 
