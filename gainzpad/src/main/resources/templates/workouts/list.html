@@ -1,13 +1,10 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" lang="bg">
-<head th:replace="fragments/head :: head">
-<!--    <meta charset="UTF-8" />-->
-<!--    <title>Тренировки</title>-->
-<!--    <link th:href="@{/webjars/bootstrap/5.3.5/css/bootstrap.min.css}" rel="stylesheet"/>-->
+<head th:replace="~{fragments/head :: head}"></head>
 </head>
 <body>
 
-<div th:replace="fragments/navbar :: navbar(activeTab)"></div>
+<div th:replace="~{fragments/navbar :: navbar(activeTab)}"></div>
 
 <div class="container mt-4">
     <h1>Тренировки</h1>
@@ -29,6 +26,6 @@
         </tbody>
     </table>
 </div>
-<div th:replace="fragments/bootstrap-js::bootstrap-js"></div>
+<div th:replace="~{fragments/bootstrap-js::bootstrap-js}"></div>
 </body>
 </html>

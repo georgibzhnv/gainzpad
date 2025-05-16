@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head th:replace="fragments/head :: head">
+<head th:replace="~{fragments/head :: head}"></head>
 </head>
 <body>
 <div th:replace="fragments/navbar :: navbar(activeTab)"></div>
@@ -14,6 +14,6 @@
     </ul>
 </div>
 
-<div th:replace="fragments/bootstrap-js::bootstrap-js"></div>
+<div th:replace="~{fragments/bootstrap-js::bootstrap-js}"></div>
 </body>
 </html>
