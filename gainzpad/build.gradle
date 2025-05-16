@@ -22,6 +22,7 @@ dependencies {
     implementation 'org.springdoc:springdoc-openapi-ui:1.6.0'
     implementation("io.swagger.core.v3:swagger-core:2.2.30")
     implementation("org.mapstruct:mapstruct:1.6.3")
+    annotationProcessor 'org.mapstruct:mapstruct-processor:1.6.3'
     implementation("com.mysql:mysql-connector-j:9.3.0")
     implementation 'org.springframework.boot:spring-boot-starter-actuator'
 //    implementation 'org.springframework.boot:spring-boot-starter-amqp'

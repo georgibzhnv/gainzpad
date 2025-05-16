@@ -32,4 +32,14 @@ public class WorkoutEntity extends BaseEntity{
         this.workoutExercises = workoutExercises;
         return this;
     }
+
+    public void addExercise(WorkoutExercise workoutExercise){
+        workoutExercises.add(workoutExercise);
+        workoutExercise.setWorkout(this);
+    }
+
+    public void removeExercise(WorkoutExercise workoutExercise){
+        workoutExercises.remove(workoutExercise);
+        workoutExercise.setWorkout(null);
+    }
 }

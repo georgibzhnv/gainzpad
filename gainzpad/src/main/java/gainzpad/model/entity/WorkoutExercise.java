@@ -1,75 +1,71 @@
 package gainzpad.model.entity;
-import gainzpad.model.entity.key.WorkoutExerciseKey;
+
 import jakarta.persistence.*;
 
 @Entity
 @Table(name = "workout_exercises")
 public class WorkoutExercise {
 
-    @EmbeddedId
-    private WorkoutExerciseKey id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @MapsId("workoutId")
+    @ManyToOne
+    @JoinColumn(name = "workout_id", referencedColumnName = "id")
     private WorkoutEntity workout;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @MapsId("exerciseId")
+    @ManyToOne
+    @JoinColumn(name = "exercise_id", referencedColumnName = "id")
     private ExerciseEntity exercise;
 
     private int sets;
     private int reps;
     private double weight;
 
-    public WorkoutExercise() {}
-
-    // getters и setters
-
-    public WorkoutExerciseKey getId() {
-        return id;
-    }
-
-    public void setId(WorkoutExerciseKey id) {
-        this.id = id;
-    }
+    // Гетъри и Сетъри
 
     public WorkoutEntity getWorkout() {
         return workout;
     }
 
-    public void setWorkout(WorkoutEntity workout) {
+    public WorkoutExercise setWorkout(WorkoutEntity workout) {
         this.workout = workout;
+        return this;
     }
 
     public ExerciseEntity getExercise() {
         return exercise;
     }
 
-    public void setExercise(ExerciseEntity exercise) {
+    public WorkoutExercise setExercise(ExerciseEntity exercise) {
         this.exercise = exercise;
+        return this;
     }
 
     public int getSets() {
         return sets;
     }
 
-    public void setSets(int sets) {
+    public WorkoutExercise setSets(int sets) {
         this.sets = sets;
+        return this;
     }
 
     public int getReps() {
         return reps;
     }
 
-    public void setReps(int reps) {
+    public WorkoutExercise setReps(int reps) {
         this.reps = reps;
+        return this;
     }
 
     public double getWeight() {
         return weight;
     }
 
-    public void setWeight(double weight) {
+    public WorkoutExercise setWeight(double weight) {
         this.weight = weight;
+        return this;
     }
 }

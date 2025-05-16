@@ -12,44 +12,40 @@ public class WorkoutExerciseDTO {
         return workoutId;
     }
 
-    public WorkoutExerciseDTO setWorkoutId(Long workoutId) {
+    public void setWorkoutId(Long workoutId) {
         this.workoutId = workoutId;
-        return this;
     }
 
     public Long getExerciseId() {
         return exerciseId;
     }
 
-    public WorkoutExerciseDTO setExerciseId(Long exerciseId) {
+    public void setExerciseId(Long exerciseId) {
         this.exerciseId = exerciseId;
-        return this;
     }
 
     public int getSets() {
         return sets;
     }
 
-    public WorkoutExerciseDTO setSets(int sets) {
+    public void setSets(int sets) {
         this.sets = sets;
-        return this;
     }
 
     public int getReps() {
         return reps;
     }
 
-    public WorkoutExerciseDTO setReps(int reps) {
+    public void setReps(int reps) {
         this.reps = reps;
-        return this;
     }
 
     public double getWeight() {
         return weight;
     }
 
-    public WorkoutExerciseDTO setWeight(double weight) {
+    public void setWeight(double weight) {
         this.weight = weight;
-        return this;
     }
 }
+
