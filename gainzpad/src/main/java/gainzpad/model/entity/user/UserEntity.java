@@ -11,7 +11,7 @@ import java.util.Set;
 public class UserEntity extends BaseEntity {
 
     private String username;
-    @Column(unique = true)
+    @Column(unique = true,nullable = false)
     private String email;
     private String password;
 
@@ -21,7 +21,7 @@ public class UserEntity extends BaseEntity {
             fetch = FetchType.EAGER
     )
     @JoinColumn(name = "user_id")
-    private Set<RoleEntity> role = new HashSet<>();
+    private Set<RoleEntity> roles = new HashSet<>();
 
     public String getUsername() {
         return username;
@@ -50,12 +50,12 @@ public class UserEntity extends BaseEntity {
         return this;
     }
 
-    public Set<RoleEntity> getRole() {
-        return role;
+    public Set<RoleEntity> getRoles() {
+        return roles;
     }
 
-    public UserEntity setRole(Set<RoleEntity> role) {
-        this.role = role;
+    public UserEntity setRoles(Set<RoleEntity> roles) {
+        this.roles = roles;
         return this;
     }
 
