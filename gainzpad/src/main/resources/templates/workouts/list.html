@@ -4,7 +4,7 @@
 </head>
 <body>
 
-<div th:replace="~{fragments/navbar :: navbar(activeTab)}"></div>
+<div th:replace="~{fragments/navbar :: navbar('workouts')}"></div>
 
 <div class="container mt-4">
     <h1>Тренировки</h1>
@@ -21,6 +21,7 @@
             <td th:text="${workout.workoutName}">Workout Name</td>
             <td>
                 <a th:href="@{|/workouts/${workout.id}|}" class="btn btn-info btn-sm">Преглед</a>
+                <a th:href="@{|/workouts/${workout.id}|}" class="btn btn-info btn-sm">Изтрии</a>
             </td>
         </tr>
         </tbody>

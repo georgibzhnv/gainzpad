@@ -8,10 +8,10 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
-import static org.springframework.security.config.Customizer.withDefaults;
 
 @Configuration
 @EnableWebSecurity
@@ -48,9 +48,11 @@ public class SecurityConfig {
                 .formLogin(form->
                         form
                                 .loginPage("/login")
+                                .usernameParameter("email")
                                 .loginProcessingUrl("/login/authenticate")
-                                .failureForwardUrl("/login?param.error=bad_credentials")
-                                .successForwardUrl("/"))
+                                .failureUrl("/login?error=true")
+                        .defaultSuccessUrl("/home",true)
+                )
                 .logout(logout->
                         logout
                                 .logoutUrl("/logout")

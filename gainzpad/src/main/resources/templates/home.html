@@ -3,8 +3,10 @@
 <head th:replace="~{fragments/head :: head}"></head>
 </head>
 <body>
-<div th:replace="fragments/navbar :: navbar(activeTab)"></div>
-<h1 class="margin-auto">Welcome to GainzPad!</h1>
+<div th:replace="~{fragments/navbar :: navbar(activeTab)}"></div>
+<h1 class="margin-auto">
+    Welcome to GainzPad, <span th:text="${#authentication.getName()}" th:remove="tag">user</span>!
+</h1>
 
 <div>
     <ul>
