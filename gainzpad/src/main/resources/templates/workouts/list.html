@@ -1,32 +1,55 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" lang="bg">
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
 <head th:replace="~{fragments/head :: head}"></head>
 </head>
 <body>
 
 <div th:replace="~{fragments/navbar :: navbar('workouts')}"></div>
+<div th:replace="fragments/delete-confirm :: deleteModal"></div>
 
 <div class="container mt-4">
-    <h1>Тренировки</h1>
-    <a th:href="@{/workouts/new}" class="btn btn-primary mb-3">Добави тренировка</a>
+    <h1>Workouts</h1>
+    <a th:href="@{/workouts/new}" class="btn btn-primary mb-3">Add workout</a>
     <table class="table table-striped">
         <thead>
         <tr>
-            <th>Име</th>
-            <th>Действия</th>
+            <th>Name</th>
+            <th>Actions</th>
         </tr>
         </thead>
         <tbody>
         <tr th:each="workout : ${workouts}">
             <td th:text="${workout.workoutName}">Workout Name</td>
             <td>
-                <a th:href="@{|/workouts/${workout.id}|}" class="btn btn-info btn-sm">Преглед</a>
-                <a th:href="@{|/workouts/${workout.id}|}" class="btn btn-info btn-sm">Изтрии</a>
+                <a th:href="@{|/workouts/${workout.id}|}" class="btn btn-info btn-sm">View</a>
+                <a th:href="@{|/workouts/${workout.id}|}"
+                   class="btn btn-danger btn-sm"
+                   data-bs-toggle="modal"
+                   data-bs-target="#confirmDeleteModal"
+                   th:attr="data-workout-id=${workout.id}, data-workout-name=${workout.workoutName}">
+                    Delete
+                </a>
             </td>
         </tr>
         </tbody>
     </table>
 </div>
+
+<script>
+    var confirmDeleteModal = document.getElementById('confirmDeleteModal');
+    confirmDeleteModal.addEventListener('show.bs.modal', function (event) {
+        var button = event.relatedTarget;
+        var workoutId = button.getAttribute('data-workout-id');
+        var workoutName = button.getAttribute('data-workout-name');
+
+        var modalTitle = confirmDeleteModal.querySelector('#modalWorkoutName');
+        var confirmBtn = confirmDeleteModal.querySelector('#confirmDeleteBtn');
+
+        modalTitle.textContent = workoutName;
+        confirmBtn.href = '/workouts/delete/' + workoutId;
+    });
+</script>
+
 <div th:replace="~{fragments/bootstrap-js::bootstrap-js}"></div>
 </body>
 </html>

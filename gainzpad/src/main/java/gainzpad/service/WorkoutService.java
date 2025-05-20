@@ -8,4 +8,6 @@ import java.util.List;
 @Service
 public interface WorkoutService {
     List<WorkoutDTO>getAll();
+
+    void create(WorkoutDTO workoutDTO);
 }

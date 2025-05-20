@@ -3,15 +3,18 @@ package gainzpad.model.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotEmpty;
 
 import java.util.Set;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class WorkoutDTO {
-
     private Long id;
+
+    @NotBlank(message = "Името на тренировката е задължително")
     private String workoutName;
-    @NotBlank
+
+    @NotEmpty(message = "Трябва да има поне едно упражнение")
     private Set<WorkoutExerciseDTO> exercises;
 
     public Long getId() {

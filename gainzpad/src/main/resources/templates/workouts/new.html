@@ -1,22 +1,112 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" lang="bg">
 <head th:replace="~{fragments/head :: head}"></head>
-</head>
 <body>
 <div class="container mt-4">
     <h2>Добави нова тренировка</h2>
 
     <form th:action="@{/workouts/new}" th:object="${workout}" method="post">
+
         <div class="mb-3">
             <label for="workoutName" class="form-label">Име на тренировката</label>
             <input type="text" th:field="*{workoutName}" class="form-control" id="workoutName" placeholder="Пример: Chest Day" required />
         </div>
 
+        <h4>Упражнения</h4>
+        <div id="exercises-container">
+
+            <!-- Начално упражнение - Thymeleaf клонира -->
+            <div class="exercise-item mb-3 border p-3 rounded" th:each="exercise, stat : *{exercises}" th:data-index="${stat.index}">
+                <div class="mb-2">
+                    <label class="form-label">Избери упражнение</label>
+                    <select th:field="*{exercises[__${stat.index}__].exerciseId}" class="form-select">
+                        <option value="" disabled selected>-- Избери упражнение --</option>
+                        <option th:each="ex : ${allExercises}" th:value="${ex.id}" th:text="${ex.name}"></option>
+                    </select>
+                </div>
+
+                <div class="mb-2">
+                    <label class="form-label">Или добави ново упражнение</label>
+                    <input type="text" th:field="*{exercises[__${stat.index}__].newExerciseName}" placeholder="Име на ново упражнение" class="form-control" />
+                </div>
+
+                <div class="row g-2">
+                    <div class="col">
+                        <label class="form-label">Серии</label>
+                        <input type="number" min="1" th:field="*{exercises[__${stat.index}__].sets}" class="form-control" required />
+                    </div>
+                    <div class="col">
+                        <label class="form-label">Повторения</label>
+                        <input type="number" min="1" th:field="*{exercises[__${stat.index}__].reps}" class="form-control" required />
+                    </div>
+                    <div class="col">
+                        <label class="form-label">Тежест (кг)</label>
+                        <input type="number" min="0" step="0.1" th:field="*{exercises[__${stat.index}__].weight}" class="form-control" />
+                    </div>
+                </div>
+
+                <button type="button" class="btn btn-danger btn-sm mt-2 remove-exercise-btn">Премахни упражнение</button>
+            </div>
+
+        </div>
+
+        <button type="button" id="add-exercise-btn" class="btn btn-secondary mb-3">Добави упражнение</button>
+
+        <br/>
         <button type="submit" class="btn btn-primary">Запази</button>
         <a th:href="@{/workouts}" class="btn btn-secondary">Отказ</a>
     </form>
 </div>
 
 <div th:replace="~{fragments/bootstrap-js::bootstrap-js}"></div>
+
+<script>
+    const exercisesContainer = document.getElementById('exercises-container');
+    const addExerciseBtn = document.getElementById('add-exercise-btn');
+
+    // Обновява индексите в имената на input-ите и select-ите
+    function updateIndices() {
+        const items = exercisesContainer.querySelectorAll('.exercise-item');
+        items.forEach((item, index) => {
+            item.setAttribute('data-index', index);
+            item.querySelectorAll('input, select').forEach(input => {
+                const name = input.getAttribute('name');
+                if (name) {
+                    const newName = name.replace(/\[\d+\]/, '[' + index + ']');
+                    input.setAttribute('name', newName);
+                }
+            });
+        });
+    }
+
+    // Добавяне на ново упражнение (клониране на първото)
+    addExerciseBtn.addEventListener('click', () => {
+        const firstExercise = exercisesContainer.querySelector('.exercise-item');
+        const newExercise = firstExercise.cloneNode(true);
+
+        // Изчистване на стойностите
+        newExercise.querySelectorAll('input').forEach(input => {
+            input.value = '';
+        });
+        newExercise.querySelector('select').selectedIndex = 0; // нулиране на select
+
+        exercisesContainer.appendChild(newExercise);
+        updateIndices();
+    });
+
+    // Премахване на упражнение
+    exercisesContainer.addEventListener('click', (e) => {
+        if (e.target.classList.contains('remove-exercise-btn')) {
+            const items = exercisesContainer.querySelectorAll('.exercise-item');
+            if (items.length > 1) {
+                e.target.closest('.exercise-item').remove();
+                updateIndices();
+            } else {
+                alert("Трябва да има поне едно упражнение.");
+            }
+        }
+    });
+</script>
+
 </body>
 </html>
