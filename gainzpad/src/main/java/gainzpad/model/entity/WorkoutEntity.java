@@ -1,5 +1,6 @@
 package gainzpad.model.entity;
 
+import gainzpad.model.entity.user.UserEntity;
 import jakarta.persistence.*;
 
 import java.util.HashSet;
@@ -11,9 +12,22 @@ public class WorkoutEntity extends BaseEntity{
 
     private String workoutName;
 
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", nullable = false)
+    private UserEntity user;
+
     @OneToMany(mappedBy = "workout", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<WorkoutExercise> workoutExercises = new HashSet<>();
 
+
+    public UserEntity getUser() {
+        return user;
+    }
+
+    public WorkoutEntity setUser(UserEntity user) {
+        this.user = user;
+        return this;
+    }
 
     public String getWorkoutName() {
         return workoutName;

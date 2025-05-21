@@ -41,9 +41,11 @@ public class WorkoutController {
 
     @PostMapping("/new")
     public String createWorkout(@Valid @ModelAttribute("workout") WorkoutDTO workoutDTO,
-                                BindingResult bindingResult) {
+                                BindingResult bindingResult,
+                                Model model) {
 
         if (bindingResult.hasErrors()) {
+            model.addAttribute("allExercises", exerciseService.getAllExercises());
             return "workouts/new";
         }
         workoutService.create(workoutDTO);

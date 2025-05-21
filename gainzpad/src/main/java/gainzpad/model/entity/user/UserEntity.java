@@ -1,6 +1,7 @@
 package gainzpad.model.entity.user;
 
 import gainzpad.model.entity.BaseEntity;
+import gainzpad.model.entity.WorkoutEntity;
 import jakarta.persistence.*;
 
 import java.util.HashSet;
@@ -22,6 +23,22 @@ public class UserEntity extends BaseEntity {
     )
     @JoinColumn(name = "user_id")
     private Set<RoleEntity> roles = new HashSet<>();
+
+    @OneToMany(
+            mappedBy = "user",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true
+    )
+    private Set<WorkoutEntity> workouts = new HashSet<>();
+
+    public Set<WorkoutEntity> getWorkouts() {
+        return workouts;
+    }
+
+    public UserEntity setWorkouts(Set<WorkoutEntity> workouts) {
+        this.workouts = workouts;
+        return this;
+    }
 
     public String getUsername() {
         return username;
@@ -64,7 +81,6 @@ public class UserEntity extends BaseEntity {
         final StringBuilder sb = new StringBuilder("UserEntity{");
         sb.append("username='").append(username).append('\'');
         sb.append(", email='").append(email).append('\'');
-        sb.append(", password='").append(password).append('\'');
         sb.append('}');
         return sb.toString();
     }
