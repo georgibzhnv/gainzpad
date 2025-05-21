@@ -1,6 +1,7 @@
 package gainzpad.service.impl;
 
 import gainzpad.model.dto.WorkoutDTO;
+import gainzpad.model.dto.WorkoutExerciseDTO;
 import gainzpad.model.entity.ExerciseEntity;
 import gainzpad.model.entity.WorkoutEntity;
 import gainzpad.model.entity.WorkoutExercise;
@@ -46,24 +47,35 @@ public class WorkoutServiceImpl implements WorkoutService {
 
     @Override
     public void create(WorkoutDTO workoutDTO) {
-        String username = SecurityContextHolder
-                .getContext()
-                .getAuthentication()
-                .getName();
+        // 1) Намираме текущия потребител
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+        UserEntity user = userRepository.findOneByEmail(username)
+                .orElseThrow(() -> new UsernameNotFoundException(username));
 
-        // 2) Лоудваме UserEntity
-        UserEntity currentUser = userRepository
-                .findOneByEmail(username)
-                .orElseThrow(() ->
-                        new UsernameNotFoundException("User not found: " + username));
+        // 2) Създаваме WorkoutEntity
+        WorkoutEntity workout = new WorkoutEntity()
+                .setWorkoutName(workoutDTO.getWorkoutName())
+                .setUser(user);
 
-        // 3) Мапваме DTO → Entity
-        WorkoutEntity workout = WorkoutMapper.INSTANCE.mapWorkoutDtoToEntity(workoutDTO);
+        // 3) За всяко упражнение в DTO-то – създаваме WorkoutExercise и го вкарваме в WorkoutEntity
+        for (WorkoutExerciseDTO exDto : workoutDTO.getExercises()) {
+            // Зареждаме ExerciseEntity (трябва да е налице по ID)
+            ExerciseEntity exercise = exerciseRepository.findById(exDto.getExerciseId())
+                    .orElseThrow(() -> new IllegalArgumentException("Няма упражнение с ID=" + exDto.getExerciseId()));
 
-        // 4) Асoциираме собственик
-        workout.setUser(currentUser);
+            // Създаваме моста WorkoutExercise
+            WorkoutExercise we = new WorkoutExercise()
+                    .setWorkout(workout)      // важно за двупосочната връзка
+                    .setExercise(exercise)
+                    .setSets(exDto.getSets())
+                    .setReps(exDto.getReps())
+                    .setWeight(exDto.getWeight());
 
-        // 5) Запазваме — Cascade.ALL ще запази и упражненията
+            // Добавяме към WorkoutEntity
+            workout.getWorkoutExercises().add(we);
+        }
+
+        // 4) Записваме – Hibernate ще вкара редове и в workouts, и в workout_exercises
         workoutRepository.save(workout);
     }
 }
