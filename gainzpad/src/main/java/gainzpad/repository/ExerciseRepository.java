@@ -9,4 +9,6 @@ import java.util.Optional;
 @Repository
 public interface ExerciseRepository extends JpaRepository<ExerciseEntity,Long> {
     Optional<ExerciseEntity> findByNameIgnoreCase(String name);
+    Optional<ExerciseEntity> findByName(String name);
+
 }

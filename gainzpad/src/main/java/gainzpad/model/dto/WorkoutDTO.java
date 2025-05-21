@@ -5,6 +5,9 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
 
+import java.util.ArrayList;
+import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Set;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
@@ -15,7 +18,7 @@ public class WorkoutDTO {
     private String workoutName;
 
     @NotEmpty(message = "Трябва да има поне едно упражнение")
-    private Set<WorkoutExerciseDTO> exercises;
+    private List<WorkoutExerciseDTO> exercises = new ArrayList<>();
 
     public Long getId() {
         return id;
@@ -35,11 +38,11 @@ public class WorkoutDTO {
         return this;
     }
 
-    public Set<WorkoutExerciseDTO> getExercises() {
+    public List<WorkoutExerciseDTO> getExercises() {
         return exercises;
     }
 
-    public WorkoutDTO setExercises(Set<WorkoutExerciseDTO> exercises) {
+    public WorkoutDTO setExercises(List<WorkoutExerciseDTO> exercises) {
         this.exercises = exercises;
         return this;
     }

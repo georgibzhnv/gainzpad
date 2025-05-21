@@ -4,12 +4,16 @@ import gainzpad.model.dto.WorkoutDTO;
 import gainzpad.model.entity.ExerciseEntity;
 import gainzpad.model.entity.WorkoutEntity;
 import gainzpad.model.entity.WorkoutExercise;
+import gainzpad.model.entity.user.UserEntity;
 import gainzpad.model.mapper.WorkoutMapper;
 import gainzpad.repository.ExerciseRepository;
+import gainzpad.repository.UserRepository;
 import gainzpad.repository.WorkoutExerciseRepository;
 import gainzpad.repository.WorkoutRepository;
 import gainzpad.service.WorkoutService;
 import jakarta.transaction.Transactional;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -23,11 +27,13 @@ public class WorkoutServiceImpl implements WorkoutService {
     private final WorkoutRepository workoutRepository;
     private final ExerciseRepository exerciseRepository;
     private final WorkoutExerciseRepository workoutExerciseRepository;
+    private final UserRepository userRepository;
 
-    public WorkoutServiceImpl(WorkoutRepository workoutRepository, ExerciseRepository exerciseRepository, WorkoutExerciseRepository workoutExerciseRepository) {
+    public WorkoutServiceImpl(WorkoutRepository workoutRepository, ExerciseRepository exerciseRepository, WorkoutExerciseRepository workoutExerciseRepository, UserRepository userRepository) {
         this.workoutRepository = workoutRepository;
         this.exerciseRepository = exerciseRepository;
         this.workoutExerciseRepository = workoutExerciseRepository;
+        this.userRepository = userRepository;
     }
 
     @Override
@@ -40,42 +46,24 @@ public class WorkoutServiceImpl implements WorkoutService {
 
     @Override
     public void create(WorkoutDTO workoutDTO) {
-        WorkoutEntity workoutEntity = WorkoutMapper.INSTANCE.mapWorkoutDtoToEntity(workoutDTO);
+        String username = SecurityContextHolder
+                .getContext()
+                .getAuthentication()
+                .getName();
 
+        // 2) Лоудваме UserEntity
+        UserEntity currentUser = userRepository
+                .findOneByEmail(username)
+                .orElseThrow(() ->
+                        new UsernameNotFoundException("User not found: " + username));
 
-        workoutDTO.getExercises().forEach(weDto -> {
-            ExerciseEntity exerciseEntity;
+        // 3) Мапваме DTO → Entity
+        WorkoutEntity workout = WorkoutMapper.INSTANCE.mapWorkoutDtoToEntity(workoutDTO);
 
+        // 4) Асoциираме собственик
+        workout.setUser(currentUser);
 
-            if (weDto.getNewExerciseName() != null && !weDto.getNewExerciseName().isBlank()) {
-
-                Optional<ExerciseEntity> existing = exerciseRepository.findByNameIgnoreCase(weDto.getNewExerciseName().trim());
-
-                if (existing.isPresent()) {
-                    exerciseEntity = existing.get();
-                } else {
-                    // Създаване на ново упражнение
-                    exerciseEntity = new ExerciseEntity();
-                    exerciseEntity.setName(weDto.getNewExerciseName().trim());
-                    exerciseEntity = exerciseRepository.save(exerciseEntity);
-                }
-            } else if (weDto.getExerciseId() != null) {
-                exerciseEntity = exerciseRepository.findById(weDto.getExerciseId())
-                        .orElseThrow(() -> new RuntimeException("Exercise not found: " + weDto.getExerciseId()));
-            } else {
-                throw new RuntimeException("Exercise information missing");
-            }
-
-            WorkoutExercise workoutExercise = new WorkoutExercise();
-            workoutExercise.setExercise(exerciseEntity);
-            workoutExercise.setSets(weDto.getSets());
-            workoutExercise.setReps(weDto.getReps());
-            workoutExercise.setWeight(weDto.getWeight());
-            workoutExercise.setWorkout(workoutEntity);
-
-            workoutEntity.addExercise(workoutExercise);
-        });
-
-        workoutRepository.save(workoutEntity);
+        // 5) Запазваме — Cascade.ALL ще запази и упражненията
+        workoutRepository.save(workout);
     }
 }

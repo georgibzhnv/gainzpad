@@ -1,14 +1,12 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" lang="bg">
-<!-- head фрагмент: зарежда Bootstrap CSS, твоите стилове, jQuery и FontAwesome -->
-<head th:replace="fragments/head :: head"></head>
-
+<head th:replace="~{fragments/head :: head}"></head>
 <body>
 <div class="container mt-4">
     <h2>Добави нова тренировка</h2>
 
     <form th:action="@{/workouts/new}" th:object="${workout}" method="post">
-
+        <!-- Workout name -->
         <div class="mb-3">
             <label for="workoutName" class="form-label">Име на тренировката</label>
             <input
@@ -30,13 +28,15 @@
                     th:each="exercise, stat : *{exercises}"
                     th:data-index="${stat.index}"
             >
+
+                <!-- Select (по избор) -->
                 <div class="mb-2">
-                    <label class="form-label">Избери упражнение</label>
+                    <label class="form-label">Избери упражнение (по избор)</label>
                     <select
                             th:field="*{exercises[__${stat.index}__].exerciseId}"
                             class="form-select"
                     >
-                        <option value="" disabled selected>-- Избери упражнение --</option>
+                        <option value="">-- По избор: съществуващо упражнение --</option>
                         <option
                                 th:each="ex : ${allExercises}"
                                 th:value="${ex.id}"
@@ -45,6 +45,7 @@
                     </select>
                 </div>
 
+                <!-- Ново упражнение -->
                 <div class="mb-2">
                     <label class="form-label">Или добави ново упражнение</label>
                     <input
@@ -55,6 +56,7 @@
                     />
                 </div>
 
+                <!-- Серии / Повторения / Тежест -->
                 <div class="row g-2">
                     <div class="col">
                         <label class="form-label">Серии</label>
@@ -91,52 +93,42 @@
                 <button
                         type="button"
                         class="btn btn-danger btn-sm mt-2 remove-exercise-btn"
-                >
-                    Премахни упражнение
-                </button>
-            </div>
+                >Премахни упражнение</button>
 
+            </div>
         </div>
 
         <button
                 type="button"
                 id="add-exercise-btn"
                 class="btn btn-secondary mb-3"
-        >
-            Добави упражнение
-        </button>
+        >Добави упражнение</button>
 
-        <br/>
         <div class="d-flex justify-content-end gap-2">
             <button type="submit" class="btn btn-primary">Запази</button>
             <button
                     type="button"
                     class="btn btn-secondary"
                     th:onclick="|window.location='@{/workouts}'|"
-            >
-                Отказ
-            </button>
+            >Отказ</button>
         </div>
     </form>
 </div>
 
-<!-- скриптове за Popper & Bootstrap JS -->
-<div th:replace="fragments/bootstrap-js :: bootstrap-js"></div>
+<!-- Popper & Bootstrap JS -->
+<div th:replace="~{fragments/bootstrap-js :: bootstrap-js}"></div>
 
-<!-- твоя JavaScript за клониране/премахване на упражнения -->
+<!-- Клониране/премахване на упражнения -->
 <script>
     const exercisesContainer = document.getElementById('exercises-container');
-    const addExerciseBtn = document.getElementById('add-exercise-btn');
+    const addExerciseBtn    = document.getElementById('add-exercise-btn');
 
     function updateIndices() {
-        const items = exercisesContainer.querySelectorAll('.exercise-item');
-        items.forEach((item, index) => {
-            item.setAttribute('data-index', index);
-            item.querySelectorAll('input, select').forEach(input => {
-                const name = input.getAttribute('name');
-                if (name) {
-                    input.setAttribute('name', name.replace(/\[\d+\]/, '[' + index + ']'));
-                }
+        exercisesContainer.querySelectorAll('.exercise-item').forEach((item, i) => {
+            item.setAttribute('data-index', i);
+            item.querySelectorAll('input, select').forEach(el => {
+                const name = el.getAttribute('name');
+                el.setAttribute('name', name.replace(/\[\d+\]/, '[' + i + ']'));
             });
         });
     }
@@ -152,8 +144,8 @@
 
     exercisesContainer.addEventListener('click', e => {
         if (e.target.classList.contains('remove-exercise-btn')) {
-            const all = exercisesContainer.querySelectorAll('.exercise-item');
-            if (all.length > 1) {
+            const items = exercisesContainer.querySelectorAll('.exercise-item');
+            if (items.length > 1) {
                 e.target.closest('.exercise-item').remove();
                 updateIndices();
             } else {

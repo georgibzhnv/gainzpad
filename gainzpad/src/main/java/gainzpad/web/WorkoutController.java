@@ -1,6 +1,8 @@
 package gainzpad.web;
 
+import gainzpad.model.dto.ExerciseDTO;
 import gainzpad.model.dto.WorkoutDTO;
+import gainzpad.model.dto.WorkoutExerciseDTO;
 import gainzpad.service.ExerciseService;
 import gainzpad.service.WorkoutService;
 import jakarta.validation.Valid;
@@ -34,7 +36,10 @@ public class WorkoutController {
 
     @GetMapping("/new")
     public String newWorkout(Model model) {
-        model.addAttribute("workout", new WorkoutDTO());
+        WorkoutDTO workout = new WorkoutDTO();
+
+        workout.getExercises().add(new WorkoutExerciseDTO());
+        model.addAttribute("workout", workout);
         model.addAttribute("allExercises", exerciseService.getAllExercises());
         return "workouts/new";
     }
@@ -44,10 +49,39 @@ public class WorkoutController {
                                 BindingResult bindingResult,
                                 Model model) {
 
+        // 1) Стандартна валидация на полета (workoutName, sets, reps...)
         if (bindingResult.hasErrors()) {
             model.addAttribute("allExercises", exerciseService.getAllExercises());
             return "workouts/new";
         }
+
+        // 2) Собствена валидация: за всяко упражнение
+        boolean allValid = workoutDTO.getExercises().stream().allMatch(ex ->
+                // валидно, ако е избрано упражнение
+                ex.getExerciseId() != null
+                        // или е въведено име
+                        || (ex.getNewExerciseName() != null && !ex.getNewExerciseName().isBlank())
+        );
+
+        if (!allValid) {
+            model.addAttribute("allExercises", exerciseService.getAllExercises());
+            model.addAttribute("errorMessage",
+                    "За всяко упражнение изберете готово или напишете ново име.");
+            return "workouts/new";
+        }
+
+        // 3) Създаваме всички нови упражнения по newExerciseName
+        workoutDTO.getExercises().stream()
+                .filter(ex -> ex.getExerciseId() == null)          // няма избрано
+                .filter(ex -> !ex.getNewExerciseName().isBlank()) // има текст
+                .forEach(ex -> {
+                    String name = ex.getNewExerciseName().trim();
+                    ExerciseDTO found = exerciseService.findByName(name)
+                            .orElseGet(() -> exerciseService.createExercise(name));
+                    ex.setExerciseId(found.getId());
+                });
+
+        // 4) Окончателно записваме тренировката
         workoutService.create(workoutDTO);
         return "redirect:/workouts";
     }
