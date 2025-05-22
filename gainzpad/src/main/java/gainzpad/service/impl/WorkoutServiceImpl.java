@@ -78,4 +78,12 @@ public class WorkoutServiceImpl implements WorkoutService {
         // 4) Записваме – Hibernate ще вкара редове и в workouts, и в workout_exercises
         workoutRepository.save(workout);
     }
+
+    @Override
+    public List<WorkoutDTO> getAllByUser(String username) {
+        return workoutRepository.findAllByUser_Email(username)
+                .stream()
+                .map(WorkoutMapper.INSTANCE::mapWorkoutEntityToDto)
+                .collect(Collectors.toList());
+    }
 }

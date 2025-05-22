@@ -10,4 +10,6 @@ public interface WorkoutService {
     List<WorkoutDTO>getAll();
 
     void create(WorkoutDTO workoutDTO);
+
+    List<WorkoutDTO>getAllByUser(String username);
 }

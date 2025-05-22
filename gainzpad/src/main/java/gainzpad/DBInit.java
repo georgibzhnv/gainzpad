@@ -65,11 +65,11 @@ public class DBInit implements CommandLineRunner {
                 .findOneByEmail("gbozhinov17@gmail.com")
                 .orElseThrow(() -> new IllegalStateException("Admin not found"));
 
-        // Създаваме упражнения
-        ExerciseEntity pushUp = new ExerciseEntity().setName("Push Up");
-        ExerciseEntity squat  = new ExerciseEntity().setName("Squat");
-        exerciseRepository.saveAll(List.of(pushUp, squat));
+        ExerciseEntity pushUp = exerciseRepository.findByName("Push Up")
+                .orElseGet(() -> exerciseRepository.save(new ExerciseEntity().setName("Push Up")));
 
+        ExerciseEntity squat = exerciseRepository.findByName("Squat")
+                .orElseGet(() -> exerciseRepository.save(new ExerciseEntity().setName("Squat")));
 
         WorkoutEntity chestDay = new WorkoutEntity()
                 .setWorkoutName("Chest Day")
@@ -79,6 +79,7 @@ public class DBInit implements CommandLineRunner {
                 .setWorkout(chestDay)
                 .setExercise(pushUp)
                 .setSets(4).setReps(12).setWeight(0.0);
+
         WorkoutExercise we2 = new WorkoutExercise()
                 .setWorkout(chestDay)
                 .setExercise(squat)
@@ -88,4 +89,5 @@ public class DBInit implements CommandLineRunner {
 
         workoutRepository.save(chestDay);
     }
+
 }

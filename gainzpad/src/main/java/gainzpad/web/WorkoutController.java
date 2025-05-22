@@ -6,6 +6,8 @@ import gainzpad.model.dto.WorkoutExerciseDTO;
 import gainzpad.service.ExerciseService;
 import gainzpad.service.WorkoutService;
 import jakarta.validation.Valid;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -21,7 +23,6 @@ public class WorkoutController {
     private final WorkoutService workoutService;
     private final ExerciseService exerciseService;
 
-
     public WorkoutController(WorkoutService workoutService, ExerciseService exerciseService) {
         this.workoutService = workoutService;
         this.exerciseService = exerciseService;
@@ -29,16 +30,25 @@ public class WorkoutController {
 
     @GetMapping
     public String getAllWorkouts(Model model){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String username = authentication.getName();
 
-        model.addAttribute("workouts",workoutService.getAll());
+        boolean isAdmin = authentication.getAuthorities().stream()
+                .anyMatch(a -> a.getAuthority().equals("ADMIN"));
+
+        if (isAdmin) {
+            model.addAttribute("workouts", workoutService.getAll());
+        } else {
+            model.addAttribute("workouts", workoutService.getAllByUser(username));
+        }
         return "workouts/list";
     }
 
     @GetMapping("/new")
     public String newWorkout(Model model) {
         WorkoutDTO workout = new WorkoutDTO();
-
         workout.getExercises().add(new WorkoutExerciseDTO());
+
         model.addAttribute("workout", workout);
         model.addAttribute("allExercises", exerciseService.getAllExercises());
         return "workouts/new";
@@ -49,17 +59,13 @@ public class WorkoutController {
                                 BindingResult bindingResult,
                                 Model model) {
 
-        // 1) Стандартна валидация на полета (workoutName, sets, reps...)
         if (bindingResult.hasErrors()) {
             model.addAttribute("allExercises", exerciseService.getAllExercises());
             return "workouts/new";
         }
 
-        // 2) Собствена валидация: за всяко упражнение
         boolean allValid = workoutDTO.getExercises().stream().allMatch(ex ->
-                // валидно, ако е избрано упражнение
                 ex.getExerciseId() != null
-                        // или е въведено име
                         || (ex.getNewExerciseName() != null && !ex.getNewExerciseName().isBlank())
         );
 
@@ -70,10 +76,10 @@ public class WorkoutController {
             return "workouts/new";
         }
 
-        // 3) Създаваме всички нови упражнения по newExerciseName
+        // Създаваме всички нови упражнения по newExerciseName
         workoutDTO.getExercises().stream()
-                .filter(ex -> ex.getExerciseId() == null)          // няма избрано
-                .filter(ex -> !ex.getNewExerciseName().isBlank()) // има текст
+                .filter(ex -> ex.getExerciseId() == null)
+                .filter(ex -> !ex.getNewExerciseName().isBlank())
                 .forEach(ex -> {
                     String name = ex.getNewExerciseName().trim();
                     ExerciseDTO found = exerciseService.findByName(name)
@@ -81,8 +87,10 @@ public class WorkoutController {
                     ex.setExerciseId(found.getId());
                 });
 
-        // 4) Окончателно записваме тренировката
+        // Записваме тренировката и я свързваме с текущия потребител
         workoutService.create(workoutDTO);
+
+        // Връщаме се към списъка като използваме същия username
         return "redirect:/workouts";
     }
 }
