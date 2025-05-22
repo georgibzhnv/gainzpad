@@ -20,6 +20,7 @@ public class WorkoutDTO {
     @NotEmpty(message = "Трябва да има поне едно упражнение")
     private List<WorkoutExerciseDTO> exercises = new ArrayList<>();
 
+
     public Long getId() {
         return id;
     }

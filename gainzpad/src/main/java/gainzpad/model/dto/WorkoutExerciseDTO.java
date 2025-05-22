@@ -19,7 +19,17 @@ public class WorkoutExerciseDTO {
     @Min(value = 0, message = "Тежестта не може да е отрицателна")
     private double weight;
 
-    private String newExerciseName; // добави
+    private String newExerciseName;
+    private String exerciseName;
+
+    public String getExerciseName() {
+        return exerciseName;
+    }
+
+    public WorkoutExerciseDTO setExerciseName(String exerciseName) {
+        this.exerciseName = exerciseName;
+        return this;
+    }
 
     public String getNewExerciseName() {
         return newExerciseName;

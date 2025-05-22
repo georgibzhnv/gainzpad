@@ -11,10 +11,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 @Controller
 @RequestMapping("/workouts")
@@ -52,6 +49,15 @@ public class WorkoutController {
         model.addAttribute("workout", workout);
         model.addAttribute("allExercises", exerciseService.getAllExercises());
         return "workouts/new";
+    }
+
+    @GetMapping("/{id}")
+    public String viewWorkout(@PathVariable Long id, Model model) {
+        WorkoutDTO workoutDTO = workoutService.getById(id)
+                .orElseThrow(()->new IllegalArgumentException("Workout not found: " + id));
+
+        model.addAttribute("workout", workoutDTO);
+        return "workouts/view";
     }
 
     @PostMapping("/new")

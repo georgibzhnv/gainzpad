@@ -13,7 +13,7 @@ public interface WorkoutMapper {
 
     WorkoutMapper INSTANCE = Mappers.getMapper(WorkoutMapper.class);
 
-    WorkoutEntity mapWorkoutDtoToEntity(WorkoutDTO dto);
     WorkoutDTO mapWorkoutEntityToDto(WorkoutEntity workoutEntity);
 
+    WorkoutEntity mapWorkoutDtoToEntity(WorkoutDTO dto);
 }

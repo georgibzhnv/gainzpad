@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" lang="bg">
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
 <head th:replace="~{fragments/head :: head}"></head>
 <body>
 <div class="container mt-4">
@@ -8,15 +8,15 @@
   <table class="table table-bordered">
     <thead>
     <tr>
-      <th>Упражнение</th>
-      <th>Серии</th>
-      <th>Повторения</th>
-      <th>Тежест (kg)</th>
+      <th>Exercise</th>
+      <th>Sets</th>
+      <th>Reps</th>
+      <th>Weight (kg)</th>
     </tr>
     </thead>
     <tbody>
-    <tr th:each="we : ${workout.workoutExercises}">
-      <td th:text="${we.exercise.name}">Exercise Name</td>
+    <tr th:each="we : ${workout.exercises}">
+      <td th:text="${we.exerciseName}">Exercise Name</td>
       <td th:text="${we.sets}">3</td>
       <td th:text="${we.reps}">10</td>
       <td th:text="${we.weight}">20.5</td>
@@ -24,7 +24,7 @@
     </tbody>
   </table>
 
-  <a th:href="@{/workouts}" class="btn btn-secondary">Обратно към списъка</a>
+  <a th:href="@{/workouts}" class="btn btn-secondary">Back to list</a>
 </div>
 
 <div th:replace="~{fragments/bootstrap-js::bootstrap-js}"></div>

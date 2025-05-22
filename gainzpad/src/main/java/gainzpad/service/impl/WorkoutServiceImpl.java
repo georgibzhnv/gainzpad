@@ -86,4 +86,10 @@ public class WorkoutServiceImpl implements WorkoutService {
                 .map(WorkoutMapper.INSTANCE::mapWorkoutEntityToDto)
                 .collect(Collectors.toList());
     }
+
+    @Override
+    public Optional<WorkoutDTO> getById(Long id) {
+        return workoutRepository.findById(id)
+                .map(WorkoutMapper.INSTANCE::mapWorkoutEntityToDto);
+    }
 }
