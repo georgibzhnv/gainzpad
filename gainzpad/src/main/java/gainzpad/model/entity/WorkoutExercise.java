@@ -10,11 +10,11 @@ public class WorkoutExercise {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "workout_id", referencedColumnName = "id")
     private WorkoutEntity workout;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "exercise_id", referencedColumnName = "id")
     private ExerciseEntity exercise;
 

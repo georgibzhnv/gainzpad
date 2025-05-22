@@ -29,19 +29,21 @@ public class WorkoutServiceImpl implements WorkoutService {
     private final ExerciseRepository exerciseRepository;
     private final WorkoutExerciseRepository workoutExerciseRepository;
     private final UserRepository userRepository;
+    private final WorkoutMapper workoutMapper;
 
-    public WorkoutServiceImpl(WorkoutRepository workoutRepository, ExerciseRepository exerciseRepository, WorkoutExerciseRepository workoutExerciseRepository, UserRepository userRepository) {
+    public WorkoutServiceImpl(WorkoutRepository workoutRepository, ExerciseRepository exerciseRepository, WorkoutExerciseRepository workoutExerciseRepository, UserRepository userRepository, WorkoutMapper workoutMapper) {
         this.workoutRepository = workoutRepository;
         this.exerciseRepository = exerciseRepository;
         this.workoutExerciseRepository = workoutExerciseRepository;
         this.userRepository = userRepository;
+        this.workoutMapper = workoutMapper;
     }
 
     @Override
     public List<WorkoutDTO>getAll(){
         return workoutRepository.findAll()
                 .stream()
-                .map(WorkoutMapper.INSTANCE::mapWorkoutEntityToDto)
+                .map(workoutMapper::mapWorkoutEntityToDto)
                 .collect(Collectors.toList());
     }
 
@@ -83,13 +85,13 @@ public class WorkoutServiceImpl implements WorkoutService {
     public List<WorkoutDTO> getAllByUser(String username) {
         return workoutRepository.findAllByUser_Email(username)
                 .stream()
-                .map(WorkoutMapper.INSTANCE::mapWorkoutEntityToDto)
+                .map(workoutMapper::mapWorkoutEntityToDto)
                 .collect(Collectors.toList());
     }
 
     @Override
     public Optional<WorkoutDTO> getById(Long id) {
-        return workoutRepository.findById(id)
-                .map(WorkoutMapper.INSTANCE::mapWorkoutEntityToDto);
+        return workoutRepository.findByIdWithExercises(id)
+                .map(workoutMapper::mapWorkoutEntityToDto);
     }
 }

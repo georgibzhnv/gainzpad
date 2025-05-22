@@ -12,6 +12,7 @@ public interface WorkoutExerciseMapper {
 
     WorkoutExerciseMapper INSTANCE = Mappers.getMapper(WorkoutExerciseMapper.class);
 
+    @Mapping(source = "exercise.name", target = "exerciseName")
     WorkoutExerciseDTO toDto(WorkoutExercise workoutExercise);
 
     WorkoutExercise toEntity(WorkoutExerciseDTO workoutExerciseDto);
