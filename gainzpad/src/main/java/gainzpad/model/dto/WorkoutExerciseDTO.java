@@ -23,6 +23,16 @@ public class WorkoutExerciseDTO {
     private String exerciseName;
     private long restTime;
     private long timeSpent;
+    private boolean isCompleted;
+
+    public boolean isCompleted() {
+        return isCompleted;
+    }
+
+    public WorkoutExerciseDTO setCompleted(boolean completed) {
+        isCompleted = completed;
+        return this;
+    }
 
     public long getRestTime() {
         return restTime;

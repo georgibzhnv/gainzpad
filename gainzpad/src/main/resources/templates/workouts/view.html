@@ -8,25 +8,38 @@
   <table class="table table-bordered">
     <thead>
     <tr>
-      <th>Exercise</th>
-      <th>Sets</th>
-      <th>Reps</th>
-      <th>Weight (kg)</th>
-      <th>Rest time (min)</th>
+      <th>Упражнение</th>
+      <th>Серии</th>
+      <th>Повторения</th>
+      <th>Тежест (kg)</th>
+      <th>Статус</th>
     </tr>
     </thead>
     <tbody>
     <tr th:each="we : ${workout.exercises}">
       <td th:text="${we.exerciseName}">Exercise Name</td>
-      <td th:text="${we.sets}">3</td>
-      <td th:text="${we.reps}">10</td>
-      <td th:text="${we.weight}">20.5</td>
-      <td th:text="${we.restTime}">2</td>
+      <td><input type="number" th:field="*{we.sets}" placeholder="Sets"></td>
+      <td><input type="number" th:field="*{we.reps}" placeholder="Reps"></td>
+      <td><input type="number" th:field="*{we.weight}" placeholder="Weight"></td>
+      <td><button th:if="${!we.isCompleted}" type="submit" th:formaction="@{/workouts/{id}/recordSet(id=${workout.id})}">Запиши серия</button></td>
     </tr>
     </tbody>
   </table>
 
-  <a th:href="@{/workouts}" class="btn btn-secondary">Back to list</a>
+  <form th:action="@{/workouts/start/{id}(id=${workout.id})}" method="post">
+    <button type="submit" class="btn btn-success">Start Workout</button>
+  </form>
+
+  <form th:action="@{/workouts/finish/{id}(id=${workout.id})}" method="post">
+    <button type="submit" class="btn btn-danger">Finish Workout</button>
+  </form>
+
+  <form th:action="@{/workouts/{id}/startRest(id=${workout.id})}" method="post">
+    <input type="number" name="restTime" placeholder="Rest Time (in seconds)">
+    <button type="submit" class="btn btn-primary">Start Rest</button>
+  </form>
+
+  <a th:href="@{/workouts}" class="btn btn-secondary">Обратно към списъка</a>
 </div>
 
 <div th:replace="~{fragments/bootstrap-js::bootstrap-js}"></div>

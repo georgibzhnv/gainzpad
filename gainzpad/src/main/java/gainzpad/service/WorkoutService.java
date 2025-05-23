@@ -15,7 +15,8 @@ public interface WorkoutService {
 
     List<WorkoutDTO>getAllByUser(String username);
     Optional<WorkoutDTO>getById(Long id);
-    void addSets(Long id, WorkoutExerciseDTO workoutExerciseDTO);
     void startWorkout(Long id);
     void finishWorkout(Long id);
+    void recordSet(Long id, WorkoutExerciseDTO workoutExerciseDTO);
+    void startRest(Long id,long restTime);
 }

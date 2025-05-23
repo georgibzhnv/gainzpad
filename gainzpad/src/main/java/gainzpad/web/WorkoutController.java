@@ -112,17 +112,15 @@ public class WorkoutController {
         return "redirect:/workouts/" + id;
     }
 
+    @PostMapping("/{id}/recordSet")
+    public String recordSet(@PathVariable Long id, @ModelAttribute WorkoutExerciseDTO workoutExerciseDTO,Model model) {
+        workoutService.recordSet(id,workoutExerciseDTO);
+        return "redirect:/workouts/" + id;
+    }
 
-    @PostMapping("/{id}/addSets")
-    public String addSets(@PathVariable Long id, @Valid @ModelAttribute WorkoutExerciseDTO workoutExerciseDTO,
-                          BindingResult bindingResult, Model model) {
-        if (bindingResult.hasErrors()) {
-            model.addAttribute("workout",workoutService.getById(id)
-                    .orElseThrow(()->new IllegalArgumentException("Workout not found: " + id)));
-            return "workouts/view";
-        }
-
-        workoutService.addSets(id,workoutExerciseDTO);
-        return "redirect:/workouts/" +id;
+    @PostMapping("/{id}/startRest")
+    public String startRest(@PathVariable Long id, @RequestParam long restTime) {
+        workoutService.startRest(id,restTime);
+        return "redirect:/workouts/" + id;
     }
 }

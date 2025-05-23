@@ -27,7 +27,16 @@ public class WorkoutExercise {
     @Column(nullable = false)
     private long restTime;
     private long timeSpent;
+    private boolean isCompleted;
 
+    public boolean isCompleted() {
+        return isCompleted;
+    }
+
+    public WorkoutExercise setCompleted(boolean completed) {
+        isCompleted = completed;
+        return this;
+    }
 
     public Long getId() {
         return id;

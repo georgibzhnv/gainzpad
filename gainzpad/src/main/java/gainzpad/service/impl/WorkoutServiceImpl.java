@@ -97,27 +97,6 @@ public class WorkoutServiceImpl implements WorkoutService {
     }
 
     @Override
-    public void addSets(Long id, WorkoutExerciseDTO workoutExerciseDTO) {
-        WorkoutEntity workoutEntity = workoutRepository.findById(id)
-                .orElseThrow(()->new IllegalArgumentException("Workout with id=" + id + " not found"));
-
-        ExerciseEntity exercise = exerciseRepository.findById(workoutExerciseDTO.getExerciseId())
-                .orElseThrow(()->new IllegalArgumentException("Exercise with id=" + workoutExerciseDTO.getExerciseId() + " not found"));
-
-        WorkoutExercise workoutExercise = new WorkoutExercise()
-                .setWorkout(workoutEntity)
-                .setExercise(exercise)
-                .setSets(workoutExerciseDTO.getSets())
-                .setReps(workoutExerciseDTO.getReps())
-                .setWeight(workoutExerciseDTO.getWeight())
-                .setRestTime(workoutExerciseDTO.getRestTime())
-                .setTimeSpent(workoutExerciseDTO.getTimeSpent());
-
-        workoutEntity.getWorkoutExercises().add(workoutExercise);
-        workoutRepository.save(workoutEntity);
-    }
-
-    @Override
     public void startWorkout(Long id) {
         WorkoutEntity workoutEntity = workoutRepository.findById(id)
                 .orElseThrow(()->new IllegalArgumentException("Workout with id=" + id + " not found"));
@@ -134,6 +113,38 @@ public class WorkoutServiceImpl implements WorkoutService {
         workoutEntity.setStartTime(LocalDateTime.now());
         workoutEntity.setActive(false);
 
+        workoutRepository.save(workoutEntity);
+    }
+
+    @Override
+    public void recordSet(Long id, WorkoutExerciseDTO workoutExerciseDTO) {
+        WorkoutEntity workoutEntity = workoutRepository.findById(id)
+                .orElseThrow(()->new IllegalArgumentException("Workout with id=" + id + " not found"));
+
+        WorkoutExercise workoutExercise = workoutEntity.getWorkoutExercises().stream()
+                .filter(we->we.getId().equals(workoutExerciseDTO.getExerciseId()))
+                .findFirst()
+                .orElseThrow(()->new IllegalArgumentException("Exercise not found."));
+
+        workoutExercise.setReps(workoutExerciseDTO.getReps())
+                .setWeight(workoutExerciseDTO.getWeight())
+                .setSets(workoutExerciseDTO.getSets())
+                .setTimeSpent(workoutExerciseDTO.getTimeSpent())
+                .setCompleted(true);
+
+        workoutRepository.save(workoutEntity);
+    }
+
+    @Override
+    public void startRest(Long id, long restTime) {
+        WorkoutEntity workoutEntity = workoutRepository.findById(id)
+                .orElseThrow(()->new IllegalArgumentException("Workout with id=" + id + " not found"));
+
+        workoutEntity.getWorkoutExercises().forEach(ex->{
+            if (!ex.isCompleted()){
+                ex.setTimeSpent(restTime);
+            }
+        });
         workoutRepository.save(workoutEntity);
     }
 
