@@ -1,5 +1,6 @@
 package gainzpad.model.dto;
 
+import jakarta.persistence.Column;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 
@@ -18,9 +19,28 @@ public class WorkoutExerciseDTO {
 
     @Min(value = 0, message = "Тежестта не може да е отрицателна")
     private double weight;
-
     private String newExerciseName;
     private String exerciseName;
+    private long restTime;
+    private long timeSpent;
+
+    public long getRestTime() {
+        return restTime;
+    }
+
+    public WorkoutExerciseDTO setRestTime(long restTime) {
+        this.restTime = restTime;
+        return this;
+    }
+
+    public long getTimeSpent() {
+        return timeSpent;
+    }
+
+    public WorkoutExerciseDTO setTimeSpent(long timeSpent) {
+        this.timeSpent = timeSpent;
+        return this;
+    }
 
     public String getExerciseName() {
         return exerciseName;

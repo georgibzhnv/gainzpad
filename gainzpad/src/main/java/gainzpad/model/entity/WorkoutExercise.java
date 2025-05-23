@@ -2,6 +2,8 @@ package gainzpad.model.entity;
 
 import jakarta.persistence.*;
 
+import java.time.LocalDateTime;
+
 @Entity
 @Table(name = "workout_exercises")
 public class WorkoutExercise {
@@ -22,7 +24,37 @@ public class WorkoutExercise {
     private int reps;
     private double weight;
 
-    // Гетъри и Сетъри
+    @Column(nullable = false)
+    private long restTime;
+    private long timeSpent;
+
+
+    public Long getId() {
+        return id;
+    }
+
+    public WorkoutExercise setId(Long id) {
+        this.id = id;
+        return this;
+    }
+
+    public long getRestTime() {
+        return restTime;
+    }
+
+    public WorkoutExercise setRestTime(long restTime) {
+        this.restTime = restTime;
+        return this;
+    }
+
+    public long getTimeSpent() {
+        return timeSpent;
+    }
+
+    public WorkoutExercise setTimeSpent(long timeSpent) {
+        this.timeSpent = timeSpent;
+        return this;
+    }
 
     public WorkoutEntity getWorkout() {
         return workout;

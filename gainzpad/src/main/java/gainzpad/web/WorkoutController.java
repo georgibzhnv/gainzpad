@@ -99,4 +99,30 @@ public class WorkoutController {
         // Връщаме се към списъка като използваме същия username
         return "redirect:/workouts";
     }
+
+    @PostMapping("/start/{id}")
+    public String startWorkout(@PathVariable Long id) {
+        workoutService.startWorkout(id);
+        return "redirect:/workouts/" + id;
+    }
+
+    @PostMapping("/finish/{id}")
+    public String finishWorkout(@PathVariable Long id) {
+        workoutService.finishWorkout(id);
+        return "redirect:/workouts/" + id;
+    }
+
+
+    @PostMapping("/{id}/addSets")
+    public String addSets(@PathVariable Long id, @Valid @ModelAttribute WorkoutExerciseDTO workoutExerciseDTO,
+                          BindingResult bindingResult, Model model) {
+        if (bindingResult.hasErrors()) {
+            model.addAttribute("workout",workoutService.getById(id)
+                    .orElseThrow(()->new IllegalArgumentException("Workout not found: " + id)));
+            return "workouts/view";
+        }
+
+        workoutService.addSets(id,workoutExerciseDTO);
+        return "redirect:/workouts/" +id;
+    }
 }

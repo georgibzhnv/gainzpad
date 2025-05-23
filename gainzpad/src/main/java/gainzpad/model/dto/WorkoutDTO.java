@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -19,7 +20,46 @@ public class WorkoutDTO {
 
     @NotEmpty(message = "Трябва да има поне едно упражнение")
     private List<WorkoutExerciseDTO> exercises = new ArrayList<>();
+    private boolean isActive;
+    private long totalTime;
+    private LocalDateTime startTime;
+    private LocalDateTime endTime;
 
+    public LocalDateTime getStartTime() {
+        return startTime;
+    }
+
+    public WorkoutDTO setStartTime(LocalDateTime startTime) {
+        this.startTime = startTime;
+        return this;
+    }
+
+    public LocalDateTime getEndTime() {
+        return endTime;
+    }
+
+    public WorkoutDTO setEndTime(LocalDateTime endTime) {
+        this.endTime = endTime;
+        return this;
+    }
+
+    public boolean isActive() {
+        return isActive;
+    }
+
+    public WorkoutDTO setActive(boolean active) {
+        isActive = active;
+        return this;
+    }
+
+    public long getTotalTime() {
+        return totalTime;
+    }
+
+    public WorkoutDTO setTotalTime(long totalTime) {
+        this.totalTime = totalTime;
+        return this;
+    }
 
     public Long getId() {
         return id;

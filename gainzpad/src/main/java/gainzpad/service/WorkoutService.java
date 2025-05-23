@@ -1,6 +1,7 @@
 package gainzpad.service;
 
 import gainzpad.model.dto.WorkoutDTO;
+import gainzpad.model.dto.WorkoutExerciseDTO;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -14,4 +15,7 @@ public interface WorkoutService {
 
     List<WorkoutDTO>getAllByUser(String username);
     Optional<WorkoutDTO>getById(Long id);
+    void addSets(Long id, WorkoutExerciseDTO workoutExerciseDTO);
+    void startWorkout(Long id);
+    void finishWorkout(Long id);
 }

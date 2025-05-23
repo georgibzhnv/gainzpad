@@ -17,6 +17,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -94,4 +95,47 @@ public class WorkoutServiceImpl implements WorkoutService {
         return workoutRepository.findByIdWithExercises(id)
                 .map(workoutMapper::mapWorkoutEntityToDto);
     }
+
+    @Override
+    public void addSets(Long id, WorkoutExerciseDTO workoutExerciseDTO) {
+        WorkoutEntity workoutEntity = workoutRepository.findById(id)
+                .orElseThrow(()->new IllegalArgumentException("Workout with id=" + id + " not found"));
+
+        ExerciseEntity exercise = exerciseRepository.findById(workoutExerciseDTO.getExerciseId())
+                .orElseThrow(()->new IllegalArgumentException("Exercise with id=" + workoutExerciseDTO.getExerciseId() + " not found"));
+
+        WorkoutExercise workoutExercise = new WorkoutExercise()
+                .setWorkout(workoutEntity)
+                .setExercise(exercise)
+                .setSets(workoutExerciseDTO.getSets())
+                .setReps(workoutExerciseDTO.getReps())
+                .setWeight(workoutExerciseDTO.getWeight())
+                .setRestTime(workoutExerciseDTO.getRestTime())
+                .setTimeSpent(workoutExerciseDTO.getTimeSpent());
+
+        workoutEntity.getWorkoutExercises().add(workoutExercise);
+        workoutRepository.save(workoutEntity);
+    }
+
+    @Override
+    public void startWorkout(Long id) {
+        WorkoutEntity workoutEntity = workoutRepository.findById(id)
+                .orElseThrow(()->new IllegalArgumentException("Workout with id=" + id + " not found"));
+        workoutEntity.setStartTime(LocalDateTime.now());
+        workoutEntity.setActive(true);
+
+        workoutRepository.save(workoutEntity);
+    }
+
+    @Override
+    public void finishWorkout(Long id) {
+        WorkoutEntity workoutEntity = workoutRepository.findById(id)
+                .orElseThrow(()->new IllegalArgumentException("Workout with id=" + id + " not found"));
+        workoutEntity.setStartTime(LocalDateTime.now());
+        workoutEntity.setActive(false);
+
+        workoutRepository.save(workoutEntity);
+    }
+
+
 }
