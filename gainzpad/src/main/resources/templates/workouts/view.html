@@ -5,6 +5,7 @@
 <div class="container mt-4">
   <h2 th:text="${workout.workoutName}">Workout Name</h2>
 
+  <form th:action="@{/workouts/{id}/save(id=${workout.id})}" th:object="${workout}" method="post">
   <table class="table table-bordered">
     <thead>
     <tr>
@@ -16,29 +17,26 @@
     </tr>
     </thead>
     <tbody>
-    <tr th:each="we, iterStat : ${workout.exercises}">
-      <!-- Биндиране на упражнението (може да добавите проверка дали името е налично) -->
-      <td th:text="${we.exerciseName}">Exercise Name</td>
-
-      <!-- Полета за серия, повторения и тежест със съответния формат на биндване -->
+    <tr th:each="we, iterStat : *{exercises}">
+      <td th:text="*{exercises[__${iterStat.index}__].exerciseName}">Exercise Name</td>
       <td>
-        <input type="number" th:field="*{we.sets}" placeholder="Sets">
+        <input type="number" th:field="*{exercises[__${iterStat.index}__].sets}">
       </td>
       <td>
-        <input type="number" th:field="*{we.reps}" placeholder="Reps">
+        <input type="number" th:field="*{exercises[__${iterStat.index}__].reps}">
       </td>
       <td>
-        <input type="number" th:field="*{we.weight}" placeholder="Weight">
+        <input type="number" th:field="*{exercises[__${iterStat.index}__].weight}">
       </td>
-
-      <!-- Връзка за записване на серия -->
       <td>
-        <button th:if="${!we.isCompleted}" type="submit" th:formaction="@{/workouts/{id}/recordSet(id=${workout.id})}">Запиши серия</button>
+        <!-- ВАЖНО: използвай ${we.completed}, не *{} -->
+        <button th:if="${we.completed} == false" type="submit"
+                th:formaction="@{/workouts/{id}/recordSet(id=${workout.id})}">Запиши серия</button>
       </td>
     </tr>
-
     </tbody>
   </table>
+  </form>
 
   <form th:action="@{/workouts/start/{id}(id=${workout.id})}" method="post">
     <button type="submit" class="btn btn-success">Start Workout</button>
