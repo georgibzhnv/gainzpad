@@ -1,6 +1,5 @@
 package gainzpad.model.dto;
 
-import jakarta.persistence.Column;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 

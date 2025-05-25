@@ -16,13 +16,27 @@
     </tr>
     </thead>
     <tbody>
-    <tr th:each="we : ${workout.exercises}">
+    <tr th:each="we, iterStat : ${workout.exercises}">
+      <!-- Биндиране на упражнението (може да добавите проверка дали името е налично) -->
       <td th:text="${we.exerciseName}">Exercise Name</td>
-      <td><input type="number" th:field="*{we.sets}" placeholder="Sets"></td>
-      <td><input type="number" th:field="*{we.reps}" placeholder="Reps"></td>
-      <td><input type="number" th:field="*{we.weight}" placeholder="Weight"></td>
-      <td><button th:if="${!we.isCompleted}" type="submit" th:formaction="@{/workouts/{id}/recordSet(id=${workout.id})}">Запиши серия</button></td>
+
+      <!-- Полета за серия, повторения и тежест със съответния формат на биндване -->
+      <td>
+        <input type="number" th:field="*{we.sets}" placeholder="Sets">
+      </td>
+      <td>
+        <input type="number" th:field="*{we.reps}" placeholder="Reps">
+      </td>
+      <td>
+        <input type="number" th:field="*{we.weight}" placeholder="Weight">
+      </td>
+
+      <!-- Връзка за записване на серия -->
+      <td>
+        <button th:if="${!we.isCompleted}" type="submit" th:formaction="@{/workouts/{id}/recordSet(id=${workout.id})}">Запиши серия</button>
+      </td>
     </tr>
+
     </tbody>
   </table>
 

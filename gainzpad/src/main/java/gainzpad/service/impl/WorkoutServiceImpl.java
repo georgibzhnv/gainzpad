@@ -110,7 +110,7 @@ public class WorkoutServiceImpl implements WorkoutService {
     public void finishWorkout(Long id) {
         WorkoutEntity workoutEntity = workoutRepository.findById(id)
                 .orElseThrow(()->new IllegalArgumentException("Workout with id=" + id + " not found"));
-        workoutEntity.setStartTime(LocalDateTime.now());
+        workoutEntity.setEndTime(LocalDateTime.now());
         workoutEntity.setActive(false);
 
         workoutRepository.save(workoutEntity);

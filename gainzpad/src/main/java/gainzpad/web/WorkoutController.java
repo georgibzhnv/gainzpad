@@ -13,6 +13,8 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
+
 @Controller
 @RequestMapping("/workouts")
 public class WorkoutController {
@@ -56,7 +58,12 @@ public class WorkoutController {
         WorkoutDTO workoutDTO = workoutService.getById(id)
                 .orElseThrow(()->new IllegalArgumentException("Workout not found: " + id));
 
+        if (workoutDTO.getExercises() == null) {
+            workoutDTO.setExercises(new ArrayList<>());
+        }
+
         model.addAttribute("workout", workoutDTO);
+        model.addAttribute("exercises", workoutDTO.getExercises());
         return "workouts/view";
     }
 
@@ -82,23 +89,10 @@ public class WorkoutController {
             return "workouts/new";
         }
 
-        // Създаваме всички нови упражнения по newExerciseName
-        workoutDTO.getExercises().stream()
-                .filter(ex -> ex.getExerciseId() == null)
-                .filter(ex -> !ex.getNewExerciseName().isBlank())
-                .forEach(ex -> {
-                    String name = ex.getNewExerciseName().trim();
-                    ExerciseDTO found = exerciseService.findByName(name)
-                            .orElseGet(() -> exerciseService.createExercise(name));
-                    ex.setExerciseId(found.getId());
-                });
-
-        // Записваме тренировката и я свързваме с текущия потребител
         workoutService.create(workoutDTO);
-
-        // Връщаме се към списъка като използваме същия username
         return "redirect:/workouts";
     }
+
 
     @PostMapping("/start/{id}")
     public String startWorkout(@PathVariable Long id) {
