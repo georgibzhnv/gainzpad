@@ -17,6 +17,9 @@ public interface WorkoutService {
     Optional<WorkoutDTO>getById(Long id);
     void startWorkout(Long id);
     void finishWorkout(Long id);
-    void recordSet(Long id, WorkoutExerciseDTO workoutExerciseDTO);
+    void recordSet( Long workoutId,
+                   Long exerciseId,
+                   Long setId, Integer reps,
+                   Double weight);
     void startRest(Long id,long restTime);
 }

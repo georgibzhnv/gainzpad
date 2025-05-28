@@ -4,57 +4,47 @@
 <body>
 <div class="container mt-4">
   <h2 th:text="${workout.workoutName}">Workout Name</h2>
-
-  <form th:action="@{/workouts/{id}/save(id=${workout.id})}" th:object="${workout}" method="post">
   <table class="table table-bordered">
     <thead>
     <tr>
       <th>Упражнение</th>
-      <th>Серии</th>
+      <th>Серия №</th>
       <th>Повторения</th>
       <th>Тежест (kg)</th>
       <th>Статус</th>
+      <th>Действие</th>
     </tr>
     </thead>
     <tbody>
-    <tr th:each="we, iterStat : *{exercises}">
-      <td th:text="*{exercises[__${iterStat.index}__].exerciseName}">Exercise Name</td>
-      <td>
-        <input type="number" th:field="*{exercises[__${iterStat.index}__].sets}">
-      </td>
-      <td>
-        <input type="number" th:field="*{exercises[__${iterStat.index}__].reps}">
-      </td>
-      <td>
-        <input type="number" th:field="*{exercises[__${iterStat.index}__].weight}">
-      </td>
-      <td>
-        <!-- ВАЖНО: използвай ${we.completed}, не *{} -->
-        <button th:if="${we.completed} == false" type="submit"
-                th:formaction="@{/workouts/{id}/recordSet(id=${workout.id})}">Запиши серия</button>
-      </td>
-    </tr>
+    <th:block th:each="we : ${workout.exercises}">
+      <th:block th:each="set, setStat : ${we.sets}">
+        <form th:action="@{/workouts/{workoutId}/exercise/{exerciseId}/recordSet(workoutId=${workout.id},exerciseId=${we.exerciseId})}" method="post">
+          <tr>
+            <td th:if="${setStat.index == 0}" th:rowspan="${#lists.size(we.sets)}" th:text="${we.exerciseName}"></td>
+            <td th:text="${setStat.index + 1}"></td>
+            <td>
+              <input type="hidden" name="setId" th:value="${set.id}" />
+              <input type="number" name="reps" th:value="${set.reps}" min="0" class="form-control form-control-sm" />
+            </td>
+            <td>
+              <input type="number" name="weight" th:value="${set.weight}" min="0" class="form-control form-control-sm" />
+            </td>
+            <td>
+              <span th:text="${set.completed} ? 'Готова' : 'Не е готова'"></span>
+            </td>
+            <td>
+              <button type="submit" class="btn btn-success btn-sm" th:if="${!set.completed}">Запиши серия</button>
+              <span th:if="${set.completed}" class="text-success">✔</span>
+            </td>
+          </tr>
+        </form>
+      </th:block>
+    </th:block>
     </tbody>
+
   </table>
-  </form>
-
-  <form th:action="@{/workouts/start/{id}(id=${workout.id})}" method="post">
-    <button type="submit" class="btn btn-success">Start Workout</button>
-  </form>
-
-  <form th:action="@{/workouts/finish/{id}(id=${workout.id})}" method="post">
-    <button type="submit" class="btn btn-danger">Finish Workout</button>
-  </form>
-
-  <form th:action="@{/workouts/{id}/startRest(id=${workout.id})}" method="post">
-    <input type="number" name="restTime" placeholder="Rest Time (in seconds)">
-    <button type="submit" class="btn btn-primary">Start Rest</button>
-  </form>
-
   <a th:href="@{/workouts}" class="btn btn-secondary">Обратно към списъка</a>
 </div>
-
 <div th:replace="~{fragments/bootstrap-js::bootstrap-js}"></div>
-
 </body>
 </html>

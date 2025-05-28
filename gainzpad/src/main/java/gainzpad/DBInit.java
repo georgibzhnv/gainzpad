@@ -4,6 +4,7 @@ import gainzpad.model.entity.ExerciseEntity;
 import gainzpad.model.entity.WorkoutEntity;
 import gainzpad.model.entity.WorkoutExercise;
 import gainzpad.model.entity.user.RoleEntity;
+import gainzpad.model.entity.SetEntity;
 import gainzpad.model.entity.user.UserEntity;
 import gainzpad.model.enums.UserRoleEnum;
 import gainzpad.repository.*;
@@ -11,6 +12,7 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
@@ -78,15 +80,36 @@ public class DBInit implements CommandLineRunner {
         WorkoutExercise we1 = new WorkoutExercise()
                 .setWorkout(chestDay)
                 .setExercise(pushUp)
-                .setSets(4).setReps(12).setWeight(0.0);
+                .setRestTime(90); // например 90 секунди почивка
+
+        List<SetEntity> we1Sets = new ArrayList<>();
+        for (int i = 0; i < 4; i++) {
+            SetEntity set = new SetEntity()
+                    .setReps(12)
+                    .setWeight(0.0)
+                    .setCompleted(false)
+                    .setWorkoutExercise(we1);
+            we1Sets.add(set);
+        }
+        we1.setSets(we1Sets);
 
         WorkoutExercise we2 = new WorkoutExercise()
                 .setWorkout(chestDay)
                 .setExercise(squat)
-                .setSets(4).setReps(12).setWeight(0.0);
+                .setRestTime(90);
+
+        List<SetEntity> we2Sets = new ArrayList<>();
+        for (int i = 0; i < 4; i++) {
+            SetEntity set = new SetEntity()
+                    .setReps(15)
+                    .setWeight(0.0)
+                    .setCompleted(false)
+                    .setWorkoutExercise(we2);
+            we2Sets.add(set);
+        }
+        we2.setSets(we2Sets);
 
         chestDay.setWorkoutExercises(Set.of(we1, we2));
-
         workoutRepository.save(chestDay);
     }
 

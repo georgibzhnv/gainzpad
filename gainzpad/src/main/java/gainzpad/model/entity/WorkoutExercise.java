@@ -2,7 +2,8 @@ package gainzpad.model.entity;
 
 import jakarta.persistence.*;
 
-import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "workout_exercises")
@@ -19,22 +20,19 @@ public class WorkoutExercise {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "exercise_id", referencedColumnName = "id")
     private ExerciseEntity exercise;
-
-    private int sets;
-    private int reps;
-    private double weight;
-
+    @OneToMany(mappedBy = "workoutExercise", cascade = CascadeType.ALL,orphanRemoval = true)
+    private List<SetEntity> sets = new ArrayList<>();
     @Column(nullable = false)
     private long restTime;
     private long timeSpent;
-    private boolean isCompleted;
 
-    public boolean isCompleted() {
-        return isCompleted;
+
+    public List<SetEntity> getSets() {
+        return sets;
     }
 
-    public WorkoutExercise setCompleted(boolean completed) {
-        isCompleted = completed;
+    public WorkoutExercise setSets(List<SetEntity> sets) {
+        this.sets = sets;
         return this;
     }
 
@@ -83,30 +81,4 @@ public class WorkoutExercise {
         return this;
     }
 
-    public int getSets() {
-        return sets;
-    }
-
-    public WorkoutExercise setSets(int sets) {
-        this.sets = sets;
-        return this;
-    }
-
-    public int getReps() {
-        return reps;
-    }
-
-    public WorkoutExercise setReps(int reps) {
-        this.reps = reps;
-        return this;
-    }
-
-    public double getWeight() {
-        return weight;
-    }
-
-    public WorkoutExercise setWeight(double weight) {
-        this.weight = weight;
-        return this;
-    }
 }

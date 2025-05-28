@@ -106,11 +106,16 @@ public class WorkoutController {
         return "redirect:/workouts/" + id;
     }
 
-    @PostMapping("/{id}/recordSet")
-    public String recordSet(@PathVariable Long id, @ModelAttribute WorkoutExerciseDTO workoutExerciseDTO,Model model) {
-        workoutService.recordSet(id,workoutExerciseDTO);
-        return "redirect:/workouts/" + id;
+    @PostMapping("/{workoutId}/exercise/{exerciseId}/recordSet")
+    public String recordSet(@PathVariable Long workoutId,
+                            @PathVariable Long exerciseId,
+                            @RequestParam Long setId,
+                            @RequestParam Integer reps,
+                            @RequestParam Double weight) {
+        workoutService.recordSet(workoutId, exerciseId, setId, reps, weight);
+        return "redirect:/workouts/" + workoutId;
     }
+
 
     @PostMapping("/{id}/startRest")
     public String startRest(@PathVariable Long id, @RequestParam long restTime) {

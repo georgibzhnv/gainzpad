@@ -5,6 +5,7 @@ import gainzpad.model.dto.WorkoutExerciseDTO;
 import gainzpad.model.entity.ExerciseEntity;
 import gainzpad.model.entity.WorkoutEntity;
 import gainzpad.model.entity.WorkoutExercise;
+import gainzpad.model.entity.SetEntity;
 import gainzpad.model.entity.user.UserEntity;
 import gainzpad.model.mapper.WorkoutMapper;
 import gainzpad.repository.ExerciseRepository;
@@ -70,16 +71,20 @@ public class WorkoutServiceImpl implements WorkoutService {
             WorkoutExercise we = new WorkoutExercise()
                     .setWorkout(workout)      // важно за двупосочната връзка
                     .setExercise(exercise)
-                    .setSets(exDto.getSets())
-                    .setReps(exDto.getReps())
-                    .setWeight(exDto.getWeight());
+                    .setRestTime(exDto.getRestTime())
+                    .setTimeSpent(exDto.getTimeSpent());
 
-            // Добавяме към WorkoutEntity
+            List<SetEntity>setEntities = exDto.getSets().stream()
+                    .map(setDTO -> new SetEntity()
+                            .setReps(setDTO.getReps())
+                            .setWeight(setDTO.getWeight())
+                            .setCompleted(setDTO.isCompleted())
+                            .setWorkoutExercise(we))
+                    .collect(Collectors.toList());
+            we.setSets(setEntities);
             workout.getWorkoutExercises().add(we);
         }
-
-        // 4) Записваме – Hibernate ще вкара редове и в workouts, и в workout_exercises
-        workoutRepository.save(workout);
+       workoutRepository.save(workout);
     }
 
     @Override
@@ -117,34 +122,40 @@ public class WorkoutServiceImpl implements WorkoutService {
     }
 
     @Override
-    public void recordSet(Long id, WorkoutExerciseDTO workoutExerciseDTO) {
+    public void recordSet(Long id, Long exerciseId, Long setId, Integer reps, Double weight) {
         WorkoutEntity workoutEntity = workoutRepository.findById(id)
                 .orElseThrow(()->new IllegalArgumentException("Workout with id=" + id + " not found"));
 
         WorkoutExercise workoutExercise = workoutEntity.getWorkoutExercises().stream()
-                .filter(we->we.getId().equals(workoutExerciseDTO.getExerciseId()))
+                .filter(we->we.getId().equals(exerciseId))
                 .findFirst()
                 .orElseThrow(()->new IllegalArgumentException("Exercise not found."));
 
-        workoutExercise.setReps(workoutExerciseDTO.getReps())
-                .setWeight(workoutExerciseDTO.getWeight())
-                .setSets(workoutExerciseDTO.getSets())
-                .setTimeSpent(workoutExerciseDTO.getTimeSpent())
-                .setCompleted(true);
+        SetEntity setEntity = workoutExercise.getSets().stream()
+                .filter(set->set.getId().equals(setId))
+                .findFirst()
+                .orElseThrow(()->new IllegalArgumentException("Set not found."));
+
+        setEntity.setReps(reps);
+        setEntity.setWeight(weight);
+        setEntity.setCompleted(true);
 
         workoutRepository.save(workoutEntity);
     }
+
 
     @Override
     public void startRest(Long id, long restTime) {
         WorkoutEntity workoutEntity = workoutRepository.findById(id)
                 .orElseThrow(()->new IllegalArgumentException("Workout with id=" + id + " not found"));
 
-        workoutEntity.getWorkoutExercises().forEach(ex->{
-            if (!ex.isCompleted()){
-                ex.setTimeSpent(restTime);
+        for (WorkoutExercise we : workoutEntity.getWorkoutExercises()) {
+            for (SetEntity set : we.getSets()) {
+                if (!set.isCompleted()){
+                    set.setRestTime(restTime);
+                }
             }
-        });
+        }
         workoutRepository.save(workoutEntity);
     }
 
