@@ -4,15 +4,26 @@
 <body>
 <div class="container mt-4">
   <h2 th:text="${workout.workoutName}">Workout Name</h2>
+
+  <div class="mb-3">
+    <form th:action="@{/workouts/start/{id}(id=${workout.id})}" method="post" th:if="${workout.startTime == null}">
+      <button type="submit" class="btn btn-primary">Start routine</button>
+    </form>
+    <form th:action="@{/workouts/finish/{id}(id=${workout.id})}" method="post" th:if="${workout.startTime != null and workout.endTime == null}">
+      <button type="submit" class="btn btn-danger">Finish</button>
+    </form>
+    <span th:if="${workout.endTime != null}" class="badge bg-success">Routine is finished.</span>
+  </div>
+
   <table class="table table-bordered">
     <thead>
     <tr>
-      <th>Упражнение</th>
-      <th>Серия №</th>
-      <th>Повторения</th>
-      <th>Тежест (kg)</th>
-      <th>Статус</th>
-      <th>Действие</th>
+      <th>Exercise</th>
+      <th>Set №</th>
+      <th>Reps</th>
+      <th>Weight (kg)</th>
+      <th>Status</th>
+      <th>Action</th>
     </tr>
     </thead>
     <tbody>
@@ -30,10 +41,13 @@
               <input type="number" name="weight" th:value="${set.weight}" min="0" class="form-control form-control-sm" />
             </td>
             <td>
-              <span th:text="${set.completed} ? 'Готова' : 'Не е готова'"></span>
+              <span th:text="${set.completed} ? 'Completed' : 'Not completed'"></span>
             </td>
             <td>
-              <button type="submit" class="btn btn-success btn-sm" th:if="${!set.completed}">Запиши серия</button>
+              <button type="submit" class="btn btn-success btn-sm"
+                      th:if="${!set.completed and workout.startTime != null and workout.endTime == null}">
+                Done
+              </button>
               <span th:if="${set.completed}" class="text-success">✔</span>
             </td>
           </tr>
@@ -43,7 +57,7 @@
     </tbody>
 
   </table>
-  <a th:href="@{/workouts}" class="btn btn-secondary">Обратно към списъка</a>
+  <a th:href="@{/workouts}" class="btn btn-secondary">Return to list</a>
 </div>
 <div th:replace="~{fragments/bootstrap-js::bootstrap-js}"></div>
 </body>

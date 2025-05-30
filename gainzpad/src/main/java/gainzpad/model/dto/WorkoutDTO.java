@@ -12,10 +12,10 @@ import java.util.List;
 public class WorkoutDTO {
     private Long id;
 
-    @NotBlank(message = "Името на тренировката е задължително")
+    @NotBlank(message = "There must be a name.")
     private String workoutName;
 
-    @NotEmpty(message = "Трябва да има поне едно упражнение")
+    @NotEmpty(message = "There must be at least one exercise.")
     private List<WorkoutExerciseDTO> exercises = new ArrayList<>();
     private boolean isActive;
     private long totalTime;
@@ -84,4 +84,12 @@ public class WorkoutDTO {
         this.exercises = exercises;
         return this;
     }
+    public boolean isStarted() {
+        return startTime != null;
+    }
+
+    public boolean isFinished() {
+        return endTime != null;
+    }
+
 }
