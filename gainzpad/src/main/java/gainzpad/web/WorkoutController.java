@@ -108,10 +108,25 @@ public class WorkoutController {
     }
 
     @PostMapping("/finish/{id}")
-    public String finishWorkout(@PathVariable Long id) {
+    public String finishWorkout(@PathVariable Long id, Model model) {
+        WorkoutDTO workoutDTO = workoutService.getById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Workout not found: " + id));
+
+        boolean allSetsCompleted = workoutDTO.getExercises().stream()
+                .flatMap(ex -> ex.getSets().stream())
+                .allMatch(set -> set.isCompleted());
+
+        if (!allSetsCompleted) {
+            model.addAttribute("workout", workoutDTO);
+            model.addAttribute("exercises", workoutDTO.getExercises());
+            model.addAttribute("error", "Please, finish all sets before finishing the workout!");
+            return "workouts/view";
+        }
+
         workoutService.finishWorkout(id);
         return "redirect:/workouts/" + id;
     }
+
 
     @PostMapping("/{workoutId}/exercise/{exerciseId}/recordSet")
     public String recordSet(@PathVariable Long workoutId,

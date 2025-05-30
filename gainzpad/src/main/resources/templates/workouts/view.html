@@ -5,6 +5,8 @@
 <div class="container mt-4">
   <h2 th:text="${workout.workoutName}">Workout Name</h2>
 
+  <div th:if="${error}" class="alert alert-danger" th:text="${error}"></div>
+
   <div id="timer"
        th:attr="data-start-time=${workoutStartTime},data-end-time=${workoutEndTime}"
        style="font-size: 1.5rem; margin-bottom: 15px; font-weight: bold;">
