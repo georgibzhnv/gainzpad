@@ -1,42 +1,38 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" lang="bg">
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
 <head th:replace="~{fragments/head :: head}"></head>
 <body>
 <div class="container mt-4">
-    <h2>Добави нова тренировка</h2>
+    <h2>Add new routine</h2>
 
     <form th:action="@{/workouts/new}" th:object="${workout}" method="post">
-        <!-- Workout name -->
         <div class="mb-3">
-            <label for="workoutName" class="form-label">Име на тренировката</label>
+            <label for="workoutName" class="form-label">Workout Name</label>
             <input
                     type="text"
                     th:field="*{workoutName}"
                     class="form-control"
                     id="workoutName"
-                    placeholder="Пример: Chest Day"
+                    placeholder="Example: Chest Day"
                     required
             />
         </div>
 
-        <h4>Упражнения</h4>
+        <h4>Exercises</h4>
         <div id="exercises-container">
 
-            <!-- Thymeleaf клонира този блок според размера на workout.exercises -->
             <div
                     class="exercise-item mb-3 border p-3 rounded"
                     th:each="exercise, stat : *{exercises}"
                     th:data-index="${stat.index}"
             >
-
-                <!-- Select (по избор) -->
                 <div class="mb-2">
-                    <label class="form-label">Избери упражнение (по избор)</label>
+                    <label class="form-label">Choose an exercise(optional)</label>
                     <select
                             th:field="*{exercises[__${stat.index}__].exerciseId}"
                             class="form-select"
                     >
-                        <option value="">-- По избор: съществуващо упражнение --</option>
+                        <option value="">-- Optional: existing exercise --</option>
                         <option
                                 th:each="ex : ${allExercises}"
                                 th:value="${ex.id}"
@@ -45,21 +41,19 @@
                     </select>
                 </div>
 
-                <!-- Ново упражнение -->
                 <div class="mb-2">
-                    <label class="form-label">Или добави ново упражнение</label>
+                    <label class="form-label">Or add new exercise</label>
                     <input
                             type="text"
                             th:field="*{exercises[__${stat.index}__].newExerciseName}"
-                            placeholder="Име на ново упражнение"
+                            placeholder="Name of new exercise"
                             class="form-control"
                     />
                 </div>
 
-                <!-- Серии / Повторения / Тежест -->
                 <div class="row g-2">
                     <div class="col">
-                        <label class="form-label">Серии</label>
+                        <label class="form-label">Sets</label>
                         <input
                                 type="number"
                                 min="1"
@@ -69,7 +63,7 @@
                         />
                     </div>
                     <div class="col">
-                        <label class="form-label">Повторения</label>
+                        <label class="form-label">Reps</label>
                         <input
                                 type="number"
                                 min="1"
@@ -79,7 +73,7 @@
                         />
                     </div>
                     <div class="col">
-                        <label class="form-label">Тежест (кг)</label>
+                        <label class="form-label">Weight (kg)</label>
                         <input
                                 type="number"
                                 min="0"
@@ -93,7 +87,7 @@
                 <button
                         type="button"
                         class="btn btn-danger btn-sm mt-2 remove-exercise-btn"
-                >Премахни упражнение</button>
+                >Remove exercise</button>
 
             </div>
         </div>
@@ -102,23 +96,22 @@
                 type="button"
                 id="add-exercise-btn"
                 class="btn btn-secondary mb-3"
-        >Добави упражнение</button>
+        >Add exercise</button>
 
         <div class="d-flex justify-content-end gap-2">
-            <button type="submit" class="btn btn-primary">Запази</button>
+            <button type="submit" class="btn btn-primary">Save</button>
             <button
                     type="button"
                     class="btn btn-secondary"
                     th:onclick="|window.location='@{/workouts}'|"
-            >Отказ</button>
+            >Cancel</button>
         </div>
     </form>
 </div>
 
-<!-- Popper & Bootstrap JS -->
+
 <div th:replace="~{fragments/bootstrap-js :: bootstrap-js}"></div>
 
-<!-- Клониране/премахване на упражнения -->
 <script>
     const exercisesContainer = document.getElementById('exercises-container');
     const addExerciseBtn    = document.getElementById('add-exercise-btn');
@@ -149,7 +142,7 @@
                 e.target.closest('.exercise-item').remove();
                 updateIndices();
             } else {
-                alert('Трябва да има поне едно упражнение.');
+                alert('There must be at least one exercise.');
             }
         }
     });

@@ -74,7 +74,6 @@
     var startTime = timerDiv.getAttribute('data-start-time');
     var endTime = timerDiv.getAttribute('data-end-time');
 
-    // Проверка за валидност
     if (startTime && startTime !== "") {
       function formatTime(ms) {
         let t = Math.floor(ms/1000),
@@ -93,7 +92,7 @@
         }
         update();
         if (!to) return setInterval(update, 1000);
-        else update(); // Показва крайното време
+        else update();
       }
 
       startTimer(startTime, (endTime && endTime !== "") ? endTime : null);

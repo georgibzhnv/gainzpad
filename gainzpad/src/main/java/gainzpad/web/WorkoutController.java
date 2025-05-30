@@ -1,6 +1,5 @@
 package gainzpad.web;
 
-import gainzpad.model.dto.ExerciseDTO;
 import gainzpad.model.dto.WorkoutDTO;
 import gainzpad.model.dto.WorkoutExerciseDTO;
 import gainzpad.service.ExerciseService;
