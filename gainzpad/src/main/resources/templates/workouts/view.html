@@ -5,6 +5,12 @@
 <div class="container mt-4">
   <h2 th:text="${workout.workoutName}">Workout Name</h2>
 
+  <div id="timer"
+       th:attr="data-start-time=${workoutStartTime},data-end-time=${workoutEndTime}"
+       style="font-size: 1.5rem; margin-bottom: 15px; font-weight: bold;">
+  </div>
+
+
   <div class="mb-3">
     <form th:action="@{/workouts/start/{id}(id=${workout.id})}" method="post" th:if="${workout.startTime == null}">
       <button type="submit" class="btn btn-primary">Start routine</button>
@@ -55,10 +61,46 @@
       </th:block>
     </th:block>
     </tbody>
-
   </table>
   <a th:href="@{/workouts}" class="btn btn-secondary">Return to list</a>
 </div>
 <div th:replace="~{fragments/bootstrap-js::bootstrap-js}"></div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    var timerDiv = document.getElementById('timer');
+    var startTime = timerDiv.getAttribute('data-start-time');
+    var endTime = timerDiv.getAttribute('data-end-time');
+
+    // Проверка за валидност
+    if (startTime && startTime !== "") {
+      function formatTime(ms) {
+        let t = Math.floor(ms/1000),
+                h = Math.floor(t/3600),
+                m = Math.floor((t%3600)/60),
+                s = t % 60;
+        return `${h.toString().padStart(2,'0')}:${m.toString().padStart(2,'0')}:${s.toString().padStart(2,'0')}`;
+      }
+
+      function startTimer(from, to) {
+        function update() {
+          var now = to ? new Date(to) : new Date();
+          var diff = now - new Date(from);
+          if (diff < 0 || isNaN(diff)) diff = 0;
+          timerDiv.innerHTML = "<b>Време: </b>" + formatTime(diff);
+        }
+        update();
+        if (!to) return setInterval(update, 1000);
+        else update(); // Показва крайното време
+      }
+
+      startTimer(startTime, (endTime && endTime !== "") ? endTime : null);
+    } else {
+      timerDiv.innerHTML = "<b>Време: </b>00:00:00";
+    }
+  });
+</script>
+
+
 </body>
 </html>

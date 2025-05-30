@@ -13,6 +13,7 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
 @Controller
@@ -62,8 +63,14 @@ public class WorkoutController {
             workoutDTO.setExercises(new ArrayList<>());
         }
 
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss");
+        String startTimeStr = (workoutDTO.getStartTime() != null) ? workoutDTO.getStartTime().format(formatter) : "";
+        String endTimeStr = (workoutDTO.getEndTime() != null) ? workoutDTO.getEndTime().format(formatter) : "";
+
         model.addAttribute("workout", workoutDTO);
         model.addAttribute("exercises", workoutDTO.getExercises());
+        model.addAttribute("workoutStartTime", startTimeStr);
+        model.addAttribute("workoutEndTime", endTimeStr);
         return "workouts/view";
     }
 
