@@ -159,5 +159,38 @@ public class WorkoutServiceImpl implements WorkoutService {
         workoutRepository.save(workoutEntity);
     }
 
+    @Override
+    public void addSet(Long workoutId, Long exerciseId) {
+        WorkoutEntity workout = workoutRepository.findById(workoutId)
+                .orElseThrow(()->new IllegalArgumentException("Workout with id=" + workoutId + " not found"));
+        WorkoutExercise exercise = workout.getWorkoutExercises().stream()
+                .filter(we->we.getId().equals(exerciseId))
+                .findFirst()
+                .orElseThrow(()->new IllegalArgumentException("Exercise not found."));
+
+        SetEntity newSet = new SetEntity()
+                .setReps(0)
+                .setWeight(0.0)
+                .setCompleted(false)
+                .setWorkoutExercise(exercise);
+
+        exercise.getSets().add(newSet);
+        workoutRepository.save(workout);
+    }
+
+    @Override
+    public void removeSet(Long workoutId, Long exerciseId, Long setId) {
+        WorkoutEntity workout = workoutRepository.findById(workoutId)
+                .orElseThrow(()->new IllegalArgumentException("Workout with id=" + workoutId + " not found"));
+        WorkoutExercise exercise = workout.getWorkoutExercises().stream()
+                .filter(we->we.getId().equals(exerciseId))
+                .findFirst()
+                .orElseThrow(()->new IllegalArgumentException("Exercise not found."));
+
+        boolean removed = exercise.getSets().removeIf(set -> set.getId().equals(setId));
+        System.out.println("Set with id=" + setId + " removed: " + removed);
+        workoutRepository.save(workout);
+    }
+
 
 }

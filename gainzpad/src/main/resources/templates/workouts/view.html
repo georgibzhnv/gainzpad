@@ -56,11 +56,25 @@
                       th:if="${!set.completed and workout.startTime != null and workout.endTime == null}">
                 Done
               </button>
+        </form>
+        <form th:action="@{/workouts/{workoutId}/exercise/{exerciseId}/removeSet(workoutId=${workout.id},exerciseId=${we.exerciseId})}" method="post"
+        style="display:inline;">
+          <input type="hidden" name="setId" th:value="${set.id}" />
+          <button type="submit" class="btn btn-danger btn-sm"
+                  th:if="${workout.startTime != null and workout.endTime == null}">
+            Remove set</button>
+        </form>
               <span th:if="${set.completed}" class="text-success">✔</span>
             </td>
           </tr>
-        </form>
       </th:block>
+      <tr th:if="${workout.startTime != null and workout.endTime == null}">
+        <td colspan="6">
+          <form th:action="@{/workouts/{workoutId}/exercise/{exerciseId}/addSet(workoutId=${workout.id},exerciseId=${we.exerciseId})}" method="post">
+            <button type="submit" class="btn btn-primary btn-sm">Add set</button>
+          </form>
+        </td>
+      </tr>
     </th:block>
     </tbody>
   </table>

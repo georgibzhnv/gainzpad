@@ -1,9 +1,6 @@
 package gainzpad.model.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 
 @Entity
 @Table(name = "sets")
@@ -12,7 +9,7 @@ public class SetEntity extends BaseEntity {
     private int reps;
     private Double weight;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "workout_exercise_id")
     private WorkoutExercise workoutExercise;
 

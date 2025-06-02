@@ -22,4 +22,8 @@ public interface WorkoutService {
                    Long setId, Integer reps,
                    Double weight);
     void startRest(Long id,long restTime);
+
+    void addSet(Long workoutId, Long exerciseId);
+
+    void removeSet(Long workoutId, Long exerciseId, Long setId);
 }

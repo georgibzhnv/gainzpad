@@ -143,4 +143,16 @@ public class WorkoutController {
         workoutService.startRest(id,restTime);
         return "redirect:/workouts/" + id;
     }
+
+    @PostMapping("{workoutId}/exercise/{exerciseId}/addSet")
+    public String addSet(@PathVariable Long workoutId,@PathVariable Long exerciseId){
+        workoutService.addSet(workoutId,exerciseId);
+        return "redirect:/workouts/" + workoutId;
+    }
+
+    @PostMapping("{workoutId}/exercise/{exerciseId}/removeSet")
+    public String removeSet(@PathVariable Long workoutId,@PathVariable Long exerciseId,@RequestParam Long setId){
+        workoutService.removeSet(workoutId,exerciseId,setId);
+        return "redirect:/workouts/" + workoutId;
+    }
 }
