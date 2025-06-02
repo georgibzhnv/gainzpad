@@ -109,7 +109,7 @@ public class DBInit implements CommandLineRunner {
         }
         we2.setSets(we2Sets);
 
-        chestDay.setWorkoutExercises(Set.of(we1, we2));
+        chestDay.setWorkoutExercises(List.of(we1, we2));
         workoutRepository.save(chestDay);
     }
 

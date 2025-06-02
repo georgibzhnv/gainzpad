@@ -187,8 +187,7 @@ public class WorkoutServiceImpl implements WorkoutService {
                 .findFirst()
                 .orElseThrow(()->new IllegalArgumentException("Exercise not found."));
 
-        boolean removed = exercise.getSets().removeIf(set -> set.getId().equals(setId));
-        System.out.println("Set with id=" + setId + " removed: " + removed);
+        exercise.getSets().removeIf(set -> set.getId().equals(setId));
         workoutRepository.save(workout);
     }
 

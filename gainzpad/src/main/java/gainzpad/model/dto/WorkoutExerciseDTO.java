@@ -8,6 +8,7 @@ import java.util.List;
 
 public class WorkoutExerciseDTO {
 
+    private Long id;
     private Long workoutId;
     @NotNull(message = "exerciseId не може да е null")
     private Long exerciseId;
@@ -18,6 +19,15 @@ public class WorkoutExerciseDTO {
     private long timeSpent;
 
     private List<SetDTO> sets = new ArrayList<>();
+
+    public Long getId() {
+        return id;
+    }
+
+    public WorkoutExerciseDTO setId(Long id) {
+        this.id = id;
+        return this;
+    }
 
     public List<SetDTO> getSets() {
         return sets;

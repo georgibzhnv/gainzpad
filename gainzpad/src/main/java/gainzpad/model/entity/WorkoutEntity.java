@@ -4,7 +4,9 @@ import gainzpad.model.entity.user.UserEntity;
 import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -18,7 +20,7 @@ public class WorkoutEntity extends BaseEntity{
     private UserEntity user;
 
     @OneToMany(mappedBy = "workout", cascade = CascadeType.ALL, orphanRemoval = true,fetch = FetchType.EAGER)
-    private Set<WorkoutExercise> workoutExercises = new HashSet<>();
+    private List<WorkoutExercise> workoutExercises =new ArrayList<>();
     private boolean isActive;
     private long totalTime;
 
@@ -79,11 +81,11 @@ public class WorkoutEntity extends BaseEntity{
         return this;
     }
 
-    public Set<WorkoutExercise> getWorkoutExercises() {
+    public List<WorkoutExercise> getWorkoutExercises() {
         return workoutExercises;
     }
 
-    public WorkoutEntity setWorkoutExercises(Set<WorkoutExercise> workoutExercises) {
+    public WorkoutEntity setWorkoutExercises(List<WorkoutExercise> workoutExercises) {
         this.workoutExercises = workoutExercises;
         return this;
     }

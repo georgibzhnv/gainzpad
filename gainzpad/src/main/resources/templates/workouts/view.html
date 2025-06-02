@@ -37,7 +37,7 @@
     <tbody>
     <th:block th:each="we : ${workout.exercises}">
       <th:block th:each="set, setStat : ${we.sets}">
-        <form th:action="@{/workouts/{workoutId}/exercise/{exerciseId}/recordSet(workoutId=${workout.id},exerciseId=${we.exerciseId})}" method="post">
+        <form th:action="@{/workouts/{workoutId}/exercise/{exerciseId}/recordSet(workoutId=${workout.id},exerciseId=${we.id})}" method="post">
           <tr>
             <td th:if="${setStat.index == 0}" th:rowspan="${#lists.size(we.sets)}" th:text="${we.exerciseName}"></td>
             <td th:text="${setStat.index + 1}"></td>
