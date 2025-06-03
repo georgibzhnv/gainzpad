@@ -21,7 +21,7 @@
             <td th:text="${workout.workoutName}">Workout Name</td>
             <td>
                 <a th:href="@{|/workouts/${workout.id}|}" class="btn btn-info btn-sm">View</a>
-                <a th:href="@{|/workouts/${workout.id}|}"
+                <a href="#"
                    class="btn btn-danger btn-sm"
                    data-bs-toggle="modal"
                    data-bs-target="#confirmDeleteModal"
@@ -42,12 +42,13 @@
         var workoutName = button.getAttribute('data-workout-name');
 
         var modalTitle = confirmDeleteModal.querySelector('#modalWorkoutName');
-        var confirmBtn = confirmDeleteModal.querySelector('#confirmDeleteBtn');
-
         modalTitle.textContent = workoutName;
-        confirmBtn.href = '/workouts/delete/' + workoutId;
+
+        var form = document.getElementById('deleteWorkoutForm');
+        form.action = '/workouts/delete/' + workoutId;
     });
 </script>
+
 
 <div th:replace="~{fragments/bootstrap-js::bootstrap-js}"></div>
 </body>

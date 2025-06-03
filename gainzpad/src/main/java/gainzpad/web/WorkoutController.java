@@ -99,6 +99,11 @@ public class WorkoutController {
         return "redirect:/workouts";
     }
 
+    @PostMapping("/delete/{id}")
+    public String deleteWorkout(@PathVariable Long id) {
+        workoutService.deleteWorkout(id);
+        return "redirect:/workouts";
+    }
 
     @PostMapping("/start/{id}")
     public String startWorkout(@PathVariable Long id) {
@@ -155,4 +160,5 @@ public class WorkoutController {
         workoutService.removeSet(workoutId,exerciseId,setId);
         return "redirect:/workouts/" + workoutId;
     }
+
 }

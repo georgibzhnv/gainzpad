@@ -191,5 +191,10 @@ public class WorkoutServiceImpl implements WorkoutService {
         workoutRepository.save(workout);
     }
 
+    @Override
+    public void deleteWorkout(Long id) {
+        workoutRepository.deleteById(id);
+    }
+
 
 }
