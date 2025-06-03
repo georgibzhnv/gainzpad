@@ -4,7 +4,6 @@
 <body>
 <div class="container mt-4">
     <h2>Add new routine</h2>
-
     <form th:action="@{/workouts/new}" th:object="${workout}" method="post">
         <div class="mb-3">
             <label for="workoutName" class="form-label">Workout Name</label>
@@ -20,84 +19,58 @@
 
         <h4>Exercises</h4>
         <div id="exercises-container">
-
-            <div
-                    class="exercise-item mb-3 border p-3 rounded"
-                    th:each="exercise, stat : *{exercises}"
-                    th:data-index="${stat.index}"
-            >
+            <div class="exercise-item mb-3 border p-3 rounded"
+                 th:each="exercise, stat : *{exercises}"
+                 th:data-index="${stat.index}">
+                <!-- Избор на упражнение -->
                 <div class="mb-2">
-                    <label class="form-label">Choose an exercise(optional)</label>
-                    <select
-                            th:field="*{exercises[__${stat.index}__].exerciseId}"
-                            class="form-select"
-                    >
+                    <label class="form-label">Choose an exercise (optional)</label>
+                    <select th:field="*{exercises[__${stat.index}__].exerciseId}" class="form-select">
                         <option value="">-- Optional: existing exercise --</option>
-                        <option
-                                th:each="ex : ${allExercises}"
-                                th:value="${ex.id}"
-                                th:text="${ex.name}"
-                        ></option>
+                        <option th:each="ex : ${allExercises}" th:value="${ex.id}" th:text="${ex.name}"></option>
                     </select>
                 </div>
-
                 <div class="mb-2">
                     <label class="form-label">Or add new exercise</label>
-                    <input
-                            type="text"
-                            th:field="*{exercises[__${stat.index}__].newExerciseName}"
-                            placeholder="Name of new exercise"
-                            class="form-control"
-                    />
+                    <input type="text"
+                           th:field="*{exercises[__${stat.index}__].newExerciseName}"
+                           placeholder="Name of new exercise"
+                           class="form-control"/>
                 </div>
-
-                <div class="row g-2">
-                    <div class="col">
-                        <label class="form-label">Sets</label>
-                        <input
-                                type="number"
-                                min="1"
-                                th:field="*{exercises[__${stat.index}__].sets}"
-                                class="form-control"
-                                required
-                        />
-                    </div>
-                    <div class="col">
-                        <label class="form-label">Reps</label>
-                        <input
-                                type="number"
-                                min="1"
-                                th:field="*{exercises[__${stat.index}__].reps}"
-                                class="form-control"
-                                required
-                        />
-                    </div>
-                    <div class="col">
-                        <label class="form-label">Weight (kg)</label>
-                        <input
-                                type="number"
-                                min="0"
-                                step="0.1"
-                                th:field="*{exercises[__${stat.index}__].weight}"
-                                class="form-control"
-                        />
-                    </div>
-                </div>
-
-                <button
-                        type="button"
-                        class="btn btn-danger btn-sm mt-2 remove-exercise-btn"
-                >Remove exercise</button>
-
+                <!-- Таблица със серии -->
+                <table class="table table-bordered mb-2">
+                    <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Reps</th>
+                        <th>Weight (kg)</th>
+                        <th>Action</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="set, setStat : *{exercises[__${stat.index}__].sets}">
+                        <td th:text="${setStat.index + 1}"></td>
+                        <td>
+                            <input type="number"
+                                   th:field="*{exercises[__${stat.index}__].sets[__${setStat.index}__].reps}"
+                                   class="form-control form-control-sm" min="1" required/>
+                        </td>
+                        <td>
+                            <input type="number"
+                                   th:field="*{exercises[__${stat.index}__].sets[__${setStat.index}__].weight}"
+                                   class="form-control form-control-sm" min="0" step="0.1"/>
+                        </td>
+                        <td>
+                            <button type="button" class="btn btn-danger btn-sm remove-set-btn">Remove</button>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+                <button type="button" class="btn btn-secondary btn-sm add-set-btn">Add set</button>
+                <button type="button" class="btn btn-danger btn-sm mt-2 remove-exercise-btn">Remove exercise</button>
             </div>
         </div>
-
-        <button
-                type="button"
-                id="add-exercise-btn"
-                class="btn btn-secondary mb-3"
-        >Add exercise</button>
-
+        <button type="button" id="add-exercise-btn" class="btn btn-secondary mb-3">Add exercise</button>
         <div class="d-flex justify-content-end gap-2">
             <button type="submit" class="btn btn-primary">Save</button>
             <button
@@ -109,33 +82,59 @@
     </form>
 </div>
 
-
 <div th:replace="~{fragments/bootstrap-js :: bootstrap-js}"></div>
 
 <script>
     const exercisesContainer = document.getElementById('exercises-container');
     const addExerciseBtn    = document.getElementById('add-exercise-btn');
 
+    // Опреснява индексите при динамични промени
     function updateIndices() {
         exercisesContainer.querySelectorAll('.exercise-item').forEach((item, i) => {
             item.setAttribute('data-index', i);
+
+            // Update имена на полетата за упражнение
             item.querySelectorAll('input, select').forEach(el => {
-                const name = el.getAttribute('name');
-                el.setAttribute('name', name.replace(/\[\d+\]/, '[' + i + ']'));
+                if (el.name) {
+                    el.name = el.name.replace(/exercises\[\d+\]/, `exercises[${i}]`);
+                }
+            });
+
+            // Update имена на сетовете
+            item.querySelectorAll('tbody tr').forEach((tr, j) => {
+                tr.querySelectorAll('input').forEach(input => {
+                    if (input.name) {
+                        input.name = input.name.replace(/sets\[\d+\]/, `sets[${j}]`);
+                    }
+                });
             });
         });
     }
 
+    // Добавяне на упражнение
     addExerciseBtn.addEventListener('click', () => {
         const first = exercisesContainer.querySelector('.exercise-item');
         const clone = first.cloneNode(true);
+
+        // Изчисти всички инпути и селекти
         clone.querySelectorAll('input').forEach(i => i.value = '');
-        clone.querySelector('select').selectedIndex = 0;
+        clone.querySelectorAll('select').forEach(s => s.selectedIndex = 0);
+
+        // Остави само първия ред в сет таблицата
+        const tbody = clone.querySelector('tbody');
+        const firstRow = tbody.querySelector('tr');
+        while (tbody.rows.length > 1) {
+            tbody.deleteRow(1);
+        }
+        firstRow.querySelectorAll('input').forEach(i => i.value = '');
+
         exercisesContainer.appendChild(clone);
         updateIndices();
     });
 
+    // Слушател за бутони в контейнера
     exercisesContainer.addEventListener('click', e => {
+        // Премахване на упражнение
         if (e.target.classList.contains('remove-exercise-btn')) {
             const items = exercisesContainer.querySelectorAll('.exercise-item');
             if (items.length > 1) {
@@ -143,6 +142,26 @@
                 updateIndices();
             } else {
                 alert('There must be at least one exercise.');
+            }
+        }
+        // Добавяне на серия (set)
+        if (e.target.classList.contains('add-set-btn')) {
+            const tbody = e.target.closest('.exercise-item').querySelector('tbody');
+            const firstRow = tbody.querySelector('tr');
+            const newRow = firstRow.cloneNode(true);
+            newRow.querySelectorAll('input').forEach(i => i.value = '');
+            tbody.appendChild(newRow);
+            updateIndices();
+        }
+        // Премахване на серия (set)
+        if (e.target.classList.contains('remove-set-btn')) {
+            const tbody = e.target.closest('tbody');
+            const rows = tbody.querySelectorAll('tr');
+            if (rows.length > 1) {
+                e.target.closest('tr').remove();
+                updateIndices();
+            } else {
+                alert('There must be at least one set.');
             }
         }
     });

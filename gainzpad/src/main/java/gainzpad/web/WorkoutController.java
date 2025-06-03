@@ -1,5 +1,6 @@
 package gainzpad.web;
 
+import gainzpad.model.dto.SetDTO;
 import gainzpad.model.dto.WorkoutDTO;
 import gainzpad.model.dto.WorkoutExerciseDTO;
 import gainzpad.service.ExerciseService;
@@ -46,7 +47,16 @@ public class WorkoutController {
     @GetMapping("/new")
     public String newWorkout(Model model) {
         WorkoutDTO workout = new WorkoutDTO();
+        WorkoutExerciseDTO exercise = new WorkoutExerciseDTO();
+        exercise.getSets().add(new SetDTO());
         workout.getExercises().add(new WorkoutExerciseDTO());
+        if (workout.getExercises() != null) {
+            for (WorkoutExerciseDTO ex : workout.getExercises()) {
+                if (ex.getSets() == null || ex.getSets().isEmpty()) {
+                    ex.getSets().add(new SetDTO());
+                }
+            }
+        }
 
         model.addAttribute("workout", workout);
         model.addAttribute("allExercises", exerciseService.getAllExercises());

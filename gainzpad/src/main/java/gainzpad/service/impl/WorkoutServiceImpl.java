@@ -51,30 +51,41 @@ public class WorkoutServiceImpl implements WorkoutService {
 
     @Override
     public void create(WorkoutDTO workoutDTO) {
-        // 1) Намираме текущия потребител
+
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
         UserEntity user = userRepository.findOneByEmail(username)
                 .orElseThrow(() -> new UsernameNotFoundException(username));
 
-        // 2) Създаваме WorkoutEntity
         WorkoutEntity workout = new WorkoutEntity()
                 .setWorkoutName(workoutDTO.getWorkoutName())
                 .setUser(user);
 
-        // 3) За всяко упражнение в DTO-то – създаваме WorkoutExercise и го вкарваме в WorkoutEntity
         for (WorkoutExerciseDTO exDto : workoutDTO.getExercises()) {
-            // Зареждаме ExerciseEntity (трябва да е налице по ID)
-            ExerciseEntity exercise = exerciseRepository.findById(exDto.getExerciseId())
-                    .orElseThrow(() -> new IllegalArgumentException("Няма упражнение с ID=" + exDto.getExerciseId()));
+            ExerciseEntity exercise;
 
-            // Създаваме моста WorkoutExercise
+            if (exDto.getExerciseId() != null) {
+                exercise = exerciseRepository.findById(exDto.getExerciseId())
+                        .orElseThrow(() -> new IllegalArgumentException("No exercise with ID=" + exDto.getExerciseId()));
+            }
+
+            else if (exDto.getNewExerciseName() != null && !exDto.getNewExerciseName().isBlank()) {
+                exercise = new ExerciseEntity();
+                exercise.setName(exDto.getNewExerciseName());
+                // сетни и други полета ако имаш
+                exercise = exerciseRepository.save(exercise);
+            }
+
+            else {
+                throw new IllegalArgumentException("No exercise specified.");
+            }
+
             WorkoutExercise we = new WorkoutExercise()
-                    .setWorkout(workout)      // важно за двупосочната връзка
+                    .setWorkout(workout)
                     .setExercise(exercise)
                     .setRestTime(exDto.getRestTime())
                     .setTimeSpent(exDto.getTimeSpent());
 
-            List<SetEntity>setEntities = exDto.getSets().stream()
+            List<SetEntity> setEntities = exDto.getSets().stream()
                     .map(setDTO -> new SetEntity()
                             .setReps(setDTO.getReps())
                             .setWeight(setDTO.getWeight())
@@ -84,7 +95,8 @@ public class WorkoutServiceImpl implements WorkoutService {
             we.setSets(setEntities);
             workout.getWorkoutExercises().add(we);
         }
-       workoutRepository.save(workout);
+
+        workoutRepository.save(workout);
     }
 
     @Override
