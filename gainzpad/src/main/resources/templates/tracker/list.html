@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/head :: head}"></head>
+</head>
+<body>
+<div th:replace="~{fragments/navbar :: navbar(activeTab)}"></div>
+<body>
+<h2>Food Entries</h2>
+<table>
+    <thead>
+    <tr>
+        <th>Food Name</th>
+        <th>Calories</th>
+        <th>Protein</th>
+        <th>Fat</th>
+        <th>Carbs</th>
+        <th>Meal Time</th>
+        <th>Action</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="foodEntry : ${foodEntries}">
+        <td th:text="${foodEntry.foodName}"></td>
+        <td th:text="${foodEntry.calories}"></td>
+        <td th:text="${foodEntry.protein}"></td>
+        <td th:text="${foodEntry.fat}"></td>
+        <td th:text="${foodEntry.carbs}"></td>
+        <td th:text="${foodEntry.mealTime}"></td>
+        <td><a th:href="@{/food-entries/{id}(id=${foodEntry.id})}">View</a></td>
+    </tr>
+    </tbody>
+</table>
+<a href="/tracker/new">Add New Food Entry</a>
+
+<div th:replace="~{fragments/bootstrap-js::bootstrap-js}"></div>
+</body>
+</html>

@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/head :: head}"></head>
+</head>
+<body>
+<div th:replace="~{fragments/navbar :: navbar(activeTab)}"></div>
+<div class="container mt-4">
+    <h2>Food Entry Details</h2>
+
+    <!-- Display Food Entry Information -->
+    <div class="card">
+        <div class="card-body">
+            <h5 class="card-title" th:text="${foodEntry.foodName}">Food Name</h5>
+            <p class="card-text">
+                <strong>Calories:</strong> <span th:text="${foodEntry.calories}">100</span> kcal
+            </p>
+            <p class="card-text">
+                <strong>Protein:</strong> <span th:text="${foodEntry.protein}">10</span> g
+            </p>
+            <p class="card-text">
+                <strong>Fat:</strong> <span th:text="${foodEntry.fat}">5</span> g
+            </p>
+            <p class="card-text">
+                <strong>Carbs:</strong> <span th:text="${foodEntry.carbs}">20</span> g
+            </p>
+            <p class="card-text">
+                <strong>Meal Time:</strong> <span th:text="${foodEntry.mealTime}">Breakfast</span>
+            </p>
+
+            <!-- Display the food image if available -->
+            <div th:if="${foodEntry.foodImageUrl != null}">
+                <img th:src="@{${foodEntry.foodImageUrl}}" alt="Food Image" class="img-fluid"/>
+            </div>
+
+            <a href="/tracker" class="btn btn-secondary mt-3">Back to Tracker</a>
+        </div>
+    </div>
+</div>
+
+<div th:replace="~{fragments/bootstrap-js::bootstrap-js}"></div>
+</body>
+</html>
