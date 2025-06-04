@@ -101,7 +101,7 @@ public class WorkoutController {
         if (!allValid) {
             model.addAttribute("allExercises", exerciseService.getAllExercises());
             model.addAttribute("errorMessage",
-                    "За всяко упражнение изберете готово или напишете ново име.");
+                    "Choose an existing exercise or enter a new one.");
             return "workouts/new";
         }
 
