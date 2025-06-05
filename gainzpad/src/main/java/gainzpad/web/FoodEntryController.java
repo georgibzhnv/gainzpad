@@ -2,10 +2,15 @@ package gainzpad.web;
 
 import gainzpad.model.dto.FoodEntryDTO;
 import gainzpad.service.FoodEntryService;
+import gainzpad.service.UserService;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+
+import java.security.Principal;
+import java.time.LocalDate;
 
 @Controller
 @RequestMapping("/tracker")
@@ -17,37 +22,37 @@ public class FoodEntryController {
         this.foodEntryService = foodEntryService;
     }
 
+    // Списък с храненията за конкретен ден
     @GetMapping
-    public String getAllFoodEntries(Model model){
-        String username = SecurityContextHolder.getContext().getAuthentication().getName();
-        model.addAttribute("foodEntries",foodEntryService.getAllByUser(username));
-        return "tracker/list";
+    public String listEntries(@RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date,
+                              Principal principal, Model model) {
+        if (date == null) date = LocalDate.now();
+        String email = principal.getName();
+        model.addAttribute("entries", foodEntryService.getAllByUserAndDate(email, date));
+        model.addAttribute("date", date);
+        return "food-entries-list";
     }
 
-    // Show form to add a new food entry
-    @GetMapping("/new")
-    public String addFoodEntryForm(Model model) {
+    // Форма за добавяне
+    @GetMapping("/add")
+    public String addEntryForm(Model model) {
         model.addAttribute("foodEntry", new FoodEntryDTO());
-        return "tracker/new";
+        return "food-entry-add";
     }
 
-    @PostMapping("/new")
-    public String addFoodEntry(@ModelAttribute("foodEntry") FoodEntryDTO foodEntryDTO,Model model){
-        String username = SecurityContextHolder.getContext().getAuthentication().getName();
-        foodEntryService.addFoodEntry(foodEntryDTO,username);
-        return "redirect:/tracker";
+    // Записва нова храна
+    @PostMapping("/add")
+    public String addEntry(@ModelAttribute FoodEntryDTO foodEntry, Principal principal) {
+        String email = principal.getName();
+        foodEntryService.addFoodEntry(foodEntry, email);
+        return "redirect:/food-entries";
     }
 
-    @GetMapping("/{id}")
-    public String viewFoodEntry(@PathVariable Long id,Model model){
-        model.addAttribute("foodEntry",foodEntryService.getFoodEntryById(id)
-                .orElseThrow(()->new IllegalArgumentException("Food entry not found: " + id)));
-        return "tracker/view";
-    }
-
-    @PostMapping("/delete/{id}")
-    public String deleteFoodEntry(@PathVariable Long id){
-        foodEntryService.deleteFoodEntry(id);
-        return "redirect:/tracker";
+    // Изтриване на храна
+    @PostMapping("/{id}/delete")
+    public String deleteEntry(@PathVariable Long id, Principal principal) {
+        String email = principal.getName();
+        foodEntryService.deleteFoodEntry(id, email);
+        return "redirect:/food-entries";
     }
 }

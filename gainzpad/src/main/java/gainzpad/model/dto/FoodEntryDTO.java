@@ -2,6 +2,8 @@ package gainzpad.model.dto;
 
 import gainzpad.model.enums.MealTimeEnum;
 
+import java.time.LocalDateTime;
+
 public class FoodEntryDTO {
 
     private Long id;
@@ -10,8 +12,28 @@ public class FoodEntryDTO {
     private Double protein;
     private Double fat;
     private Double carbs;
-    private MealTimeEnum mealTime;  // Променено към MealTime
+    private Double weightInGrams;
+    private MealTimeEnum mealTime;
     private String foodImageUrl;
+    private LocalDateTime date;
+
+    public Double getWeightInGrams() {
+        return weightInGrams;
+    }
+
+    public FoodEntryDTO setWeightInGrams(Double weightInGrams) {
+        this.weightInGrams = weightInGrams;
+        return this;
+    }
+
+    public LocalDateTime getDate() {
+        return date;
+    }
+
+    public FoodEntryDTO setDate(LocalDateTime date) {
+        this.date = date;
+        return this;
+    }
 
     public Long getId() {
         return id;

@@ -7,6 +7,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
+
 @Controller
 @RequestMapping("/tracker/goals")
 public class GoalController {
@@ -18,30 +20,28 @@ public class GoalController {
     }
 
     @GetMapping
-    public String getGoal(Model model) {
-        String username = SecurityContextHolder.getContext().getAuthentication().getName();
-        GoalDTO goalDTO = goalService.getGoalByUser(username);
-        model.addAttribute("goal", goalDTO);
-        return "tracker/goal/view";
+    public String viewGoal(Principal principal, Model model) {
+        String email = principal.getName();
+        GoalDTO goal = goalService.getGoalByEmail(email);
+        if (goal == null) goal = new GoalDTO();
+        model.addAttribute("goal", goal);
+        return "goal-view";
     }
 
-    @GetMapping("/new")
-    public String createGoal(Model model) {
-        model.addAttribute("goal", new GoalDTO());
-        return "tracker/goal/create";
+    @GetMapping("/edit")
+    public String editGoalForm(Principal principal, Model model) {
+        String email = principal.getName();
+        GoalDTO goal = goalService.getGoalByEmail(email);
+        if (goal == null) goal = new GoalDTO();
+        model.addAttribute("goal", goal);
+        return "goal-edit";
     }
 
-    @PostMapping("/new")
-    public String saveGoal(@ModelAttribute GoalDTO goalDTO) {
-        String username = SecurityContextHolder.getContext().getAuthentication().getName();
-        goalService.createGoal(goalDTO, username);
-        return "redirect:/goals";
-    }
-
-    @PostMapping("/update")
-    public String updateGoal(@ModelAttribute GoalDTO goalDTO) {
-        String username = SecurityContextHolder.getContext().getAuthentication().getName();
-        goalService.updateGoal(goalDTO, username);
-        return "redirect:/goals";
+    @PostMapping("/edit")
+    public String editGoal(@ModelAttribute GoalDTO goal, Principal principal) {
+        String email = principal.getName();
+        goalService.saveOrUpdateGoal(goal, email);
+        return "redirect:/goal";
     }
 }
+

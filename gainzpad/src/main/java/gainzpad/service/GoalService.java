@@ -8,7 +8,9 @@ public interface GoalService {
 
     GoalDTO createGoal(GoalDTO goalDTO, String username);
 
-    GoalDTO getGoalByUser(String username);
+    GoalDTO getGoalByEmail(String username);
 
     GoalDTO updateGoal(GoalDTO goalDTO,String username);
+
+    void saveOrUpdateGoal(GoalDTO goal, String email);
 }

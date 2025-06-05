@@ -4,6 +4,8 @@ import gainzpad.model.entity.user.UserEntity;
 import gainzpad.model.enums.MealTimeEnum;
 import jakarta.persistence.*;
 
+import java.time.LocalDateTime;
+
 @Entity
 @Table(name = "food_entries")
 public class FoodEntryEntity extends BaseEntity {
@@ -26,6 +28,7 @@ public class FoodEntryEntity extends BaseEntity {
     @Column(nullable = false)
     private Double weightInGrams; // Тегло на храната, което потребителят въвежда
 
+    @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private MealTimeEnum mealTime; // Време на хранене (напр. "Закуска")
 
@@ -34,7 +37,28 @@ public class FoodEntryEntity extends BaseEntity {
 
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
-    private UserEntity user; // Потребител, който е добавил храната
+    private UserEntity user;
+
+    @Column(nullable = false)
+    private LocalDateTime date;
+
+    public Double getWeightInGrams() {
+        return weightInGrams;
+    }
+
+    public FoodEntryEntity setWeightInGrams(Double weightInGrams) {
+        this.weightInGrams = weightInGrams;
+        return this;
+    }
+
+    public LocalDateTime getDate() {
+        return date;
+    }
+
+    public FoodEntryEntity setDate(LocalDateTime date) {
+        this.date = date;
+        return this;
+    }
 
     public String getName() {
         return name;
