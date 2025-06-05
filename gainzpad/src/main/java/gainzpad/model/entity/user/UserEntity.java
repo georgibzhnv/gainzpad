@@ -1,6 +1,7 @@
 package gainzpad.model.entity.user;
 
 import gainzpad.model.entity.BaseEntity;
+import gainzpad.model.entity.GoalEntity;
 import gainzpad.model.entity.WorkoutEntity;
 import jakarta.persistence.*;
 
@@ -30,6 +31,18 @@ public class UserEntity extends BaseEntity {
             orphanRemoval = true
     )
     private Set<WorkoutEntity> workouts = new HashSet<>();
+
+    @OneToOne(mappedBy = "user")
+    private GoalEntity goal;
+
+    public GoalEntity getGoal() {
+        return goal;
+    }
+
+    public UserEntity setGoal(GoalEntity goal) {
+        this.goal = goal;
+        return this;
+    }
 
     public Set<WorkoutEntity> getWorkouts() {
         return workouts;

@@ -1,5 +1,7 @@
 package gainzpad.model.dto;
 
+import gainzpad.model.enums.MealTimeEnum;
+
 public class FoodEntryDTO {
 
     private Long id;
@@ -8,7 +10,7 @@ public class FoodEntryDTO {
     private Double protein;
     private Double fat;
     private Double carbs;
-    private String mealTime;
+    private MealTimeEnum mealTime;  // Променено към MealTime
     private String foodImageUrl;
 
     public Long getId() {
@@ -65,11 +67,11 @@ public class FoodEntryDTO {
         return this;
     }
 
-    public String getMealTime() {
+    public MealTimeEnum getMealTime() {
         return mealTime;
     }
 
-    public FoodEntryDTO setMealTime(String mealTime) {
+    public FoodEntryDTO setMealTime(MealTimeEnum mealTime) {
         this.mealTime = mealTime;
         return this;
     }

@@ -1,6 +1,7 @@
 package gainzpad.model.entity;
 
 import gainzpad.model.entity.user.UserEntity;
+import gainzpad.model.enums.MealTimeEnum;
 import jakarta.persistence.*;
 
 @Entity
@@ -11,22 +12,29 @@ public class FoodEntryEntity extends BaseEntity {
     private String name;
 
     @Column(nullable = false)
-    private Double calories;
+    private Double calories; // Калории на 100 г
+
     @Column(nullable = false)
-    private Double protein;
+    private Double protein; // Протеини на 100 г
+
     @Column(nullable = false)
-    private Double carbs;
+    private Double carbs; // Въглехидрати на 100 г
+
     @Column(nullable = false)
-    private Double fats;
+    private Double fats; // Мазнини на 100 г
+
     @Column(nullable = false)
-    private String mealTime;
+    private Double weightInGrams; // Тегло на храната, което потребителят въвежда
+
+    @Column(nullable = false)
+    private MealTimeEnum mealTime; // Време на хранене (напр. "Закуска")
 
     @Column(nullable = true)
-    private String foodImageUrl;
+    private String foodImageUrl; // URL за изображение на храната
 
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
-    private UserEntity user;
+    private UserEntity user; // Потребител, който е добавил храната
 
     public String getName() {
         return name;
@@ -38,7 +46,7 @@ public class FoodEntryEntity extends BaseEntity {
     }
 
     public Double getCalories() {
-        return calories;
+        return calories * (weightInGrams / 100); // Пресмятане на калориите за избраното тегло
     }
 
     public FoodEntryEntity setCalories(Double calories) {
@@ -47,7 +55,7 @@ public class FoodEntryEntity extends BaseEntity {
     }
 
     public Double getProtein() {
-        return protein;
+        return protein * (weightInGrams / 100); // Протеини за избраното тегло
     }
 
     public FoodEntryEntity setProtein(Double protein) {
@@ -56,7 +64,7 @@ public class FoodEntryEntity extends BaseEntity {
     }
 
     public Double getCarbs() {
-        return carbs;
+        return carbs * (weightInGrams / 100); // Въглехидрати за избраното тегло
     }
 
     public FoodEntryEntity setCarbs(Double carbs) {
@@ -65,7 +73,7 @@ public class FoodEntryEntity extends BaseEntity {
     }
 
     public Double getFats() {
-        return fats;
+        return fats * (weightInGrams / 100); // Мазнини за избраното тегло
     }
 
     public FoodEntryEntity setFats(Double fats) {
@@ -73,11 +81,11 @@ public class FoodEntryEntity extends BaseEntity {
         return this;
     }
 
-    public String getMealTime() {
+    public MealTimeEnum getMealTime() {
         return mealTime;
     }
 
-    public FoodEntryEntity setMealTime(String mealTime) {
+    public FoodEntryEntity setMealTime(MealTimeEnum mealTime) {
         this.mealTime = mealTime;
         return this;
     }
