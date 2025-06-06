@@ -3,10 +3,12 @@ package gainzpad.service.impl;
 
 import gainzpad.model.dto.FoodEntryDTO;
 import gainzpad.model.entity.FoodEntryEntity;
+import gainzpad.model.entity.user.UserEntity;
 import gainzpad.model.mapper.FoodEntryMapper;
 import gainzpad.repository.FoodEntryRepository;
 import gainzpad.repository.UserRepository;
 import gainzpad.service.FoodEntryService;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -36,17 +38,24 @@ public class FoodEntryServiceImpl implements FoodEntryService {
     }
 
     @Override
-    public FoodEntryDTO addFoodEntry(FoodEntryDTO foodEntryDTO, String email){
-        FoodEntryEntity foodEntryEntity = foodEntryMapper.toEntity(foodEntryDTO);
-        foodEntryEntity.setUser(userRepository.findOneByEmail(email)
-                .orElseThrow(() -> new RuntimeException("User not found")));
-        if (foodEntryEntity.getDate() == null) {
-            foodEntryEntity.setDate(LocalDateTime.now());
-        }
+    public FoodEntryDTO addFoodEntry(FoodEntryDTO foodEntryDTO, String email) {
+        Optional<UserEntity> user = userRepository.findOneByEmail(email);
+
+        FoodEntryEntity foodEntryEntity = new FoodEntryEntity();
+        foodEntryEntity.setName(foodEntryDTO.getName());
+        foodEntryEntity.setCalories(foodEntryDTO.getCalories());
+        foodEntryEntity.setProtein(foodEntryDTO.getProtein());
+        foodEntryEntity.setFats(foodEntryDTO.getFats());
+        foodEntryEntity.setCarbs(foodEntryDTO.getCarbs());
+        foodEntryEntity.setMealTime(foodEntryDTO.getMealTime());
+        foodEntryEntity.setDate(foodEntryDTO.getDate());
+        foodEntryEntity.setUser(user.orElseThrow(() -> new RuntimeException("User not found")));
+
         foodEntryRepository.save(foodEntryEntity);
 
         return foodEntryMapper.toDto(foodEntryEntity);
     }
+
 
     @Override
     public Optional<FoodEntryDTO> getFoodEntryById(Long id){

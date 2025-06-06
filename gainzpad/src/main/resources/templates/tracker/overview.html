@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/head :: head}"></head>
+<body>
+<div th:replace="~{fragments/navbar :: navbar(activeTab)}"></div>
+
+<div class="container mt-5">
+    <h1>Вашият Калориен Тракер</h1>
+
+    <!-- Прогрес Бар за Калориите -->
+    <div class="text-center mt-4">
+        <h3>Прогрес за Деня</h3>
+        <div class="progress" style="height: 30px;">
+            <div class="progress-bar" role="progressbar" th:style="'width:' + ${progressPercentage} + '%'" aria-valuenow="${progressPercentage}"
+                 aria-valuemin="0" aria-valuemax="100">
+                <span th:text="'Изядени калории: ' + ${caloriesConsumed} + ' / ' + ${caloriesGoal}"></span>
+            </div>
+        </div>
+        <h5 th:text="'Остатък: ' + (${caloriesGoal} - ${caloriesConsumed})">Остатък: 0</h5>
+    </div>
+
+    <!-- Таблица с храненията -->
+    <div class="mt-4">
+        <h3>Списък с хранения за деня</h3>
+        <table class="table table-bordered">
+            <thead>
+            <tr>
+                <th>Храна</th>
+                <th>Калории</th>
+                <th>Протеини (г)</th>
+                <th>Мазнини (г)</th>
+                <th>Въглехидрати (г)</th>
+                <th>Действие</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="entry : ${entries}">
+                <td th:text="${entry.name}">Примерна храна</td>
+                <td th:text="${entry.calories}">100</td>
+                <td th:text="${entry.protein}">5</td>
+                <td th:text="${entry.fats}">5</td>
+                <td th:text="${entry.carbs}">20</td>
+                <td>
+                    <form th:action="@{/tracker/{id}/delete(id=${entry.id})}" method="post">
+                        <button type="submit" class="btn btn-danger">Изтрий</button>
+                    </form>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Бутони за управление -->
+    <div class="mt-4">
+        <a href="/goal" class="btn btn-info">Настройки на целта</a>
+        <a href="/tracker/add" class="btn btn-success">Добави храна</a>
+    </div>
+</div>
+
+<div th:replace="~{fragments/bootstrap-js::bootstrap-js}"></div>
+</body>
+</html>

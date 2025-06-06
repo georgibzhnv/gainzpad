@@ -5,32 +5,31 @@
 
 <div th:replace="~{fragments/navbar :: navbar(activeTab)}"></div>
 
-<div class="container mt-4">
-  <h2 class="text-center mb-4">Създайте Вашите цели</h2>
+<div class="container mt-5">
+  <h1>Създайте ваша цел за хранене</h1>
 
-  <!-- Goal Form -->
-  <form th:action="@{/goal/create}" th:object="${goal}" method="post">
-    <div class="mb-3">
-      <label for="calories" class="form-label">Цел за калории</label>
-      <input type="number" id="calories" th:field="*{targetCalories}" class="form-control" required>
+  <form th:action="@{/goal/create}" method="post">
+    <div class="form-group">
+      <label for="targetCalories">Цел за калории</label>
+      <input type="number" id="targetCalories" name="targetCalories" class="form-control" th:value="${goal.targetCalories}" required>
     </div>
 
-    <div class="mb-3">
-      <label for="protein" class="form-label">Цел за протеини (g)</label>
-      <input type="number" id="protein" th:field="*{targetProtein}" class="form-control" required>
+    <div class="form-group">
+      <label for="targetProtein">Цел за протеини (г)</label>
+      <input type="number" id="targetProtein" name="targetProtein" class="form-control" th:value="${goal.targetProtein}" required>
     </div>
 
-    <div class="mb-3">
-      <label for="carbs" class="form-label">Цел за въглехидрати (g)</label>
-      <input type="number" id="carbs" th:field="*{targetCarbs}" class="form-control" required>
+    <div class="form-group">
+      <label for="targetFat">Цел за мазнини (г)</label>
+      <input type="number" id="targetFat" name="targetFat" class="form-control" th:value="${goal.targetFat}" required>
     </div>
 
-    <div class="mb-3">
-      <label for="fats" class="form-label">Цел за мазнини (g)</label>
-      <input type="number" id="fats" th:field="*{targetFat}" class="form-control" required>
+    <div class="form-group">
+      <label for="targetCarbs">Цел за въглехидрати (г)</label>
+      <input type="number" id="targetCarbs" name="targetCarbs" class="form-control" th:value="${goal.targetCarbs}" required>
     </div>
 
-    <button type="submit" class="btn btn-primary">Запази целите</button>
+    <button type="submit" class="btn btn-primary">Запази целта</button>
   </form>
 </div>
 

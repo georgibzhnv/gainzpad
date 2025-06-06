@@ -12,9 +12,7 @@ public class FoodEntryDTO {
     private Double protein;
     private Double fats;
     private Double carbs;
-    private Double weightInGrams;
     private MealTimeEnum mealTime;
-    private String foodImageUrl;
     private LocalDateTime date;
 
     public Long getId() {
@@ -71,14 +69,6 @@ public class FoodEntryDTO {
         return this;
     }
 
-    public Double getWeightInGrams() {
-        return weightInGrams;
-    }
-
-    public FoodEntryDTO setWeightInGrams(Double weightInGrams) {
-        this.weightInGrams = weightInGrams;
-        return this;
-    }
 
     public MealTimeEnum getMealTime() {
         return mealTime;
@@ -89,16 +79,11 @@ public class FoodEntryDTO {
         return this;
     }
 
-    public String getFoodImageUrl() {
-        return foodImageUrl;
-    }
-
-    public FoodEntryDTO setFoodImageUrl(String foodImageUrl) {
-        this.foodImageUrl = foodImageUrl;
-        return this;
-    }
 
     public LocalDateTime getDate() {
+        if (date == null) {
+            date = LocalDateTime.now();
+        }
         return date;
     }
 
@@ -107,3 +92,4 @@ public class FoodEntryDTO {
         return this;
     }
 }
+
