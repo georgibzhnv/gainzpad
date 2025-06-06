@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/head :: head}"></head>
+</head>
+<body>
+<div th:replace="~{fragments/navbar :: navbar(activeTab)}"></div>
+
+<div class="container mt-4">
+    <h2 class="mb-4 text-center">Дневен хранителен отчет за <span th:text="${date}"></span></h2>
+
+    <!-- Прогрес барове -->
+    <div class="mb-4">
+        <label class="fw-bold">Калории: <span th:text="${summary.totalCalories}"></span>/<span th:text="${summary.caloriesGoal}"></span> kcal</label>
+        <div class="progress mb-3">
+            <div class="progress-bar bg-success"
+                 role="progressbar"
+                 th:style="'width:' + (${summary.caloriesGoal} > 0 ? (${summary.totalCalories} * 100 / ${summary.caloriesGoal}) : 0) + '%;'"
+                 th:aria-valuenow="${summary.totalCalories}"
+                 th:aria-valuemax="${summary.caloriesGoal}"
+                 aria-valuemin="0">
+                <span th:text="${#numbers.formatDecimal(${summary.totalCalories} * 100 / ${summary.caloriesGoal}, 0, 0)} + '%'"></span>
+            </div>
+        </div>
+
+        <label class="fw-bold">Протеини: <span th:text="${summary.totalProtein}"></span>/<span th:text="${summary.proteinGoal}"></span> g</label>
+        <div class="progress mb-3">
+            <div class="progress-bar bg-info"
+                 role="progressbar"
+                 th:style="'width:' + (${summary.proteinGoal} > 0 ? (${summary.totalProtein} * 100 / ${summary.proteinGoal}) : 0) + '%;'"
+                 th:aria-valuenow="${summary.totalProtein}"
+                 th:aria-valuemax="${summary.proteinGoal}"
+                 aria-valuemin="0">
+                <span th:text="${#numbers.formatDecimal(${summary.totalProtein} * 100 / ${summary.proteinGoal}, 0, 0)} + '%'"></span>
+            </div>
+        </div>
+
+        <label class="fw-bold">Въглехидрати: <span th:text="${summary.totalCarbs}"></span>/<span th:text="${summary.carbsGoal}"></span> g</label>
+        <div class="progress mb-3">
+            <div class="progress-bar bg-warning"
+                 role="progressbar"
+                 th:style="'width:' + (${summary.carbsGoal} > 0 ? (${summary.totalCarbs} * 100 / ${summary.carbsGoal}) : 0) + '%;'"
+                 th:aria-valuenow="${summary.totalCarbs}"
+                 th:aria-valuemax="${summary.carbsGoal}"
+                 aria-valuemin="0">
+                <span th:text="${#numbers.formatDecimal(${summary.totalCarbs} * 100 / ${summary.carbsGoal}, 0, 0)} + '%'"></span>
+            </div>
+        </div>
+
+        <label class="fw-bold">Мазнини: <span th:text="${summary.totalFats}"></span>/<span th:text="${summary.fatsGoal}"></span> g</label>
+        <div class="progress mb-4">
+            <div class="progress-bar bg-danger"
+                 role="progressbar"
+                 th:style="'width:' + (${summary.fatsGoal} > 0 ? (${summary.totalFats} * 100 / ${summary.fatsGoal}) : 0) + '%;'"
+                 th:aria-valuenow="${summary.totalFats}"
+                 th:aria-valuemax="${summary.fatsGoal}"
+                 aria-valuemin="0">
+                <span th:text="${#numbers.formatDecimal(${summary.totalFats} * 100 / ${summary.fatsGoal}, 0, 0)} + '%'"></span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Таблица с разлики/остатък до целта -->
+    <table class="table table-bordered table-striped mt-4">
+        <thead class="table-dark">
+        <tr>
+            <th>Показател</th>
+            <th>Общо</th>
+            <th>Цел</th>
+            <th>Остава</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <td>Калории</td>
+            <td th:text="${summary.totalCalories}"></td>
+            <td th:text="${summary.caloriesGoal}"></td>
+            <td th:text="${summary.caloriesGoal - summary.totalCalories}"></td>
+        </tr>
+        <tr>
+            <td>Протеини</td>
+            <td th:text="${summary.totalProtein}"></td>
+            <td th:text="${summary.proteinGoal}"></td>
+            <td th:text="${summary.proteinGoal - summary.totalProtein}"></td>
+        </tr>
+        <tr>
+            <td>Въглехидрати</td>
+            <td th:text="${summary.totalCarbs}"></td>
+            <td th:text="${summary.carbsGoal}"></td>
+            <td th:text="${summary.carbsGoal - summary.totalCarbs}"></td>
+        </tr>
+        <tr>
+            <td>Мазнини</td>
+            <td th:text="${summary.totalFats}"></td>
+            <td th:text="${summary.fatsGoal}"></td>
+            <td th:text="${summary.fatsGoal - summary.totalFats}"></td>
+        </tr>
+        </tbody>
+    </table>
+
+    <!-- Навигация по дни -->
+    <div class="d-flex justify-content-between mt-3">
+        <a class="btn btn-secondary" th:href="@{/nutrition-summary(date=${date.minusDays(1)})}">&larr; Предишен ден</a>
+        <a class="btn btn-secondary" th:href="@{/nutrition-summary(date=${date.plusDays(1)})}">Следващ ден &rarr;</a>
+    </div>
+</div>
+
+
+
+<div th:replace="~{fragments/bootstrap-js::bootstrap-js}"></div>
+</body>
+</html>

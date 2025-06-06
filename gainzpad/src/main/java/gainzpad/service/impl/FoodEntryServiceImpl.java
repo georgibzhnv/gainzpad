@@ -28,7 +28,7 @@ public class FoodEntryServiceImpl implements FoodEntryService {
     }
 
     @Override
-    public List<FoodEntryDTO> getAllByUserAndDate(String email, LocalDate date) {
+    public List<FoodEntryDTO> getAllByUserAndDate(String email, LocalDateTime date) {
         return foodEntryRepository.findAllByUser_EmailAndDate(email, date)
                 .stream()
                 .map(foodEntryMapper::toDto)

@@ -2,7 +2,6 @@ package gainzpad.web;
 
 import gainzpad.model.dto.GoalDTO;
 import gainzpad.service.GoalService;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -10,7 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import java.security.Principal;
 
 @Controller
-@RequestMapping("/tracker/goals")
+@RequestMapping("/goal")
 public class GoalController {
 
     private final GoalService goalService;
@@ -25,20 +24,21 @@ public class GoalController {
         GoalDTO goal = goalService.getGoalByEmail(email);
         if (goal == null) goal = new GoalDTO();
         model.addAttribute("goal", goal);
-        return "goal-view";
+        return "tracker/goal/view";
     }
 
-    @GetMapping("/edit")
-    public String editGoalForm(Principal principal, Model model) {
+    @GetMapping("/create")
+    public String createGoalForm(Principal principal, Model model) {
         String email = principal.getName();
         GoalDTO goal = goalService.getGoalByEmail(email);
         if (goal == null) goal = new GoalDTO();
         model.addAttribute("goal", goal);
-        return "goal-edit";
+        return "tracker/goal/create";
     }
 
-    @PostMapping("/edit")
-    public String editGoal(@ModelAttribute GoalDTO goal, Principal principal) {
+
+    @PostMapping("/create")
+    public String saveGoal(@ModelAttribute GoalDTO goal, Principal principal) {
         String email = principal.getName();
         goalService.saveOrUpdateGoal(goal, email);
         return "redirect:/goal";

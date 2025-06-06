@@ -9,6 +9,7 @@ import gainzpad.service.NutritionSummaryService;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -23,7 +24,7 @@ public class NutritionSummaryServiceImpl implements NutritionSummaryService {
     }
 
     @Override
-    public NutritionSummaryDTO getNutritionSummary(String email, LocalDate date) {
+    public NutritionSummaryDTO getNutritionSummary(String email, LocalDateTime date) {
         List<FoodEntryEntity> entries = foodEntryRepository.findAllByUser_EmailAndDate(email, date);
 
         double totalCalories = 0;

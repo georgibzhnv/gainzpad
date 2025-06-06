@@ -7,33 +7,15 @@ import java.time.LocalDateTime;
 public class FoodEntryDTO {
 
     private Long id;
-    private String foodName;
+    private String name;
     private Double calories;
     private Double protein;
-    private Double fat;
+    private Double fats;
     private Double carbs;
     private Double weightInGrams;
     private MealTimeEnum mealTime;
     private String foodImageUrl;
     private LocalDateTime date;
-
-    public Double getWeightInGrams() {
-        return weightInGrams;
-    }
-
-    public FoodEntryDTO setWeightInGrams(Double weightInGrams) {
-        this.weightInGrams = weightInGrams;
-        return this;
-    }
-
-    public LocalDateTime getDate() {
-        return date;
-    }
-
-    public FoodEntryDTO setDate(LocalDateTime date) {
-        this.date = date;
-        return this;
-    }
 
     public Long getId() {
         return id;
@@ -44,12 +26,12 @@ public class FoodEntryDTO {
         return this;
     }
 
-    public String getFoodName() {
-        return foodName;
+    public String getName() {
+        return name;
     }
 
-    public FoodEntryDTO setFoodName(String foodName) {
-        this.foodName = foodName;
+    public FoodEntryDTO setName(String name) {
+        this.name = name;
         return this;
     }
 
@@ -71,12 +53,12 @@ public class FoodEntryDTO {
         return this;
     }
 
-    public Double getFat() {
-        return fat;
+    public Double getFats() {
+        return fats;
     }
 
-    public FoodEntryDTO setFat(Double fat) {
-        this.fat = fat;
+    public FoodEntryDTO setFats(Double fats) {
+        this.fats = fats;
         return this;
     }
 
@@ -86,6 +68,15 @@ public class FoodEntryDTO {
 
     public FoodEntryDTO setCarbs(Double carbs) {
         this.carbs = carbs;
+        return this;
+    }
+
+    public Double getWeightInGrams() {
+        return weightInGrams;
+    }
+
+    public FoodEntryDTO setWeightInGrams(Double weightInGrams) {
+        this.weightInGrams = weightInGrams;
         return this;
     }
 
@@ -104,6 +95,15 @@ public class FoodEntryDTO {
 
     public FoodEntryDTO setFoodImageUrl(String foodImageUrl) {
         this.foodImageUrl = foodImageUrl;
+        return this;
+    }
+
+    public LocalDateTime getDate() {
+        return date;
+    }
+
+    public FoodEntryDTO setDate(LocalDateTime date) {
+        this.date = date;
         return this;
     }
 }

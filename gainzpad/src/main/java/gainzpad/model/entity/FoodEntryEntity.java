@@ -23,7 +23,7 @@ public class FoodEntryEntity extends BaseEntity {
     private Double carbs; // Въглехидрати на 100 г
 
     @Column(nullable = false)
-    private Double fats; // Мазнини на 100 г
+    private Double fats;
 
     @Column(nullable = false)
     private Double weightInGrams; // Тегло на храната, което потребителят въвежда
@@ -97,7 +97,7 @@ public class FoodEntryEntity extends BaseEntity {
     }
 
     public Double getFats() {
-        return fats * (weightInGrams / 100); // Мазнини за избраното тегло
+        return fats;
     }
 
     public FoodEntryEntity setFats(Double fats) {

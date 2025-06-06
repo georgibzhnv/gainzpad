@@ -11,9 +11,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import java.security.Principal;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Controller
-@RequestMapping("/tracker/nutrition-summary")
+@RequestMapping("/nutrition-summary")
 public class NutritionSummaryController {
     private final NutritionSummaryService nutritionSummaryService;
 
@@ -22,15 +23,15 @@ public class NutritionSummaryController {
     }
 
     @GetMapping
-    public String showSummary(@RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date,
+    public String showSummary(@RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDateTime date,
                               Principal principal, Model model) {
-        if (date == null) date = LocalDate.now();
+        if (date == null) date = LocalDateTime.now();
         String email = principal.getName();
         NutritionSummaryDTO summary = nutritionSummaryService.getNutritionSummary(email, date);
 
         model.addAttribute("summary", summary);
         model.addAttribute("date", date);
-        return "nutrition-summary";
+        return "tracker/summary";
     }
 
 }
