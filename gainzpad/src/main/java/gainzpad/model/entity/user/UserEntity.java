@@ -1,10 +1,8 @@
 package gainzpad.model.entity.user;
 
 import gainzpad.model.entity.BaseEntity;
-import gainzpad.model.entity.GoalEntity;
 import gainzpad.model.entity.WorkoutEntity;
 import jakarta.persistence.*;
-
 import java.util.HashSet;
 import java.util.Set;
 
@@ -32,15 +30,44 @@ public class UserEntity extends BaseEntity {
     )
     private Set<WorkoutEntity> workouts = new HashSet<>();
 
-    @OneToOne(mappedBy = "user")
-    private GoalEntity goal;
+    private Integer goalCalories;
+    private Integer goalCarbs;
+    private Integer goalProtein;
+    private Integer goalFat;
 
-    public GoalEntity getGoal() {
-        return goal;
+    public Integer getGoalCalories() {
+        return goalCalories;
     }
 
-    public UserEntity setGoal(GoalEntity goal) {
-        this.goal = goal;
+    public UserEntity setGoalCalories(Integer goalCalories) {
+        this.goalCalories = goalCalories;
+        return this;
+    }
+
+    public Integer getGoalCarbs() {
+        return goalCarbs;
+    }
+
+    public UserEntity setGoalCarbs(Integer goalCarbs) {
+        this.goalCarbs = goalCarbs;
+        return this;
+    }
+
+    public Integer getGoalProtein() {
+        return goalProtein;
+    }
+
+    public UserEntity setGoalProtein(Integer goalProtein) {
+        this.goalProtein = goalProtein;
+        return this;
+    }
+
+    public Integer getGoalFat() {
+        return goalFat;
+    }
+
+    public UserEntity setGoalFat(Integer goalFat) {
+        this.goalFat = goalFat;
         return this;
     }
 

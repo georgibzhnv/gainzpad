@@ -1,6 +1,7 @@
 package gainzpad.service;
 
 import gainzpad.model.dto.FoodEntryDTO;
+import gainzpad.model.entity.user.UserEntity;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -10,10 +11,8 @@ import java.util.Optional;
 
 @Service
 public interface FoodEntryService {
-
-    List<FoodEntryDTO> getAllByUserAndDate(String username, LocalDateTime date);
-    FoodEntryDTO addFoodEntry(FoodEntryDTO foodEntryDTO, String username);
-    Optional<FoodEntryDTO> getFoodEntryById(Long id);
-    void deleteFoodEntry(Long id, String username);
-
+    void addFoodEntry(FoodEntryDTO dto);
+    List<FoodEntryDTO> getEntriesByUserAndDate(UserEntity user, LocalDate date);
+    void deleteEntry(Long id);
+    Optional<FoodEntryDTO> getById(Long id);
 }

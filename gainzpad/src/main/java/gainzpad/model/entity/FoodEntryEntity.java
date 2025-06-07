@@ -3,16 +3,15 @@ package gainzpad.model.entity;
 import gainzpad.model.entity.user.UserEntity;
 import gainzpad.model.enums.MealTimeEnum;
 import jakarta.persistence.*;
+import java.time.LocalDate;
 
-import java.time.LocalDateTime;
-import java.util.Optional;
 
 @Entity
 @Table(name = "food_entries")
 public class FoodEntryEntity extends BaseEntity {
 
     @Column(nullable = false)
-    private String name;
+    private String foodName;
 
     @Column(nullable = false)
     private Double calories; // Калории на 100 г
@@ -28,22 +27,23 @@ public class FoodEntryEntity extends BaseEntity {
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private MealTimeEnum mealTime; // Време на хранене (напр. "Закуска")
+    private MealTimeEnum mealTime;
 
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
     private UserEntity user;
 
     @Column(nullable = false)
-    private LocalDateTime date;
+    private LocalDate date;
 
+    private Double weightInGrams;
 
-    public String getName() {
-        return name;
+    public String getFoodName() {
+        return foodName;
     }
 
-    public FoodEntryEntity setName(String name) {
-        this.name = name;
+    public FoodEntryEntity setFoodName(String foodName) {
+        this.foodName = foodName;
         return this;
     }
 
@@ -101,12 +101,21 @@ public class FoodEntryEntity extends BaseEntity {
         return this;
     }
 
-    public LocalDateTime getDate() {
+    public LocalDate getDate() {
         return date;
     }
 
-    public FoodEntryEntity setDate(LocalDateTime date) {
+    public FoodEntryEntity setDate(LocalDate date) {
         this.date = date;
+        return this;
+    }
+
+    public Double getWeightInGrams() {
+        return weightInGrams;
+    }
+
+    public FoodEntryEntity setWeightInGrams(Double weightInGrams) {
+        this.weightInGrams = weightInGrams;
         return this;
     }
 }

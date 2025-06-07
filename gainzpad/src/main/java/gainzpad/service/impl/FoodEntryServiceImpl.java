@@ -20,56 +20,38 @@ import java.util.Optional;
 public class FoodEntryServiceImpl implements FoodEntryService {
 
     private final FoodEntryRepository foodEntryRepository;
-    private final FoodEntryMapper foodEntryMapper;
     private final UserRepository userRepository;
+    private final FoodEntryMapper foodEntryMapper;
 
-    public FoodEntryServiceImpl(FoodEntryRepository foodEntryRepository, FoodEntryMapper foodEntryMapper, UserRepository userRepository) {
+    public FoodEntryServiceImpl(
+            FoodEntryRepository foodEntryRepository,
+            UserRepository userRepository,
+            FoodEntryMapper foodEntryMapper
+    ) {
         this.foodEntryRepository = foodEntryRepository;
-        this.foodEntryMapper = foodEntryMapper;
         this.userRepository = userRepository;
+        this.foodEntryMapper = foodEntryMapper;
     }
 
     @Override
-    public List<FoodEntryDTO> getAllByUserAndDate(String email, LocalDateTime date) {
-        return foodEntryRepository.findAllByUser_EmailAndDate(email, date)
-                .stream()
-                .map(foodEntryMapper::toDto)
-                .toList();
+    public void addFoodEntry(FoodEntryDTO dto) {
+        FoodEntryEntity entity = foodEntryMapper.toEntity(dto);
+        foodEntryRepository.save(entity);
     }
 
     @Override
-    public FoodEntryDTO addFoodEntry(FoodEntryDTO foodEntryDTO, String email) {
-        Optional<UserEntity> user = userRepository.findOneByEmail(email);
-
-        FoodEntryEntity foodEntryEntity = new FoodEntryEntity();
-        foodEntryEntity.setName(foodEntryDTO.getName());
-        foodEntryEntity.setCalories(foodEntryDTO.getCalories());
-        foodEntryEntity.setProtein(foodEntryDTO.getProtein());
-        foodEntryEntity.setFats(foodEntryDTO.getFats());
-        foodEntryEntity.setCarbs(foodEntryDTO.getCarbs());
-        foodEntryEntity.setMealTime(foodEntryDTO.getMealTime());
-        foodEntryEntity.setDate(foodEntryDTO.getDate());
-        foodEntryEntity.setUser(user.orElseThrow(() -> new RuntimeException("User not found")));
-
-        foodEntryRepository.save(foodEntryEntity);
-
-        return foodEntryMapper.toDto(foodEntryEntity);
-    }
-
-
-    @Override
-    public Optional<FoodEntryDTO> getFoodEntryById(Long id){
-        return foodEntryRepository.findById(id)
-                .map(foodEntryMapper::toDto);
+    public List<FoodEntryDTO> getEntriesByUserAndDate(UserEntity user, LocalDate date) {
+        List<FoodEntryEntity> entities = foodEntryRepository.findAllByUserAndDate(user, date);
+        return entities.stream().map(foodEntryMapper::toDto).toList();
     }
 
     @Override
-    public void deleteFoodEntry(Long id, String email){
-        FoodEntryEntity entry = foodEntryRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Food entry not found"));
-        if (!entry.getUser().getEmail().equals(email)) {
-            throw new SecurityException("Cannot delete entry of another user!");
-        }
-        foodEntryRepository.delete(entry);
+    public void deleteEntry(Long id) {
+        foodEntryRepository.deleteById(id);
+    }
+
+    @Override
+    public Optional<FoodEntryDTO> getById(Long id) {
+        return foodEntryRepository.findById(id).map(foodEntryMapper::toDto);
     }
 }

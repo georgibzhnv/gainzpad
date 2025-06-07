@@ -1,35 +1,28 @@
 package gainzpad.model.dto;
 
+import gainzpad.model.entity.user.UserEntity;
 import gainzpad.model.enums.MealTimeEnum;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 public class FoodEntryDTO {
 
-    private Long id;
-    private String name;
-    private Double calories;
-    private Double protein;
+    private String foodName;
+    private Double calories; // Калории на 100 г
+    private Double protein; // Протеини на 100 г
+    private Double carbs; // Въглехидрати на 100 г
     private Double fats;
-    private Double carbs;
     private MealTimeEnum mealTime;
-    private LocalDateTime date;
+    private UserEntity user;
+    private LocalDate date;
+    private Double weightInGrams;
 
-    public Long getId() {
-        return id;
+    public String getFoodName() {
+        return foodName;
     }
 
-    public FoodEntryDTO setId(Long id) {
-        this.id = id;
-        return this;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public FoodEntryDTO setName(String name) {
-        this.name = name;
+    public FoodEntryDTO setFoodName(String foodName) {
+        this.foodName = foodName;
         return this;
     }
 
@@ -51,15 +44,6 @@ public class FoodEntryDTO {
         return this;
     }
 
-    public Double getFats() {
-        return fats;
-    }
-
-    public FoodEntryDTO setFats(Double fats) {
-        this.fats = fats;
-        return this;
-    }
-
     public Double getCarbs() {
         return carbs;
     }
@@ -69,6 +53,14 @@ public class FoodEntryDTO {
         return this;
     }
 
+    public Double getFats() {
+        return fats;
+    }
+
+    public FoodEntryDTO setFats(Double fats) {
+        this.fats = fats;
+        return this;
+    }
 
     public MealTimeEnum getMealTime() {
         return mealTime;
@@ -79,16 +71,30 @@ public class FoodEntryDTO {
         return this;
     }
 
+    public UserEntity getUser() {
+        return user;
+    }
 
-    public LocalDateTime getDate() {
-        if (date == null) {
-            date = LocalDateTime.now();
-        }
+    public FoodEntryDTO setUser(UserEntity user) {
+        this.user = user;
+        return this;
+    }
+
+    public LocalDate getDate() {
         return date;
     }
 
-    public FoodEntryDTO setDate(LocalDateTime date) {
+    public FoodEntryDTO setDate(LocalDate date) {
         this.date = date;
+        return this;
+    }
+
+    public Double getWeightInGrams() {
+        return weightInGrams;
+    }
+
+    public FoodEntryDTO setWeightInGrams(Double weightInGrams) {
+        this.weightInGrams = weightInGrams;
         return this;
     }
 }

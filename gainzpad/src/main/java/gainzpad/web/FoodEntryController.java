@@ -1,78 +1,69 @@
 package gainzpad.web;
-
 import gainzpad.model.dto.FoodEntryDTO;
-import gainzpad.model.dto.GoalDTO;
-import gainzpad.service.FoodEntryService;
-import gainzpad.service.GoalService;
-import org.springframework.format.annotation.DateTimeFormat;
+import gainzpad.model.entity.user.UserEntity;
+import gainzpad.repository.UserRepository;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import gainzpad.service.FoodEntryService;
 
-import java.security.Principal;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
+import java.util.List;
 
 @Controller
 @RequestMapping("/tracker")
 public class FoodEntryController {
 
     private final FoodEntryService foodEntryService;
-    private final GoalService goalService; // добавяме GoalService за целите
+    private final UserRepository userRepository;
 
-    public FoodEntryController(FoodEntryService foodEntryService, GoalService goalService) {
+    public FoodEntryController(FoodEntryService foodEntryService, UserRepository userRepository) {
         this.foodEntryService = foodEntryService;
-        this.goalService = goalService;
+        this.userRepository = userRepository;
     }
 
-    // Списък с храненията за конкретен ден
+
     @GetMapping
-    public String listEntries(@RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDateTime date,
-                              Principal principal, Model model) {
-        if (date == null) date = LocalDateTime.now();
-        String email = principal.getName();
+    public String diary(Model model, @AuthenticationPrincipal UserDetails userDetails) {
+        UserEntity user = userRepository.findOneByEmail(userDetails.getUsername()).orElseThrow();
+        LocalDate today = LocalDate.now();
 
-        // Вземаме всички хранения за даден ден
-        var entries = foodEntryService.getAllByUserAndDate(email, date);
-
-        // Изчисляваме изядените калории
-        double caloriesConsumed = entries.stream().mapToDouble(FoodEntryDTO::getCalories).sum();
-
-        // Вземаме целите на потребителя за деня
-        GoalDTO goal = goalService.getGoalByEmail(email);
-        double caloriesGoal = goal != null ? goal.getTargetCalories() : 2000; // Ако няма зададена цел, по подразбиране 2000
-
-        // Изчисляваме процента на изядените калории
-        double progressPercentage = (caloriesConsumed / caloriesGoal) * 100;
-
+        List<FoodEntryDTO> entries = foodEntryService.getEntriesByUserAndDate(user, today);
         model.addAttribute("entries", entries);
-        model.addAttribute("caloriesConsumed", caloriesConsumed);
-        model.addAttribute("caloriesGoal", caloriesGoal);
-        model.addAttribute("progressPercentage", progressPercentage);
-        model.addAttribute("date", date);
 
-        return "tracker/overview"; // Използваме новия темплейт overview
-    }
+        // Калкулация на макроси по ден и по хранения
+        double totalCal = 0, totalCarbs = 0, totalProtein = 0, totalFats = 0;
+        for (FoodEntryDTO entry : entries) {
+            double factor = entry.getWeightInGrams() / 100.0;
+            totalCal += entry.getCalories() * factor;
+            totalCarbs += entry.getCarbs() * factor;
+            totalProtein += entry.getProtein() * factor;
+            totalFats += entry.getFats() * factor;
+        }
+        model.addAttribute("totalCal", totalCal);
+        model.addAttribute("totalCarbs", totalCarbs);
+        model.addAttribute("totalProtein", totalProtein);
+        model.addAttribute("totalFats", totalFats);
 
-    @GetMapping("/add")
-    public String addEntryForm(Model model) {
-        model.addAttribute("foodEntry", new FoodEntryDTO());
-        return "tracker/add";
+        // TODO: Добави цели за user (или mock стойности за тест)
+        model.addAttribute("goalCalories", 2300);
+        model.addAttribute("goalCarbs", 300);
+        model.addAttribute("goalProtein", 150);
+        model.addAttribute("goalFats", 70);
+        model.addAttribute("foodEntryDTO",new FoodEntryDTO());
+
+        return "tracker/diary";
     }
 
     @PostMapping("/add")
-    public String addEntry(@ModelAttribute FoodEntryDTO foodEntry, Principal principal) {
-        String email = principal.getName();
-
-        foodEntryService.addFoodEntry(foodEntry, email);
-
+    public String addFood(@ModelAttribute FoodEntryDTO foodEntryDTO, @AuthenticationPrincipal UserDetails userDetails) {
+        UserEntity user = userRepository.findOneByEmail(userDetails.getUsername()).orElseThrow();
+        foodEntryDTO.setUser(user);
+        foodEntryDTO.setDate(LocalDate.now());
+        foodEntryService.addFoodEntry(foodEntryDTO);
         return "redirect:/tracker";
     }
-
-    // Изтриване на храна
-    @PostMapping("/{id}/delete")
-    public String deleteEntry(@PathVariable Long id, Principal principal) {
-        String email = principal.getName();
-        foodEntryService.deleteFoodEntry(id, email);
-        return "redirect:/tracker";
-    }
+        // Optional: delete, edit, etc.
 }
