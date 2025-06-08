@@ -6,17 +6,17 @@
     <div class="modal-content">
       <form th:action="@{/tracker/set-goals}" th:object="${macroGoals}" method="post">
         <div class="modal-header">
-          <h5 class="modal-title" id="editGoalsModalLabel">Промени целевите макроси</h5>
+          <h5 class="modal-title" id="editGoalsModalLabel">Edit your macronutrients</h5>
         </div>
         <div class="modal-body">
-          <label>Калории: <input type="number" th:field="*{goalCalories}" min="0"></label><br>
-          <label>Въглехидрати (g): <input type="number" th:field="*{goalCarbs}" min="0"></label><br>
-          <label>Протеин (g): <input type="number" th:field="*{goalProtein}" min="0"></label><br>
-          <label>Мазнини (g): <input type="number" th:field="*{goalFat}" min="0"></label><br>
+          <label>Calories: <input type="number" th:field="*{goalCalories}" min="0"></label><br>
+          <label>Carbs (g): <input type="number" th:field="*{goalCarbs}" min="0"></label><br>
+          <label>Protein (g): <input type="number" th:field="*{goalProtein}" min="0"></label><br>
+          <label>Fats (g): <input type="number" th:field="*{goalFat}" min="0"></label><br>
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Затвори</button>
-          <button type="submit" class="btn btn-primary">Запази</button>
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button type="submit" class="btn btn-primary">Save</button>
         </div>
       </form>
     </div>
