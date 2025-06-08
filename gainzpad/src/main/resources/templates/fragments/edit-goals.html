@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<body>
+<div class="modal fade" id="editGoalsModal" tabindex="-1" aria-labelledby="editGoalsModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <form th:action="@{/tracker/set-goals}" th:object="${macroGoals}" method="post">
+        <div class="modal-header">
+          <h5 class="modal-title" id="editGoalsModalLabel">Промени целевите макроси</h5>
+        </div>
+        <div class="modal-body">
+          <label>Калории: <input type="number" th:field="*{goalCalories}" min="0"></label><br>
+          <label>Въглехидрати (g): <input type="number" th:field="*{goalCarbs}" min="0"></label><br>
+          <label>Протеин (g): <input type="number" th:field="*{goalProtein}" min="0"></label><br>
+          <label>Мазнини (g): <input type="number" th:field="*{goalFat}" min="0"></label><br>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Затвори</button>
+          <button type="submit" class="btn btn-primary">Запази</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

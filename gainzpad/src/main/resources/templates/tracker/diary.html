@@ -9,28 +9,41 @@
     <div>Calories: <b th:text="${totalCal}"></b> / <span th:text="${goalCalories}"></span> kcal</div>
     <div class="progress">
         <div class="progress-bar"
-             th:style="'width:' + (${totalCal}*100/${goalCalories}) + '%;'"
+             th:style="'width:' + (${goalCalories != null && goalCalories > 0 ? totalCal * 100 / goalCalories : 0}) + '%;'"
              th:text="${#numbers.formatDecimal(totalCal, 0, 0)} + ' / ' + ${goalCalories} + ' kcal'"></div>
     </div>
+
     <div>Carbohydrates: <b th:text="${totalCarbs}"></b> / <span th:text="${goalCarbs}"></span> g</div>
     <div class="progress">
         <div class="progress-bar"
-             th:style="'width:' + (${totalCarbs}*100/${goalCarbs}) + '%;'"
+             th:style="'width:' + (${goalCarbs != null && goalCarbs > 0 ? totalCarbs * 100 / goalCarbs : 0}) + '%;'"
              th:text="${#numbers.formatDecimal(totalCarbs, 0, 0)} + ' / ' + ${goalCarbs} + ' g'"></div>
     </div>
+
     <div>Protein: <b th:text="${totalProtein}"></b> / <span th:text="${goalProtein}"></span> g</div>
     <div class="progress">
         <div class="progress-bar"
-             th:style="'width:' + (${totalProtein}*100/${goalProtein}) + '%;'"
+             th:style="'width:' + (${goalProtein != null && goalProtein > 0 ? totalProtein * 100 / goalProtein : 0}) + '%;'"
              th:text="${#numbers.formatDecimal(totalProtein, 0, 0)} + ' / ' + ${goalProtein} + ' g'"></div>
     </div>
+
     <div>Fats: <b th:text="${totalFats}"></b> / <span th:text="${goalFats}"></span> g</div>
     <div class="progress">
         <div class="progress-bar"
-             th:style="'width:' + (${totalFats}*100/${goalFats}) + '%;'"
+             th:style="'width:' + (${goalFats != null && goalFats > 0 ? totalFats * 100 / goalFats : 0}) + '%;'"
              th:text="${#numbers.formatDecimal(totalFats, 0, 0)} + ' / ' + ${goalFats} + ' g'"></div>
     </div>
 </div>
+
+<button type="button"
+        class="btn btn-outline-primary btn-sm"
+        data-bs-toggle="modal"
+        data-bs-target="#editGoalsModal">
+    Edit macronutrients
+</button>
+
+<div th:replace="~{fragments/edit-goals :: #editGoalsModal}"></div>
+
 <br>
 <br>
 <br>

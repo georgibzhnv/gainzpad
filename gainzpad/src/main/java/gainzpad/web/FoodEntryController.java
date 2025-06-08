@@ -1,5 +1,6 @@
 package gainzpad.web;
 import gainzpad.model.dto.FoodEntryDTO;
+import gainzpad.model.dto.MacroGoalsDTO;
 import gainzpad.model.entity.user.UserEntity;
 import gainzpad.model.enums.MealTimeEnum;
 import gainzpad.repository.UserRepository;
@@ -77,11 +78,17 @@ public class FoodEntryController {
         model.addAttribute("macrosByMeal", macrosByMeal);
 
 
-        // TODO: Добави цели за user (или mock стойности за тест)
-        model.addAttribute("goalCalories", 2300);
-        model.addAttribute("goalCarbs", 300);
-        model.addAttribute("goalProtein", 150);
-        model.addAttribute("goalFats", 70);
+        model.addAttribute("goalCalories", user.getGoalCalories() != null ? user.getGoalCalories() : 2000);
+        model.addAttribute("goalCarbs", user.getGoalCarbs() != null ? user.getGoalCarbs() : 250);
+        model.addAttribute("goalProtein", user.getGoalProtein() != null ? user.getGoalProtein() : 100);
+        model.addAttribute("goalFats", user.getGoalFat() != null ? user.getGoalFat() : 60);
+
+        MacroGoalsDTO macroGoals = new MacroGoalsDTO();
+        macroGoals.setGoalCalories(user.getGoalCalories());
+        macroGoals.setGoalCarbs(user.getGoalCarbs());
+        macroGoals.setGoalProtein(user.getGoalProtein());
+        macroGoals.setGoalFat(user.getGoalFat());
+        model.addAttribute("macroGoals", macroGoals);
 
         model.addAttribute("foodEntryDTO",new FoodEntryDTO());
 
@@ -110,6 +117,18 @@ public class FoodEntryController {
         foodEntryDTO.setUser(user);
         foodEntryDTO.setDate(LocalDate.now());
         foodEntryService.editFoodEntry(foodEntryDTO);
+        return "redirect:/tracker";
+    }
+
+    @PostMapping("/set-goals")
+    public String setGoals(@ModelAttribute MacroGoalsDTO macroGoalsDTO,
+                           @AuthenticationPrincipal UserDetails userDetails){
+        UserEntity user = userRepository.findOneByEmail(userDetails.getUsername()).orElseThrow();
+        user.setGoalCalories(macroGoalsDTO.getGoalCalories())
+                .setGoalCarbs(macroGoalsDTO.getGoalCarbs())
+                .setGoalFat(macroGoalsDTO.getGoalFat())
+                .setGoalProtein(macroGoalsDTO.getGoalProtein());
+        userRepository.save(user);
         return "redirect:/tracker";
     }
 }
