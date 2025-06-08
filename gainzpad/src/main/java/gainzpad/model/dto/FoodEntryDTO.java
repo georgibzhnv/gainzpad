@@ -7,6 +7,7 @@ import java.time.LocalDate;
 
 public class FoodEntryDTO {
 
+    private Long id;
     private String foodName;
     private Double calories; // Калории на 100 г
     private Double protein; // Протеини на 100 г
@@ -16,6 +17,15 @@ public class FoodEntryDTO {
     private UserEntity user;
     private LocalDate date;
     private Double weightInGrams;
+
+    public Long getId() {
+        return id;
+    }
+
+    public FoodEntryDTO setId(Long id) {
+        this.id = id;
+        return this;
+    }
 
     public String getFoodName() {
         return foodName;

@@ -54,4 +54,16 @@ public class FoodEntryServiceImpl implements FoodEntryService {
     public Optional<FoodEntryDTO> getById(Long id) {
         return foodEntryRepository.findById(id).map(foodEntryMapper::toDto);
     }
+
+    public void editFoodEntry(FoodEntryDTO dto){
+        FoodEntryEntity entity = foodEntryRepository.findById(dto.getId()).orElseThrow();
+        entity.setFoodName(dto.getFoodName())
+                .setCalories(dto.getCalories())
+                .setProtein(dto.getProtein())
+                .setFats(dto.getFats())
+                .setWeightInGrams(dto.getWeightInGrams())
+                .setMealTime(dto.getMealTime());
+        foodEntryRepository.save(entity);
+
+    }
 }

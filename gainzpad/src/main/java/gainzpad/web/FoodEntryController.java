@@ -97,5 +97,19 @@ public class FoodEntryController {
         return "redirect:/tracker";
     }
 
+    @PostMapping("/delete/{id}")
+    public String deleteFood(@PathVariable Long id,@AuthenticationPrincipal UserDetails userDetails) {
+        UserEntity user = userRepository.findOneByEmail(userDetails.getUsername()).orElseThrow();
+        foodEntryService.deleteEntry(id);
+        return "redirect:/tracker";
+    }
 
+    @PostMapping("/edit")
+    public String editFood(@ModelAttribute FoodEntryDTO foodEntryDTO,@AuthenticationPrincipal UserDetails userDetails) {
+        UserEntity user = userRepository.findOneByEmail(userDetails.getUsername()).orElseThrow();
+        foodEntryDTO.setUser(user);
+        foodEntryDTO.setDate(LocalDate.now());
+        foodEntryService.editFoodEntry(foodEntryDTO);
+        return "redirect:/tracker";
+    }
 }

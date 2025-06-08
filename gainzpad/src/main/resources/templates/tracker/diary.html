@@ -4,51 +4,55 @@
 <body>
 <div th:replace="~{fragments/navbar :: navbar(activeTab)}"></div>
 
-<h2>Дневен прием</h2>
+<h2>Daily intake:</h2>
 <div>
-    <div>Калории: <b th:text="${totalCal}"></b> / <span th:text="${goalCalories}"></span> kcal</div>
+    <div>Calories: <b th:text="${totalCal}"></b> / <span th:text="${goalCalories}"></span> kcal</div>
     <div class="progress">
         <div class="progress-bar"
              th:style="'width:' + (${totalCal}*100/${goalCalories}) + '%;'"
              th:text="${#numbers.formatDecimal(totalCal, 0, 0)} + ' / ' + ${goalCalories} + ' kcal'"></div>
     </div>
-    <div>Въглехидрати: <b th:text="${totalCarbs}"></b> / <span th:text="${goalCarbs}"></span> g</div>
+    <div>Carbohydrates: <b th:text="${totalCarbs}"></b> / <span th:text="${goalCarbs}"></span> g</div>
     <div class="progress">
         <div class="progress-bar"
              th:style="'width:' + (${totalCarbs}*100/${goalCarbs}) + '%;'"
              th:text="${#numbers.formatDecimal(totalCarbs, 0, 0)} + ' / ' + ${goalCarbs} + ' g'"></div>
     </div>
-    <div>Протеин: <b th:text="${totalProtein}"></b> / <span th:text="${goalProtein}"></span> g</div>
+    <div>Protein: <b th:text="${totalProtein}"></b> / <span th:text="${goalProtein}"></span> g</div>
     <div class="progress">
         <div class="progress-bar"
              th:style="'width:' + (${totalProtein}*100/${goalProtein}) + '%;'"
              th:text="${#numbers.formatDecimal(totalProtein, 0, 0)} + ' / ' + ${goalProtein} + ' g'"></div>
     </div>
-    <div>Мазнини: <b th:text="${totalFats}"></b> / <span th:text="${goalFats}"></span> g</div>
+    <div>Fats: <b th:text="${totalFats}"></b> / <span th:text="${goalFats}"></span> g</div>
     <div class="progress">
         <div class="progress-bar"
              th:style="'width:' + (${totalFats}*100/${goalFats}) + '%;'"
              th:text="${#numbers.formatDecimal(totalFats, 0, 0)} + ' / ' + ${goalFats} + ' g'"></div>
     </div>
 </div>
-
-<h3>Добави храна:</h3>
+<br>
+<br>
+<br>
+<h3>Add food:</h3>
 <form th:action="@{/tracker/add}" method="post" th:object="${foodEntryDTO}">
-    <input type="text" th:field="*{foodName}" placeholder="Храна"/>
-    <input type="number" th:field="*{calories}" placeholder="Калории (100g)"/>
-    <input type="number" th:field="*{carbs}" placeholder="Въглехидрати (100g)"/>
-    <input type="number" th:field="*{protein}" placeholder="Протеин (100g)"/>
-    <input type="number" th:field="*{fats}" placeholder="Мазнини (100g)"/>
-    <input type="number" th:field="*{weightInGrams}" placeholder="Изядено (g)"/>
+    <input type="text" th:field="*{foodName}" placeholder="Food name"/>
+    <input type="number" th:field="*{calories}" placeholder="Calories (100g)"/>
+    <input type="number" th:field="*{carbs}" placeholder="Carbs (100g)"/>
+    <input type="number" th:field="*{protein}" placeholder="Protein (100g)"/>
+    <input type="number" th:field="*{fats}" placeholder="Fats (100g)"/>
+    <input type="number" th:field="*{weightInGrams}" placeholder="Weight (g)"/>
     <select th:field="*{mealTime}">
-        <option th:value="BREAKFAST">Закуска</option>
-        <option th:value="LUNCH">Обяд</option>
-        <option th:value="DINNER">Вечеря</option>
-        <option th:value="SNACK">Снак</option>
+        <option th:value="BREAKFAST">Breakfast</option>
+        <option th:value="LUNCH">Lunch</option>
+        <option th:value="DINNER">Dinner</option>
+        <option th:value="SNACK">Snack</option>
     </select>
-    <button type="submit">Добави</button>
+    <button type="submit">Add food</button>
 </form>
-
+<br>
+<br>
+<br>
 <div th:each="mealTime : ${mealTimes}">
     <h3 th:text="${mealTime}"></h3>
     <ul>
@@ -59,6 +63,25 @@
             <span th:text="${#numbers.formatDecimal(entry.protein * entry.weightInGrams / 100, 1, 1)}"></span> g protein,
             <span th:text="${#numbers.formatDecimal(entry.carbs * entry.weightInGrams / 100, 1, 1)}"></span> g carbs,
             <span th:text="${#numbers.formatDecimal(entry.fats * entry.weightInGrams / 100, 1, 1)}"></span> g fat
+                <form th:action="@{'/tracker/delete/' + ${entry.id}}" method="post" style="display:inline;">
+                    <button type="submit" onclick="return confirm('Сигурен ли си, че искаш да изтриеш?')">❌</button>
+                </form>
+                <!-- Edit button с data-атрибути за JS -->
+                <button
+                        type="button"
+                        class="btn btn-sm btn-secondary"
+                        data-bs-toggle="modal"
+                        data-bs-target="#editModal"
+                        th:attr="data-id=${entry.id},
+                 data-foodName=${entry.foodName},
+                 data-calories=${entry.calories},
+                 data-carbs=${entry.carbs},
+                 data-protein=${entry.protein},
+                 data-fats=${entry.fats},
+                 data-weightInGrams=${entry.weightInGrams},
+                 data-mealTime=${entry.mealTime}">
+                    ✏️
+                </button>
         </li>
         <li th:if="${#lists.isEmpty(mealsMap[T(gainzpad.model.enums.MealTimeEnum).valueOf(mealTime)])}">
             No foods added.
@@ -71,12 +94,12 @@
         <span th:text="${macrosByMeal[mealTime] != null ? #numbers.formatDecimal(macrosByMeal[mealTime][1], 1, 'POINT') : 0}"></span> g carbs,
         <span th:text="${macrosByMeal[mealTime] != null ? #numbers.formatDecimal(macrosByMeal[mealTime][3], 1, 'POINT') : 0}"></span> g fat
     </div>
+    <br>
+    <br>
+    <br>
 </div>
 
-
-
-
-
+<div th:replace="~{fragments/edit-food :: editFoodModal}"></div>
 <div th:replace="~{fragments/bootstrap-js::bootstrap-js}"></div>
 </body>
 </html>

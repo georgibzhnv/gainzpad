@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+<div th:fragment="editFoodModal">
+    <div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <form id="editForm" th:action="@{/tracker/edit}" method="post">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="editModalLabel">Редактирай храна</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Затвори"></button>
+                    </div>
+                    <div class="modal-body">
+                        <input type="hidden" name="id" id="editId"/>
+                        <input type="text" name="foodName" id="editFoodName" class="form-control mb-2" placeholder="Храна"/>
+                        <input type="number" name="calories" id="editCalories" class="form-control mb-2" placeholder="Калории (100g)"/>
+                        <input type="number" name="carbs" id="editCarbs" class="form-control mb-2" placeholder="Въглехидрати (100g)"/>
+                        <input type="number" name="protein" id="editProtein" class="form-control mb-2" placeholder="Протеин (100g)"/>
+                        <input type="number" name="fats" id="editFats" class="form-control mb-2" placeholder="Мазнини (100g)"/>
+                        <input type="number" name="weightInGrams" id="editWeightInGrams" class="form-control mb-2" placeholder="Изядено (g)"/>
+                        <select name="mealTime" id="editMealTime" class="form-control mb-2">
+                            <option value="BREAKFAST">Закуска</option>
+                            <option value="LUNCH">Обяд</option>
+                            <option value="DINNER">Вечеря</option>
+                            <option value="SNACK">Снак</option>
+                        </select>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-primary">Запази</button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Затвори</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Скрипт за попълване на модала -->
+    <script th:inline="javascript">
+        document.addEventListener('DOMContentLoaded', function () {
+            const editModal = document.getElementById('editModal');
+            if (!editModal) return;
+            editModal.addEventListener('show.bs.modal', function (event) {
+                const button = event.relatedTarget;
+                document.getElementById('editId').value = button.getAttribute('data-id');
+                document.getElementById('editFoodName').value = button.getAttribute('data-foodName');
+                document.getElementById('editCalories').value = button.getAttribute('data-calories');
+                document.getElementById('editCarbs').value = button.getAttribute('data-carbs');
+                document.getElementById('editProtein').value = button.getAttribute('data-protein');
+                document.getElementById('editFats').value = button.getAttribute('data-fats');
+                document.getElementById('editWeightInGrams').value = button.getAttribute('data-weightInGrams');
+                document.getElementById('editMealTime').value = button.getAttribute('data-mealTime');
+            });
+        });
+    </script>
+</div>
+</body>
+</html>

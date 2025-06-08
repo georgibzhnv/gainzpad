@@ -15,4 +15,5 @@ public interface FoodEntryService {
     List<FoodEntryDTO> getEntriesByUserAndDate(UserEntity user, LocalDate date);
     void deleteEntry(Long id);
     Optional<FoodEntryDTO> getById(Long id);
+    void editFoodEntry(FoodEntryDTO dto);
 }
