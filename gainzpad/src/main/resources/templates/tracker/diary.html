@@ -49,6 +49,33 @@
     <button type="submit">Добави</button>
 </form>
 
+<div th:each="mealTime : ${mealTimes}">
+    <h3 th:text="${mealTime}"></h3>
+    <ul>
+        <li th:each="entry : ${mealsMap[T(gainzpad.model.enums.MealTimeEnum).valueOf(mealTime)]}">
+            <span th:text="${entry.foodName}"></span>
+            (<span th:text="${entry.weightInGrams}"></span> g,
+            <span th:text="${#numbers.formatDecimal(entry.calories * entry.weightInGrams / 100, 1, 1)}"></span> kcal,
+            <span th:text="${#numbers.formatDecimal(entry.protein * entry.weightInGrams / 100, 1, 1)}"></span> g protein,
+            <span th:text="${#numbers.formatDecimal(entry.carbs * entry.weightInGrams / 100, 1, 1)}"></span> g carbs,
+            <span th:text="${#numbers.formatDecimal(entry.fats * entry.weightInGrams / 100, 1, 1)}"></span> g fat
+        </li>
+        <li th:if="${#lists.isEmpty(mealsMap[T(gainzpad.model.enums.MealTimeEnum).valueOf(mealTime)])}">
+            No foods added.
+        </li>
+    </ul>
+    <div>
+        <b>Total for <span th:text="${mealTime}"></span>:</b>
+        <span th:text="${macrosByMeal[mealTime] != null ? #numbers.formatDecimal(macrosByMeal[mealTime][0], 1, 'POINT') : 0}"></span> kcal,
+        <span th:text="${macrosByMeal[mealTime] != null ? #numbers.formatDecimal(macrosByMeal[mealTime][2], 1, 'POINT') : 0}"></span> g protein,
+        <span th:text="${macrosByMeal[mealTime] != null ? #numbers.formatDecimal(macrosByMeal[mealTime][1], 1, 'POINT') : 0}"></span> g carbs,
+        <span th:text="${macrosByMeal[mealTime] != null ? #numbers.formatDecimal(macrosByMeal[mealTime][3], 1, 'POINT') : 0}"></span> g fat
+    </div>
+</div>
+
+
+
+
 
 <div th:replace="~{fragments/bootstrap-js::bootstrap-js}"></div>
 </body>
