@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head th:replace="~{fragments/head :: head}"></head>
+<body>
+
+<div th:replace="~{fragments/navbar :: navbar('trainers-workouts')}"></div>
+<div th:replace="~{fragments/delete-confirm :: deleteModal}"></div>
+
+<div class="container mt-4">
+  <h1>Trainers' Workouts</h1>
+  <a th:href="@{/workouts/new}" class="btn btn-primary mb-3">Add workout</a>
+  <table class="table table-striped">
+    <thead>
+    <tr>
+      <th>Name</th>
+      <th>Coach</th>
+      <th>Actions</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="workout : ${workouts}">
+      <td th:text="${workout.workoutName}">Workout Name</td>
+      <td th:text="${workout.coachName}">Coach</td>
+      <td>
+        <a th:href="@{|/workouts/${workout.id}|}" class="btn btn-info btn-sm">View</a>
+        <a href="#"
+           class="btn btn-danger btn-sm"
+           data-bs-toggle="modal"
+           data-bs-target="#confirmDeleteModal"
+           th:attr="data-workout-id=${workout.id}, data-workout-name=${workout.workoutName}">
+          Delete
+        </a>
+      </td>
+    </tr>
+    </tbody>
+  </table>
+</div>
+
+<script>
+  var confirmDeleteModal = document.getElementById('confirmDeleteModal');
+  confirmDeleteModal.addEventListener('show.bs.modal', function (event) {
+    var button = event.relatedTarget;
+    var workoutId = button.getAttribute('data-workout-id');
+    var workoutName = button.getAttribute('data-workout-name');
+
+    var modalTitle = confirmDeleteModal.querySelector('#modalWorkoutName');
+    modalTitle.textContent = workoutName;
+
+    var form = document.getElementById('deleteWorkoutForm');
+    form.action = '/workouts/delete/' + workoutId;
+  });
+</script>
+
+
+<div th:replace="~{fragments/bootstrap-js::bootstrap-js}"></div>
+</body>
+</html>

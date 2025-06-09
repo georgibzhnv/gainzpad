@@ -1,10 +1,7 @@
 package gainzpad;
 
-import gainzpad.model.entity.ExerciseEntity;
-import gainzpad.model.entity.WorkoutEntity;
-import gainzpad.model.entity.WorkoutExercise;
+import gainzpad.model.entity.*;
 import gainzpad.model.entity.user.RoleEntity;
-import gainzpad.model.entity.SetEntity;
 import gainzpad.model.entity.user.UserEntity;
 import gainzpad.model.enums.UserRoleEnum;
 import gainzpad.repository.*;
@@ -13,6 +10,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Set;
 
@@ -23,23 +21,26 @@ public class DBInit implements CommandLineRunner {
     private final ExerciseRepository exerciseRepository;
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    private final TrainersWorkoutRepository trainersWorkoutRepository;
 
     public DBInit(WorkoutRepository workoutRepository,
                   ExerciseRepository exerciseRepository,
                   WorkoutExerciseRepository workoutExerciseRepository,
                   UserRepository userRepository,
                   RoleRepository roleRepository,
-                  PasswordEncoder passwordEncoder) {
+                  PasswordEncoder passwordEncoder, TrainersWorkoutRepository trainersWorkoutRepository) {
         this.workoutRepository = workoutRepository;
         this.exerciseRepository = exerciseRepository;
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
+        this.trainersWorkoutRepository = trainersWorkoutRepository;
     }
 
     @Override
     public void run(String... args) throws Exception {
         initUsers();
         initWorkouts();
+        initTrainersWorkouts();
     }
 
     private void initUsers() {
@@ -111,6 +112,21 @@ public class DBInit implements CommandLineRunner {
 
         chestDay.setWorkoutExercises(List.of(we1, we2));
         workoutRepository.save(chestDay);
+    }
+
+    private void initTrainersWorkouts(){
+        TrainersWorkoutEntity workout = new TrainersWorkoutEntity();
+        workout.setCoachName("Chris Bumstead")
+                .setWorkoutName("Push Workout");
+
+        LinkedHashMap<String,String>exerciseSets = new LinkedHashMap<>();
+        exerciseSets.put("Bench Press", "2 Warm-Up sets, 3 Working sets");
+        exerciseSets.put("Chest flyes","2 Working sets");
+        exerciseSets.put("Dips", "1 Warm-Up set, 2 Working sets");
+        exerciseSets.put("Triceps Push-downs with straight bar", "2 Working sets");
+        exerciseSets.put("One-Arm Cable Lateral Raises", "2 Warm-Up sets,3 Working sets");
+        workout.setExerciseSets(exerciseSets);
+        trainersWorkoutRepository.save(workout);
     }
 
 }
