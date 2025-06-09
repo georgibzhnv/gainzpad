@@ -9,4 +9,6 @@ import java.util.List;
 public interface TrainersWorkoutService {
 
     List<TrainersWorkoutDTO>getAll();
+
+    void save(TrainersWorkoutDTO trainersWorkoutDTO);
 }

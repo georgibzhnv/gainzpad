@@ -1,9 +1,13 @@
 package gainzpad.web;
 
+import gainzpad.model.dto.TrainersWorkoutDTO;
 import gainzpad.service.TrainersWorkoutService;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
@@ -20,5 +24,19 @@ public class TrainersWorkoutController {
     public String getAllWorkouts(Model model){
         model.addAttribute("workouts", trainersWorkoutService.getAll());
         return "workouts/list-trainers";
+    }
+
+    @PreAuthorize("hasRole('ADMIN') or hasRole('TRAINER')")
+    @GetMapping("/new")
+    public String newWorkout(Model model){
+        model.addAttribute("trainersWorkoutDTO", new TrainersWorkoutDTO());
+        return "workouts/new-trainers";
+    }
+
+    @PreAuthorize("hasRole('ADMIN') or hasRole('TRAINER')")
+    @PostMapping("/new")
+    public String saveWorkout(@ModelAttribute TrainersWorkoutDTO trainersWorkoutDTO) {
+        trainersWorkoutService.save(trainersWorkoutDTO);
+        return "redirect:/trainers-workouts";
     }
 }

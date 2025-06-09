@@ -9,11 +9,10 @@ import java.util.*;
 public class TrainersWorkoutEntity extends BaseEntity{
 
     private String workoutName;
-    @ElementCollection
-    @CollectionTable(name = "trainers_workout_exercise_sets", joinColumns = @JoinColumn(name = "workout_id"))
-    @MapKeyColumn(name = "exercise_name")
-    @Column(name = "sets")
-    private Map<String,String> exerciseSets = new LinkedHashMap<>();
+
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "workout_id")
+    private List<ExerciseSetEntity> exerciseSets = new ArrayList<>();
     private String coachName;
 
     public String getCoachName() {
@@ -34,11 +33,11 @@ public class TrainersWorkoutEntity extends BaseEntity{
         return this;
     }
 
-    public Map<String, String> getExerciseSets() {
+    public List<ExerciseSetEntity> getExerciseSets() {
         return exerciseSets;
     }
 
-    public TrainersWorkoutEntity setExerciseSets(Map<String, String> exerciseSets) {
+    public TrainersWorkoutEntity setExerciseSets(List<ExerciseSetEntity> exerciseSets) {
         this.exerciseSets = exerciseSets;
         return this;
     }

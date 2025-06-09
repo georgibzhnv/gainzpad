@@ -34,7 +34,7 @@ public class WorkoutController {
         String username = authentication.getName();
 
         boolean isAdmin = authentication.getAuthorities().stream()
-                .anyMatch(a -> a.getAuthority().equals("ADMIN"));
+                .anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"));
 
         if (isAdmin) {
             model.addAttribute("workouts", workoutService.getAll());

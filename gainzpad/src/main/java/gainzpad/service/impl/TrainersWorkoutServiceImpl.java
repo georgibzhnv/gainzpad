@@ -1,6 +1,7 @@
 package gainzpad.service.impl;
 
 import gainzpad.model.dto.TrainersWorkoutDTO;
+import gainzpad.model.entity.TrainersWorkoutEntity;
 import gainzpad.model.mapper.TrainersWorkoutMapper;
 import gainzpad.repository.TrainersWorkoutRepository;
 import gainzpad.service.TrainersWorkoutService;
@@ -27,6 +28,12 @@ public class TrainersWorkoutServiceImpl implements TrainersWorkoutService {
         return trainersWorkoutRepository.findAll()
                 .stream().map(trainersWorkoutMapper::toDto)
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public void save(TrainersWorkoutDTO trainersWorkoutDTO) {
+        TrainersWorkoutEntity trainersWorkoutEntity = trainersWorkoutMapper.toEntity(trainersWorkoutDTO);
+        trainersWorkoutRepository.save(trainersWorkoutEntity);
     }
 
 }

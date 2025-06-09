@@ -119,13 +119,14 @@ public class DBInit implements CommandLineRunner {
         workout.setCoachName("Chris Bumstead")
                 .setWorkoutName("Push Workout");
 
-        LinkedHashMap<String,String>exerciseSets = new LinkedHashMap<>();
-        exerciseSets.put("Bench Press", "2 Warm-Up sets, 3 Working sets");
-        exerciseSets.put("Chest flyes","2 Working sets");
-        exerciseSets.put("Dips", "1 Warm-Up set, 2 Working sets");
-        exerciseSets.put("Triceps Push-downs with straight bar", "2 Working sets");
-        exerciseSets.put("One-Arm Cable Lateral Raises", "2 Warm-Up sets,3 Working sets");
-        workout.setExerciseSets(exerciseSets);
+        ExerciseSetEntity exerciseSets = new ExerciseSetEntity();
+        exerciseSets.setExerciseName("Bench Press")
+                .setSets("2 Warm-Up sets, 3 Working sets");
+
+        ExerciseSetEntity exerciseSets2 = new ExerciseSetEntity();
+        exerciseSets2.setExerciseName("Chest flyes").setSets("2 Working sets");
+
+        workout.setExerciseSets(List.of(exerciseSets,exerciseSets2));
         trainersWorkoutRepository.save(workout);
     }
 
