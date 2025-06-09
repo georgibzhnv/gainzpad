@@ -11,4 +11,6 @@ public interface TrainersWorkoutService {
     List<TrainersWorkoutDTO>getAll();
 
     void save(TrainersWorkoutDTO trainersWorkoutDTO);
+
+    TrainersWorkoutDTO getById(Long id);
 }

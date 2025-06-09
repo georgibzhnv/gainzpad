@@ -5,10 +5,7 @@ import gainzpad.service.TrainersWorkoutService;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 @Controller
 @RequestMapping("/trainers-workouts")
@@ -38,5 +35,12 @@ public class TrainersWorkoutController {
     public String saveWorkout(@ModelAttribute TrainersWorkoutDTO trainersWorkoutDTO) {
         trainersWorkoutService.save(trainersWorkoutDTO);
         return "redirect:/trainers-workouts";
+    }
+
+    @GetMapping("/{id}")
+    public String viewWorkout(@PathVariable Long id, Model model) {
+        TrainersWorkoutDTO workout = trainersWorkoutService.getById(id);
+        model.addAttribute("workout", workout);
+        return "workouts/view-trainers";
     }
 }

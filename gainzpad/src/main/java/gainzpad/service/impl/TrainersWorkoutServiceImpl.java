@@ -36,4 +36,10 @@ public class TrainersWorkoutServiceImpl implements TrainersWorkoutService {
         trainersWorkoutRepository.save(trainersWorkoutEntity);
     }
 
+    @Override
+    public TrainersWorkoutDTO getById(Long id) {
+        TrainersWorkoutEntity trainersWorkoutEntity = trainersWorkoutRepository.findById(id).orElseThrow();
+        return trainersWorkoutMapper.toDto(trainersWorkoutEntity);
+    }
+
 }
