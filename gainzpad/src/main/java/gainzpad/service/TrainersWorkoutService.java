@@ -13,4 +13,6 @@ public interface TrainersWorkoutService {
     void save(TrainersWorkoutDTO trainersWorkoutDTO);
 
     TrainersWorkoutDTO getById(Long id);
+
+    void deleteById(Long id);
 }

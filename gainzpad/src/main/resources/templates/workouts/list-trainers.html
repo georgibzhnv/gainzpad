@@ -30,7 +30,8 @@
            class="btn btn-danger btn-sm"
            data-bs-toggle="modal"
            data-bs-target="#confirmDeleteModal"
-           th:attr="data-workout-id=${workout.id}, data-workout-name=${workout.workoutName}">
+           th:attr="data-workout-id=${workout.id}, data-workout-name=${workout.workoutName}"
+           sec:authorize="hasRole('ADMIN')">
           Delete
         </a>
       </td>

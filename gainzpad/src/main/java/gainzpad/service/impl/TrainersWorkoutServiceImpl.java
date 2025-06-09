@@ -42,4 +42,9 @@ public class TrainersWorkoutServiceImpl implements TrainersWorkoutService {
         return trainersWorkoutMapper.toDto(trainersWorkoutEntity);
     }
 
+    @Override
+    public void deleteById(Long id) {
+        trainersWorkoutRepository.deleteById(id);
+    }
+
 }

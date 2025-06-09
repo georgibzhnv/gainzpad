@@ -43,4 +43,10 @@ public class TrainersWorkoutController {
         model.addAttribute("workout", workout);
         return "workouts/view-trainers";
     }
+
+    @PostMapping("/delete/{id}")
+    public String deleteWorkout(@PathVariable Long id){
+        trainersWorkoutService.deleteById(id);
+        return "redirect:/trainers-workouts";
+    }
 }
