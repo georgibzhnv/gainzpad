@@ -15,4 +15,6 @@ public interface TrainersWorkoutService {
     TrainersWorkoutDTO getById(Long id);
 
     void deleteById(Long id);
+
+    void update(Long id, TrainersWorkoutDTO trainersWorkoutDTO);
 }

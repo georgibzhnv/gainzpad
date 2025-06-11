@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head th:replace="~{fragments/head :: head}"></head>
+<body>
+
+<div th:replace="~{fragments/navbar :: navbar('trainers-workouts')}"></div>
+
+<div class="container mt-4">
+    <h2>Edit Trainer's Workout</h2>
+    <form th:action="@{|/trainers-workouts/edit/${trainersWorkoutDTO.id}|}" th:object="${trainersWorkoutDTO}" method="post">
+        <div class="mb-3">
+            <label for="workoutName" class="form-label">Workout Name:</label>
+            <input type="text" th:field="*{workoutName}" id="workoutName" class="form-control" required>
+        </div>
+        <div class="mb-3">
+            <label for="coachName" class="form-label">Coach Name:</label>
+            <input type="text" th:field="*{coachName}" id="coachName" class="form-control" required>
+        </div>
+
+        <h4>Exercises and Sets</h4>
+        <div id="exercises">
+            <div class="row mb-2 exercise-row"
+                 th:each="exerciseSet, iterStat : ${trainersWorkoutDTO.exerciseSets}">
+                <div class="col">
+                    <input type="text"
+                           th:field="*{exerciseSets[__${iterStat.index}__].exerciseName}"
+                           placeholder="Exercise name"
+                           class="form-control"
+                           required>
+                </div>
+                <div class="col">
+                    <input type="text"
+                           th:field="*{exerciseSets[__${iterStat.index}__].sets}"
+                           placeholder="Sets (e.g. 3x12, 2 Warm-up)"
+                           class="form-control"
+                           required>
+                </div>
+                <div class="col-auto">
+                    <button type="button" class="btn btn-danger btn-sm remove-exercise" onclick="removeExercise(this)">X</button>
+                </div>
+            </div>
+        </div>
+
+        <button type="button" class="btn btn-secondary btn-sm mb-3" onclick="addExercise()">Add Exercise</button>
+
+        <button type="submit" class="btn btn-primary">Save Workout</button>
+        <a th:href="@{/trainers-workouts}" class="btn btn-secondary">Cancel</a>
+    </form>
+</div>
+
+<script>
+    function addExercise() {
+        const exercisesDiv = document.getElementById('exercises');
+        const rows = exercisesDiv.getElementsByClassName('exercise-row');
+        const index = rows.length;
+
+        const row = document.createElement('div');
+        row.className = 'row mb-2 exercise-row';
+        row.innerHTML = `
+        <div class="col">
+            <input type="text" name="exerciseSets[${index}].exerciseName" placeholder="Exercise name" class="form-control" required>
+        </div>
+        <div class="col">
+            <input type="text" name="exerciseSets[${index}].sets" placeholder="Sets (e.g. 3x12, 2 Warm-up)" class="form-control" required>
+        </div>
+        <div class="col-auto">
+            <button type="button" class="btn btn-danger btn-sm remove-exercise" onclick="removeExercise(this)">X</button>
+        </div>
+    `;
+        exercisesDiv.appendChild(row);
+    }
+
+
+    function removeExercise(btn) {
+        btn.closest('.exercise-row').remove();
+    }
+</script>
+
+<div th:replace="~{fragments/bootstrap-js::bootstrap-js}"></div>
+</body>
+</html>

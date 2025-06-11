@@ -49,4 +49,19 @@ public class TrainersWorkoutController {
         trainersWorkoutService.deleteById(id);
         return "redirect:/trainers-workouts";
     }
+
+    @PreAuthorize("hasRole('ADMIN')")
+    @GetMapping("/edit/{id}")
+    public String editWorkout(@PathVariable Long id, Model model){
+        TrainersWorkoutDTO workout = trainersWorkoutService.getById(id);
+        model.addAttribute("trainersWorkoutDTO", workout);
+        return "workouts/edit-trainers";
+    }
+
+    @PreAuthorize("hasRole('ADMIN')")
+    @PostMapping("/edit/{id}")
+    public String updateWorkout(@PathVariable Long id, @ModelAttribute TrainersWorkoutDTO trainersWorkoutDTO) {
+        trainersWorkoutService.update(id, trainersWorkoutDTO);
+        return "redirect:/trainers-workouts";
+    }
 }

@@ -1,6 +1,8 @@
 package gainzpad.service.impl;
 
+import gainzpad.model.dto.ExerciseSetDTO;
 import gainzpad.model.dto.TrainersWorkoutDTO;
+import gainzpad.model.entity.ExerciseSetEntity;
 import gainzpad.model.entity.TrainersWorkoutEntity;
 import gainzpad.model.mapper.TrainersWorkoutMapper;
 import gainzpad.repository.TrainersWorkoutRepository;
@@ -45,6 +47,12 @@ public class TrainersWorkoutServiceImpl implements TrainersWorkoutService {
     @Override
     public void deleteById(Long id) {
         trainersWorkoutRepository.deleteById(id);
+    }
+
+    @Override
+    public void update(Long id, TrainersWorkoutDTO trainersWorkoutDTO) {
+        TrainersWorkoutEntity trainersWorkoutEntity = trainersWorkoutMapper.toEntity(trainersWorkoutDTO);
+        trainersWorkoutRepository.save(trainersWorkoutEntity);
     }
 
 }
