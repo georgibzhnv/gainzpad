@@ -80,6 +80,8 @@ public class WorkoutController {
         model.addAttribute("exercises", workoutDTO.getExercises());
         model.addAttribute("workoutStartTime", startTimeStr);
         model.addAttribute("workoutEndTime", endTimeStr);
+
+
         return "workouts/view";
     }
 
@@ -147,17 +149,12 @@ public class WorkoutController {
                             @PathVariable Long exerciseId,
                             @RequestParam Long setId,
                             @RequestParam Integer reps,
-                            @RequestParam Double weight) {
-        workoutService.recordSet(workoutId, exerciseId, setId, reps, weight);
+                            @RequestParam Double weight,
+                            @RequestParam Long restTime) {
+        workoutService.recordSet(workoutId, exerciseId, setId, reps, weight, restTime);
         return "redirect:/workouts/" + workoutId;
     }
 
-
-    @PostMapping("/{id}/startRest")
-    public String startRest(@PathVariable Long id, @RequestParam long restTime) {
-        workoutService.startRest(id,restTime);
-        return "redirect:/workouts/" + id;
-    }
 
     @PostMapping("{workoutId}/exercise/{exerciseId}/addSet")
     public String addSet(@PathVariable Long workoutId,@PathVariable Long exerciseId){

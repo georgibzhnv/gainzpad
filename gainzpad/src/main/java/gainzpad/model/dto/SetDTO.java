@@ -53,5 +53,6 @@ public class SetDTO {
         isCompleted = completed;
         return this;
     }
+
 }
 

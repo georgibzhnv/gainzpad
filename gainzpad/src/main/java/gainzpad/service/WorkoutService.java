@@ -20,8 +20,8 @@ public interface WorkoutService {
     void recordSet( Long workoutId,
                    Long exerciseId,
                    Long setId, Integer reps,
-                   Double weight);
-    void startRest(Long id,long restTime);
+                   Double weight,Long restTime);
+
 
     void addSet(Long workoutId, Long exerciseId);
 

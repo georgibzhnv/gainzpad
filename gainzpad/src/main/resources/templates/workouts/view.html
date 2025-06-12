@@ -12,7 +12,6 @@
        style="font-size: 1.5rem; margin-bottom: 15px; font-weight: bold;">
   </div>
 
-
   <div class="mb-3">
     <form th:action="@{/workouts/start/{id}(id=${workout.id})}" method="post" th:if="${workout.startTime == null}">
       <button type="submit" class="btn btn-primary">Start routine</button>
@@ -30,6 +29,7 @@
       <th>Set №</th>
       <th>Reps</th>
       <th>Weight (kg)</th>
+      <th>Rest (sec)</th>
       <th>Status</th>
       <th>Action</th>
     </tr>
@@ -48,28 +48,34 @@
             <td>
               <input type="number" name="weight" th:value="${set.weight}" min="0" class="form-control form-control-sm" />
             </td>
+            <td th:text="${set.restTime != null ? set.restTime : ''}"></td>
             <td>
               <span th:text="${set.completed} ? 'Completed' : 'Not completed'"></span>
+              <span class="rest-timer"
+                    th:attr="data-rest-duration=${set.restTime != null ? set.restTime*1000 : 60000}"
+                    th:if="${set.completed}"></span>
             </td>
             <td>
+              <!-- ВАЖНО! Добавяме скрито поле за restTime -->
+              <input type="hidden" name="restTime" th:value="${set.restTime != null ? set.restTime : 60}" />
               <button type="submit" class="btn btn-success btn-sm"
                       th:if="${!set.completed and workout.startTime != null and workout.endTime == null}">
                 Done
               </button>
         </form>
         <form th:action="@{/workouts/{workoutId}/exercise/{exerciseId}/removeSet(workoutId=${workout.id},exerciseId=${we.exerciseId})}" method="post"
-        style="display:inline;">
+              style="display:inline;">
           <input type="hidden" name="setId" th:value="${set.id}" />
           <button type="submit" class="btn btn-danger btn-sm"
                   th:if="${workout.startTime != null and workout.endTime == null}">
             Remove set</button>
         </form>
-              <span th:if="${set.completed}" class="text-success">✔</span>
-            </td>
-          </tr>
+        <span th:if="${set.completed}" class="text-success">✔</span>
+        </td>
+        </tr>
       </th:block>
       <tr th:if="${workout.startTime != null and workout.endTime == null}">
-        <td colspan="6">
+        <td colspan="7">
           <form th:action="@{/workouts/{workoutId}/exercise/{exerciseId}/addSet(workoutId=${workout.id},exerciseId=${we.exerciseId})}" method="post">
             <button type="submit" class="btn btn-primary btn-sm">Add set</button>
           </form>
@@ -83,18 +89,19 @@
 <div th:replace="~{fragments/bootstrap-js::bootstrap-js}"></div>
 
 <script>
-  document.addEventListener('DOMContentLoaded', function() {
+  // Главен workout таймер
+  document.addEventListener('DOMContentLoaded', function () {
     var timerDiv = document.getElementById('timer');
     var startTime = timerDiv.getAttribute('data-start-time');
     var endTime = timerDiv.getAttribute('data-end-time');
 
     if (startTime && startTime !== "") {
       function formatTime(ms) {
-        let t = Math.floor(ms/1000),
-                h = Math.floor(t/3600),
-                m = Math.floor((t%3600)/60),
+        let t = Math.floor(ms / 1000),
+                h = Math.floor(t / 3600),
+                m = Math.floor((t % 3600) / 60),
                 s = t % 60;
-        return `${h.toString().padStart(2,'0')}:${m.toString().padStart(2,'0')}:${s.toString().padStart(2,'0')}`;
+        return `${h.toString().padStart(2, '0')}:${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
       }
 
       function startTimer(from, to) {
@@ -102,8 +109,9 @@
           var now = to ? new Date(to) : new Date();
           var diff = now - new Date(from);
           if (diff < 0 || isNaN(diff)) diff = 0;
-          timerDiv.innerHTML = "<b>Време: </b>" + formatTime(diff);
+          timerDiv.innerHTML = "<b>Time: </b>" + formatTime(diff);
         }
+
         update();
         if (!to) return setInterval(update, 1000);
         else update();
@@ -111,11 +119,25 @@
 
       startTimer(startTime, (endTime && endTime !== "") ? endTime : null);
     } else {
-      timerDiv.innerHTML = "<b>Време: </b>00:00:00";
+      timerDiv.innerHTML = "<b>Time: </b>00:00:00";
     }
   });
+
+  function updateAllRestTimers() {
+    document.querySelectorAll('.rest-timer').forEach(function(el) {
+      var duration = parseInt(el.getAttribute('data-rest-duration')) || 60000;
+      if (!el.__started) el.__started = Date.now();
+      var elapsed = Date.now() - el.__started;
+      var remaining = Math.max(0, duration - elapsed);
+      let t = Math.floor(remaining / 1000),
+              min = Math.floor(t / 60),
+              sec = t % 60;
+      el.innerHTML = "<b>Rest:</b> " + min.toString().padStart(2, '0') + ':' + sec.toString().padStart(2, '0');
+      if (remaining === 0) el.innerHTML = "<b>Rest:</b> Done!";
+    });
+  }
+  setInterval(updateAllRestTimers, 1000);
+  updateAllRestTimers();
 </script>
-
-
 </body>
 </html>

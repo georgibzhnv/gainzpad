@@ -7,6 +7,8 @@ import gainzpad.model.entity.WorkoutEntity;
 import gainzpad.model.entity.WorkoutExercise;
 import gainzpad.model.entity.SetEntity;
 import gainzpad.model.entity.user.UserEntity;
+import gainzpad.model.mapper.SetMapper;
+import gainzpad.model.mapper.WorkoutExerciseMapper;
 import gainzpad.model.mapper.WorkoutMapper;
 import gainzpad.repository.ExerciseRepository;
 import gainzpad.repository.UserRepository;
@@ -29,16 +31,18 @@ public class WorkoutServiceImpl implements WorkoutService {
 
     private final WorkoutRepository workoutRepository;
     private final ExerciseRepository exerciseRepository;
-    private final WorkoutExerciseRepository workoutExerciseRepository;
     private final UserRepository userRepository;
     private final WorkoutMapper workoutMapper;
+    private final SetMapper setMapper;
+    private final WorkoutExerciseMapper workoutExerciseMapper;
 
-    public WorkoutServiceImpl(WorkoutRepository workoutRepository, ExerciseRepository exerciseRepository, WorkoutExerciseRepository workoutExerciseRepository, UserRepository userRepository, WorkoutMapper workoutMapper) {
+    public WorkoutServiceImpl(WorkoutRepository workoutRepository, ExerciseRepository exerciseRepository, WorkoutExerciseRepository workoutExerciseRepository, UserRepository userRepository, WorkoutMapper workoutMapper, SetMapper setMapper, WorkoutExerciseMapper workoutExerciseMapper) {
         this.workoutRepository = workoutRepository;
         this.exerciseRepository = exerciseRepository;
-        this.workoutExerciseRepository = workoutExerciseRepository;
         this.userRepository = userRepository;
         this.workoutMapper = workoutMapper;
+        this.setMapper = setMapper;
+        this.workoutExerciseMapper = workoutExerciseMapper;
     }
 
     @Override
@@ -51,7 +55,6 @@ public class WorkoutServiceImpl implements WorkoutService {
 
     @Override
     public void create(WorkoutDTO workoutDTO) {
-
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
         UserEntity user = userRepository.findOneByEmail(username)
                 .orElseThrow(() -> new UsernameNotFoundException(username));
@@ -66,36 +69,26 @@ public class WorkoutServiceImpl implements WorkoutService {
             if (exDto.getExerciseId() != null) {
                 exercise = exerciseRepository.findById(exDto.getExerciseId())
                         .orElseThrow(() -> new IllegalArgumentException("No exercise with ID=" + exDto.getExerciseId()));
-            }
-
-            else if (exDto.getNewExerciseName() != null && !exDto.getNewExerciseName().isBlank()) {
+            } else if (exDto.getNewExerciseName() != null && !exDto.getNewExerciseName().isBlank()) {
                 exercise = new ExerciseEntity();
                 exercise.setName(exDto.getNewExerciseName());
-                // сетни и други полета ако имаш
                 exercise = exerciseRepository.save(exercise);
-            }
-
-            else {
+            } else {
                 throw new IllegalArgumentException("No exercise specified.");
             }
 
-            WorkoutExercise we = new WorkoutExercise()
-                    .setWorkout(workout)
-                    .setExercise(exercise)
-                    .setRestTime(exDto.getRestTime())
-                    .setTimeSpent(exDto.getTimeSpent());
+            WorkoutExercise we = workoutExerciseMapper.toEntity(exDto);
+            we.setWorkout(workout);
+            we.setExercise(exercise);
 
             List<SetEntity> setEntities = exDto.getSets().stream()
-                    .map(setDTO -> new SetEntity()
-                            .setReps(setDTO.getReps())
-                            .setWeight(setDTO.getWeight())
-                            .setCompleted(setDTO.isCompleted())
-                            .setWorkoutExercise(we))
+                    .map(setMapper::toEntity)
+                    .peek(set -> set.setWorkoutExercise(we))
                     .collect(Collectors.toList());
             we.setSets(setEntities);
+
             workout.getWorkoutExercises().add(we);
         }
-
         workoutRepository.save(workout);
     }
 
@@ -134,40 +127,25 @@ public class WorkoutServiceImpl implements WorkoutService {
     }
 
     @Override
-    public void recordSet(Long id, Long exerciseId, Long setId, Integer reps, Double weight) {
+    public void recordSet(Long id, Long exerciseId, Long setId, Integer reps, Double weight, Long restTime) {
         WorkoutEntity workoutEntity = workoutRepository.findById(id)
-                .orElseThrow(()->new IllegalArgumentException("Workout with id=" + id + " not found"));
+                .orElseThrow(() -> new IllegalArgumentException("Workout with id=" + id + " not found"));
 
         WorkoutExercise workoutExercise = workoutEntity.getWorkoutExercises().stream()
-                .filter(we->we.getId().equals(exerciseId))
+                .filter(we -> we.getId().equals(exerciseId))
                 .findFirst()
-                .orElseThrow(()->new IllegalArgumentException("Exercise not found."));
+                .orElseThrow(() -> new IllegalArgumentException("Exercise not found."));
 
         SetEntity setEntity = workoutExercise.getSets().stream()
-                .filter(set->set.getId().equals(setId))
+                .filter(set -> set.getId().equals(setId))
                 .findFirst()
-                .orElseThrow(()->new IllegalArgumentException("Set not found."));
+                .orElseThrow(() -> new IllegalArgumentException("Set not found."));
 
         setEntity.setReps(reps);
         setEntity.setWeight(weight);
+        setEntity.setRestTime(restTime);  // <-- Запиши времето за почивка тук!
         setEntity.setCompleted(true);
 
-        workoutRepository.save(workoutEntity);
-    }
-
-
-    @Override
-    public void startRest(Long id, long restTime) {
-        WorkoutEntity workoutEntity = workoutRepository.findById(id)
-                .orElseThrow(()->new IllegalArgumentException("Workout with id=" + id + " not found"));
-
-        for (WorkoutExercise we : workoutEntity.getWorkoutExercises()) {
-            for (SetEntity set : we.getSets()) {
-                if (!set.isCompleted()){
-                    set.setRestTime(restTime);
-                }
-            }
-        }
         workoutRepository.save(workoutEntity);
     }
 
