@@ -80,8 +80,7 @@ public class DBInit implements CommandLineRunner {
 
         WorkoutExercise we1 = new WorkoutExercise()
                 .setWorkout(chestDay)
-                .setExercise(pushUp)
-                .setRestTime(90); // например 90 секунди почивка
+                .setExercise(pushUp);
 
         List<SetEntity> we1Sets = new ArrayList<>();
         for (int i = 0; i < 4; i++) {
@@ -96,8 +95,7 @@ public class DBInit implements CommandLineRunner {
 
         WorkoutExercise we2 = new WorkoutExercise()
                 .setWorkout(chestDay)
-                .setExercise(squat)
-                .setRestTime(90);
+                .setExercise(squat);
 
         List<SetEntity> we2Sets = new ArrayList<>();
         for (int i = 0; i < 4; i++) {

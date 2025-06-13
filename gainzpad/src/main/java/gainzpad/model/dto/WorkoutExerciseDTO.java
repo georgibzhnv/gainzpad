@@ -14,7 +14,6 @@ public class WorkoutExerciseDTO {
 
     private String newExerciseName;
     private String exerciseName;
-    private long restTime;
     private long timeSpent;
 
     private List<SetDTO> sets = new ArrayList<>();
@@ -34,15 +33,6 @@ public class WorkoutExerciseDTO {
 
     public WorkoutExerciseDTO setSets(List<SetDTO> sets) {
         this.sets = sets;
-        return this;
-    }
-
-    public long getRestTime() {
-        return restTime;
-    }
-
-    public WorkoutExerciseDTO setRestTime(long restTime) {
-        this.restTime = restTime;
         return this;
     }
 

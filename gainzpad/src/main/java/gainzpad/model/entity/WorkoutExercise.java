@@ -22,8 +22,6 @@ public class WorkoutExercise {
     private ExerciseEntity exercise;
     @OneToMany(mappedBy = "workoutExercise", cascade = CascadeType.ALL,orphanRemoval = true)
     private List<SetEntity> sets = new ArrayList<>();
-    @Column(nullable = false)
-    private long restTime;
     private long timeSpent;
 
 
@@ -42,15 +40,6 @@ public class WorkoutExercise {
 
     public WorkoutExercise setId(Long id) {
         this.id = id;
-        return this;
-    }
-
-    public long getRestTime() {
-        return restTime;
-    }
-
-    public WorkoutExercise setRestTime(long restTime) {
-        this.restTime = restTime;
         return this;
     }
 
