@@ -3,21 +3,21 @@
 <head th:replace="~{fragments/head :: head}"></head>
 <body>
 
-<div th:replace="~{fragments/navbar :: navbar('trainers-workouts')}"></div>
 
 <div class="container mt-4">
-    <h2>Edit Trainer's Workout</h2>
+    <h1>Edit Trainer's Workout</h1>
+    <br>
     <form th:action="@{|/trainers-workouts/edit/${trainersWorkoutDTO.id}|}" th:object="${trainersWorkoutDTO}" method="post">
-        <div class="mb-3">
+        <div class="mb-3" style="font-size: 1.6rem">
             <label for="workoutName" class="form-label">Workout Name:</label>
-            <input type="text" th:field="*{workoutName}" id="workoutName" class="form-control" required>
+            <input type="text" th:field="*{workoutName}" id="workoutName" class="form-control"  style="font-size: 1.5rem" required>
         </div>
-        <div class="mb-3">
+        <div class="mb-3" style="font-size: 1.6rem">
             <label for="coachName" class="form-label">Coach Name:</label>
-            <input type="text" th:field="*{coachName}" id="coachName" class="form-control" required>
+            <input type="text" th:field="*{coachName}" id="coachName" class="form-control"  style="font-size: 1.5rem" required>
         </div>
-
-        <h4>Exercises and Sets</h4>
+        <br>
+        <h2>Exercises and Sets</h2>
         <div id="exercises">
             <div class="row mb-2 exercise-row"
                  th:each="exerciseSet, iterStat : ${trainersWorkoutDTO.exerciseSets}">
@@ -26,6 +26,7 @@
                            th:field="*{exerciseSets[__${iterStat.index}__].exerciseName}"
                            placeholder="Exercise name"
                            class="form-control"
+                           style="font-size: 1.5rem"
                            required>
                 </div>
                 <div class="col">
@@ -33,18 +34,19 @@
                            th:field="*{exerciseSets[__${iterStat.index}__].sets}"
                            placeholder="Sets (e.g. 3x12, 2 Warm-up)"
                            class="form-control"
+                           style="font-size: 1.5rem"
                            required>
                 </div>
                 <div class="col-auto">
-                    <button type="button" class="btn btn-danger btn-sm remove-exercise" onclick="removeExercise(this)">X</button>
+                    <button type="button" onclick="removeExercise(this)" style="background-color: #bd2130">X</button>
                 </div>
             </div>
         </div>
+        <br>
+        <button type="button" class="btn" onclick="addExercise()">Add Exercise</button>
 
-        <button type="button" class="btn btn-secondary btn-sm mb-3" onclick="addExercise()">Add Exercise</button>
-
-        <button type="submit" class="btn btn-primary">Save Workout</button>
-        <a th:href="@{/trainers-workouts}" class="btn btn-secondary">Cancel</a>
+        <button type="submit" class="btn">Save Workout</button>
+        <a th:href="@{/trainers-workouts}" class="btn">Cancel</a>
     </form>
 </div>
 
@@ -58,13 +60,13 @@
         row.className = 'row mb-2 exercise-row';
         row.innerHTML = `
         <div class="col">
-            <input type="text" name="exerciseSets[${index}].exerciseName" placeholder="Exercise name" class="form-control" required>
+            <input type="text" name="exerciseSets[${index}].exerciseName" placeholder="Exercise name" class="form-control" style="font-size: 1.5rem" required>
         </div>
         <div class="col">
-            <input type="text" name="exerciseSets[${index}].sets" placeholder="Sets (e.g. 3x12, 2 Warm-up)" class="form-control" required>
+            <input type="text" name="exerciseSets[${index}].sets" placeholder="Sets (e.g. 3x12, 2 Warm-up)" class="form-control" style="font-size: 1.5rem" required>
         </div>
         <div class="col-auto">
-            <button type="button" class="btn btn-danger btn-sm remove-exercise" onclick="removeExercise(this)">X</button>
+            <button type="button" onclick="removeExercise(this)" style="background-color: #bd2130">X</button>
         </div>
     `;
         exercisesDiv.appendChild(row);

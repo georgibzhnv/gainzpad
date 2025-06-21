@@ -3,38 +3,39 @@
 <head th:replace="~{fragments/head :: head}"></head>
 <body>
 
-<div th:replace="~{fragments/navbar :: navbar('trainers-workouts')}"></div>
+<div th:replace="~{fragments/navbar :: navbar}"></div>
 
-<div class="container mt-4">
-    <h2>Workout Details</h2>
+<div class="container mt-4" >
+    <h1>Workout Details</h1>
+<br>
 
-    <div class="mb-3">
-        <strong>Workout Name:</strong>
+    <div class="mb-3" style="font-size: 1.8rem">
+        <h2>Workout Name</h2>
         <p th:text="${workout.workoutName}"></p>
     </div>
-
-    <div class="mb-3">
-        <strong>Coach Name:</strong>
+<br>
+    <div class="mb-3" style="font-size: 1.8rem">
+        <h2>Coach Name:</h2>
         <p th:text="${workout.coachName}"></p>
     </div>
-
-    <h4>Exercises and Sets</h4>
+    <br>
+    <h2>Exercises and Sets</h2>
     <table class="table table-striped">
         <thead>
-        <tr>
+        <tr style="font-size: 1.7rem">
             <th>Exercise</th>
             <th>Sets</th>
         </tr>
         </thead>
         <tbody>
-        <tr th:each="exerciseSet : ${workout.exerciseSets}">
+        <tr style="font-size: 1.6rem" th:each="exerciseSet : ${workout.exerciseSets}">
             <td th:text="${exerciseSet.exerciseName}"></td>
             <td th:text="${exerciseSet.sets}"></td>
         </tr>
         </tbody>
     </table>
 
-    <a th:href="@{/trainers-workouts}" class="btn btn-secondary">Back to Workouts</a>
+    <a th:href="@{/trainers-workouts}" class="btn">Back to Workouts</a>
 </div>
 
 <div th:replace="~{fragments/bootstrap-js::bootstrap-js}"></div>

@@ -2,38 +2,40 @@
 <html xmlns:th="http://www.thymeleaf.org" lang="en">
 <head th:replace="~{fragments/head :: head}"></head>
 <body>
-<div th:replace="~{fragments/navbar :: navbar('trainers-workouts')}"></div>
 
 <div class="container mt-4">
-    <h2>Add Trainer's Workout</h2>
+    <h1>Add Trainer's Workout</h1>
+    <br>
     <form th:action="@{/trainers-workouts/new}" th:object="${trainersWorkoutDTO}" method="post">
         <div class="mb-3">
-            <label for="workoutName" class="form-label">Workout Name:</label>
-            <input type="text" th:field="*{workoutName}" id="workoutName" class="form-control" required>
+            <label for="workoutName" class="form-label" style="font-size: 1.6rem;">Workout Name:</label>
+            <input type="text" th:field="*{workoutName}" id="workoutName" class="form-control" style="font-size: 1.4rem" required>
         </div>
         <div class="mb-3">
-            <label for="coachName" class="form-label">Coach Name:</label>
-            <input type="text" th:field="*{coachName}" id="coachName" class="form-control" required>
+            <label for="coachName" class="form-label" style="font-size: 1.6rem">Coach Name:</label>
+            <input type="text" th:field="*{coachName}" id="coachName" class="form-control" style="font-size: 1.4rem" required>
         </div>
-
-        <h4>Exercises and Sets</h4>
+        <br>
+        <br>
+        <h2>Exercises and Sets</h2>
         <div id="exercises">
-            <div class="row mb-2 exercise-row" th:each="exercise, iterStat : ${trainersWorkoutDTO.exerciseSets}">
+            <div class="row mb-2 exercise-row" th:each="exercise, iterStat : ${trainersWorkoutDTO.exerciseSets} ">
                 <div class="col">
-                    <input type="text" th:field="*{exerciseSets[${iterStat.index}].exerciseName}" placeholder="Exercise name" class="form-control" required>
+                    <input type="text" th:field="*{exerciseSets[${iterStat.index}].exerciseName}" placeholder="Exercise name" class="form-control" style="font-size: 1.4rem" required>
                 </div>
                 <div class="col">
-                    <input type="text" th:field="*{exerciseSets[${iterStat.index}].sets}" placeholder="Sets (e.g. 3x12, 2 Warm-up)" class="form-control" required>
+                    <input type="text" th:field="*{exerciseSets[${iterStat.index}].sets}" placeholder="Sets (e.g. 3x12, 2 Warm-up)" class="form-control" style="font-size: 1.4rem" required>
                 </div>
                 <div class="col-auto">
-                    <button type="button" class="btn btn-danger btn-sm remove-exercise" onclick="removeExercise(this)">X</button>
+                    <button type="button" style="background-color: #bd2130" onclick="removeExercise(this)">X</button>
                 </div>
             </div>
         </div>
-        <button type="button" class="btn btn-secondary btn-sm mb-3" onclick="addExercise()">Add Exercise</button>
+        <br>
+        <button type="button" class="btn" onclick="addExercise()">Add Exercise</button>
 
-        <button type="submit" class="btn btn-primary">Save Workout</button>
-        <a th:href="@{/trainers-workouts}" class="btn btn-secondary">Cancel</a>
+        <button type="submit" class="btn">Save Workout</button>
+        <a th:href="@{/trainers-workouts}" class="btn">Cancel</a>
     </form>
 </div>
 
@@ -51,13 +53,13 @@
         row.className = 'row mb-2 exercise-row';
         row.innerHTML = `
             <div class="col">
-                <input type="text" placeholder="Exercise name" class="form-control exercise-name" required>
+                <input type="text" placeholder="Exercise name" class="form-control exercise-name" style="font-size: 1.4rem" required>
             </div>
             <div class="col">
-                <input type="text" placeholder="Sets (e.g. 3x12, 2 Warm-up)" class="form-control exercise-sets" required>
+                <input type="text" placeholder="Sets (e.g. 3x12, 2 Warm-up)" class="form-control exercise-sets" style="font-size: 1.4rem" required>
             </div>
             <div class="col-auto">
-                <button type="button" class="btn btn-danger btn-sm remove-exercise" onclick="removeExercise(this)">X</button>
+                <button type="button" style="background-color: #bd2130" onclick="removeExercise(this)">X</button>
             </div>
         `;
         exercisesDiv.appendChild(row);
