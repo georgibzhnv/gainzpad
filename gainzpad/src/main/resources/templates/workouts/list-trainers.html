@@ -8,11 +8,12 @@
 
 <div class="container mt-4">
   <h1>Trainers' Workouts</h1>
+  <br>
   <a th:href="@{/trainers-workouts/new}"
      class="btn mb-3"
      sec:authorize="hasRole('ADMIN') or hasRole('TRAINER')">Add workout</a>
 
-  <table class="table table-striped" style="font-size: 1.6rem">
+  <table class="table table-striped" style="font-size: 1.5rem">
     <thead>
     <tr>
       <th>Name</th>

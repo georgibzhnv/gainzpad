@@ -3,8 +3,8 @@
 <head th:replace="~{fragments/head :: head}"></head>
 <body>
 <div class="container mt-4">
-  <h2 th:text="${workout.workoutName}">Workout Name</h2>
-
+  <h1 th:text="${workout.workoutName}">Workout Name</h1>
+<br>
   <div th:if="${error}" class="alert alert-danger" th:text="${error}"></div>
 
   <div id="timer"
@@ -14,15 +14,15 @@
 
   <div class="mb-3">
     <form th:action="@{/workouts/start/{id}(id=${workout.id})}" method="post" th:if="${workout.startTime == null}">
-      <button type="submit" class="btn btn-primary">Start routine</button>
+      <button type="submit" class="btn">Start routine</button>
     </form>
     <form th:action="@{/workouts/finish/{id}(id=${workout.id})}" method="post" th:if="${workout.startTime != null and workout.endTime == null}">
-      <button type="submit" class="btn btn-danger">Finish</button>
+      <button type="submit" class="btn ">Finish</button>
     </form>
     <span th:if="${workout.endTime != null}" class="badge bg-success">Routine is finished.</span>
   </div>
 
-  <table class="table table-bordered">
+  <table class="table table-bordered" style="font-size: 1.6rem">
     <thead>
     <tr>
       <th>Exercise</th>
@@ -34,7 +34,7 @@
       <th>Action</th>
     </tr>
     </thead>
-    <tbody>
+    <tbody style="font-size: 1.5rem">
     <th:block th:each="we : ${workout.exercises}">
       <th:block th:each="set, setStat : ${we.sets}">
         <form th:action="@{/workouts/{workoutId}/exercise/{exerciseId}/recordSet(workoutId=${workout.id},exerciseId=${we.id})}" method="post">
@@ -43,10 +43,10 @@
             <td th:text="${setStat.index + 1}"></td>
             <td>
               <input type="hidden" name="setId" th:value="${set.id}" />
-              <input type="number" name="reps" th:value="${set.reps}" min="0" class="form-control form-control-sm" />
+              <input type="number" name="reps" th:value="${set.reps}" min="0" class="form-control form-control-sm"  style="font-size: 1.5rem"/>
             </td>
             <td>
-              <input type="number" name="weight" th:value="${set.weight}" min="0" class="form-control form-control-sm" />
+              <input type="number" name="weight" th:value="${set.weight}" min="0" class="form-control form-control-sm" style="font-size: 1.5rem"/>
             </td>
             <td th:text="${set.restTime != null ? set.restTime : ''}"></td>
             <td>
@@ -58,7 +58,7 @@
             <td>
               <!-- ВАЖНО! Добавяме скрито поле за restTime -->
               <input type="hidden" name="restTime" th:value="${set.restTime != null ? set.restTime : 60}" />
-              <button type="submit" class="btn btn-success btn-sm"
+              <button type="submit"  style="background-color: #1c7430"
                       th:if="${!set.completed and workout.startTime != null and workout.endTime == null}">
                 Done
               </button>
@@ -66,7 +66,7 @@
         <form th:action="@{/workouts/{workoutId}/exercise/{exerciseId}/removeSet(workoutId=${workout.id},exerciseId=${we.exerciseId})}" method="post"
               style="display:inline;">
           <input type="hidden" name="setId" th:value="${set.id}" />
-          <button type="submit" class="btn btn-danger btn-sm"
+          <button type="submit" style="background-color: #bd2130"
                   th:if="${workout.startTime != null and workout.endTime == null}">
             Remove set</button>
         </form>
@@ -77,14 +77,14 @@
       <tr th:if="${workout.startTime != null and workout.endTime == null}">
         <td colspan="7">
           <form th:action="@{/workouts/{workoutId}/exercise/{exerciseId}/addSet(workoutId=${workout.id},exerciseId=${we.exerciseId})}" method="post">
-            <button type="submit" class="btn btn-primary btn-sm">Add set</button>
+            <button type="submit" style="background-color: #0b0b0b">Add set</button>
           </form>
         </td>
       </tr>
     </th:block>
     </tbody>
   </table>
-  <a th:href="@{/workouts}" class="btn btn-secondary">Return to list</a>
+  <a th:href="@{/workouts}" class="btn">Return to list</a>
 </div>
 <div th:replace="~{fragments/bootstrap-js::bootstrap-js}"></div>
 

@@ -3,10 +3,11 @@
 <head th:replace="~{fragments/head :: head}"></head>
 <body>
 <div class="container mt-4">
-    <h2>Add new routine</h2>
+    <h1>Add new routine</h1>
+    <br>
     <form th:action="@{/workouts/new}" th:object="${workout}" method="post">
         <div class="mb-3">
-            <label for="workoutName" class="form-label">Workout Name</label>
+            <label for="workoutName" class="form-label" style="font-size: 1.6rem">Workout Name</label>
             <input
                     type="text"
                     th:field="*{workoutName}"
@@ -14,31 +15,33 @@
                     id="workoutName"
                     placeholder="Example: Chest Day"
                     required
+                    style="font-size: 1.5rem"
             />
         </div>
-
-        <h4>Exercises</h4>
-        <div id="exercises-container">
+        <br>
+        <h2>Exercises</h2>
+        <div id="exercises-container" style="font-size: 1.5rem">
             <div class="exercise-item mb-3 border p-3 rounded"
                  th:each="exercise, stat : *{exercises}"
                  th:data-index="${stat.index}">
                 <!-- Избор на упражнение -->
-                <div class="mb-2">
+                <div class="mb-2" style="font-size: 1.5rem">
                     <label class="form-label">Choose an exercise (optional)</label>
                     <select th:field="*{exercises[__${stat.index}__].exerciseId}" class="form-select">
                         <option value="">-- Optional: existing exercise --</option>
                         <option th:each="ex : ${allExercises}" th:value="${ex.id}" th:text="${ex.name}"></option>
                     </select>
                 </div>
-                <div class="mb-2">
+                <div class="mb-2" style="font-size: 1.5rem">
                     <label class="form-label">Or add new exercise</label>
                     <input type="text"
                            th:field="*{exercises[__${stat.index}__].newExerciseName}"
                            placeholder="Name of new exercise"
-                           class="form-control"/>
+                           class="form-control"
+                    style="font-size: 1.5rem"/>
                 </div>
                 <!-- Таблица със серии -->
-                <table class="table table-bordered mb-2">
+                <table class="table table-bordered mb-2" style="font-size: 1.5rem">
                     <thead>
                     <tr>
                         <th>#</th>
@@ -54,35 +57,38 @@
                         <td>
                             <input type="number"
                                    th:field="*{exercises[__${stat.index}__].sets[__${setStat.index}__].reps}"
-                                   class="form-control form-control-sm" min="1" required/>
+                                   class="form-control form-control-sm" min="1" style="font-size: 1.5rem" required/>
                         </td>
                         <td>
                             <input type="number"
                                    th:field="*{exercises[__${stat.index}__].sets[__${setStat.index}__].weight}"
-                                   class="form-control form-control-sm" min="0" step="0.1"/>
+                                   class="form-control form-control-sm" min="0" step="0.1"
+                                   style="font-size: 1.5rem"/>
                         </td>
                         <td>
                             <input type="number"
                                    th:field="*{exercises[__${stat.index}__].sets[__${setStat.index}__].restTime}"
                                    class="form-control form-control-sm"
-                                   min="0" step="1" placeholder="60" />
+                                   min="0" step="1" placeholder="60"  style="font-size: 1.5rem"/>
                         </td>
                         <td>
-                            <button type="button" class="btn btn-danger btn-sm remove-set-btn">Remove</button>
+                            <button type="button" style="background-color: #bd2130">Remove</button>
                         </td>
                     </tr>
                     </tbody>
                 </table>
-                <button type="button" class="btn btn-secondary btn-sm add-set-btn">Add set</button>
-                <button type="button" class="btn btn-danger btn-sm mt-2 remove-exercise-btn">Remove exercise</button>
+                <button type="button" style="background-color: #0b0b0b">Add set</button>
+                <button type="button" style="background-color: #bd2130">Remove exercise</button>
             </div>
         </div>
         <button type="button" id="add-exercise-btn" class="btn btn-secondary mb-3">Add exercise</button>
         <div class="d-flex justify-content-end gap-2">
-            <button type="submit" class="btn btn-primary">Save</button>
+            <br>
+            <br>
+            <button type="submit" class="btn">Save</button>
             <button
                     type="button"
-                    class="btn btn-secondary"
+                    class="btn"
                     th:onclick="|window.location='@{/workouts}'|"
             >Cancel</button>
         </div>

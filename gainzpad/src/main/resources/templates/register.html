@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/head :: head}"></head>
+<body style="background-image: url('/img/gallery/loginbg.jpg'); background-size: auto; background-position: center; background-repeat: no-repeat">
+<div class="container text-white" style="max-width: 600px;">
+    <h1 class="text-white">Register</h1>
+    <br>
+    <form th:action="@{/register}" th:object="${userRegisterDTO}" method="post">
+        <div class="mb-3">
+            <label class="form-label" style="font-size: 1.4rem" >Username</label>
+            <input type="text" th:field="*{username}" class="form-control" style="font-size: 1.3rem" required>
+        </div>
+        <div class="mb-3">
+            <label class="form-label" style="font-size: 1.4rem">Email</label>
+            <input type="email" th:field="*{email}" class="form-control"  style="font-size: 1.3rem" required>
+            <div class="text-danger" th:if="${emailError}" th:text="${emailError}" style="font-size: 1.3rem"></div>
+        </div>
+        <div class="mb-3">
+            <label class="form-label" style="font-size: 1.4rem">Password</label>
+            <input type="password" th:field="*{password}" class="form-control" style="font-size: 1.3rem" required>
+        </div>
+        <div class="mb-3">
+            <label class="form-label" style="font-size: 1.4rem" >Confirm Password</label>
+            <input type="password" th:field="*{confirmPassword}" class="form-control" style="font-size: 1.3rem" required>
+            <div class="text-danger" th:if="${passwordError}" th:text="${passwordError}" style="font-size: 1.3rem"></div>
+        </div>
+        <br>
+        <button type="submit" class="btn">Register</button>
+    </form>
+    <div class="text-center mt-3" style="font-size: 1.4rem">
+        <span>Already have an account?</span>
+        <a th:href="@{/login}" class="btn ml-2">Login</a>
+    </div>
+</div>
+</body>
+</html>
