@@ -4,30 +4,30 @@
 <div th:fragment="editFoodModal">
     <div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
         <div class="modal-dialog">
-            <div class="modal-content">
+            <div class="modal-content" style="background-color:#232323">
                 <form id="editForm" th:action="@{/tracker/edit}" method="post">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="editModalLabel">Редактирай храна</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Затвори"></button>
+                        <h1 class="modal-title text-white" id="editModalLabel">Edit food</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
                         <input type="hidden" name="id" id="editId"/>
-                        <input type="text" name="foodName" id="editFoodName" class="form-control mb-2" placeholder="Храна"/>
-                        <input type="number" name="calories" id="editCalories" class="form-control mb-2" placeholder="Калории (100g)"/>
-                        <input type="number" name="carbs" id="editCarbs" class="form-control mb-2" placeholder="Въглехидрати (100g)"/>
-                        <input type="number" name="protein" id="editProtein" class="form-control mb-2" placeholder="Протеин (100g)"/>
-                        <input type="number" name="fats" id="editFats" class="form-control mb-2" placeholder="Мазнини (100g)"/>
-                        <input type="number" name="weightInGrams" id="editWeightInGrams" class="form-control mb-2" placeholder="Изядено (g)"/>
-                        <select name="mealTime" id="editMealTime" class="form-control mb-2">
-                            <option value="BREAKFAST">Закуска</option>
-                            <option value="LUNCH">Обяд</option>
-                            <option value="DINNER">Вечеря</option>
-                            <option value="SNACK">Снак</option>
+                        <input type="text" name="foodName" id="editFoodName" class="form-control mb-2" style="font-size:1.5rem" placeholder="Food"/>
+                        <input type="number" name="calories" id="editCalories" class="form-control mb-2" style="font-size:1.5rem" placeholder="Calories (100g)"/>
+                        <input type="number" name="carbs" id="editCarbs" class="form-control mb-2" style="font-size:1.5rem" placeholder="Carbs (100g)"/>
+                        <input type="number" name="protein" id="editProtein" class="form-control mb-2" style="font-size:1.5rem" placeholder="Protein (100g)"/>
+                        <input type="number" name="fats" id="editFats" class="form-control mb-2" style="font-size:1.5rem" placeholder="Fats (100g)"/>
+                        <input type="number" name="weightInGrams" id="editWeightInGrams" class="form-control mb-2" style="font-size:1.5rem" placeholder="Consumed (g)"/>
+                        <select name="mealTime" id="editMealTime" class="form-control mb-2" style="font-size:1.5rem">
+                            <option value="BREAKFAST" class="text-black">Breakfast</option>
+                            <option value="LUNCH" class="text-black">Lunch</option>
+                            <option value="DINNER" class="text-black">Dinner</option>
+                            <option value="SNACK" class="text-black">Snack</option>
                         </select>
                     </div>
                     <div class="modal-footer">
-                        <button type="submit" class="btn btn-primary">Запази</button>
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Затвори</button>
+                        <button type="submit" class="btn">Save</button>
+                        <button type="button" class="btn" data-bs-dismiss="modal">Close</button>
                     </div>
                 </form>
             </div>
@@ -55,3 +55,4 @@
 </div>
 </body>
 </html>
+

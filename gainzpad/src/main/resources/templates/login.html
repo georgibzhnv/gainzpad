@@ -8,13 +8,11 @@
             <h1 class="text-white" style="font-size:2.6rem">Login</h1>
             <br>
             <br>
-            <!-- Check if error parameter is present in the URL -->
             <div th:if="${param.error}">
                 <div class="alert alert-danger" style="font-size: 1.7rem">
                     Invalid username or password.
                 </div>
             </div>
-            <!-- Login Form -->
             <form th:action="@{/login/authenticate}" method="post">
                 <div class="form-group">
                     <label for="email" style="font-size: 1.8rem">Email</label>
@@ -29,7 +27,6 @@
             </form>
             <br>
             <br>
-            <!-- Register button below the login form -->
             <div class="text-center mt-3" style="font-size: 1.8rem">
                 <span>Don't have an account?</span>
                 <a th:href="@{/register}" class="btn ml-2">Register</a>

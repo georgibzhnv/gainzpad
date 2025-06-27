@@ -1,15 +1,15 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" lang="en">
 <head th:replace="~{fragments/head :: head}"></head>
-<body>
+<body class="text-white" style="background-image: url('/img/gallery/loginbg.jpg'); background-size: auto; background-position: center; background-repeat: no-repeat">
 <div class="container mt-4">
-  <h1 th:text="${workout.workoutName}">Workout Name</h1>
+  <h1 th:text="${workout.workoutName}" class="text-white">Workout Name</h1>
 <br>
-  <div th:if="${error}" class="alert alert-danger" th:text="${error}"></div>
+  <div th:if="${error}" class="alert alert-danger" th:text="${error}" style="font-size: 1.5rem"></div>
 
   <div id="timer"
        th:attr="data-start-time=${workoutStartTime},data-end-time=${workoutEndTime}"
-       style="font-size: 1.5rem; margin-bottom: 15px; font-weight: bold;">
+       style="color:#FFFFFF; font-size: 1.5rem; margin-bottom: 15px; font-weight: bold;">
   </div>
 
   <div class="mb-3">
@@ -19,10 +19,10 @@
     <form th:action="@{/workouts/finish/{id}(id=${workout.id})}" method="post" th:if="${workout.startTime != null and workout.endTime == null}">
       <button type="submit" class="btn ">Finish</button>
     </form>
-    <span th:if="${workout.endTime != null}" class="badge bg-success">Routine is finished.</span>
+    <span th:if="${workout.endTime != null}" class="badge bg-success" style="font-size: 1.5rem">Routine is finished.</span>
   </div>
 
-  <table class="table table-bordered" style="font-size: 1.6rem">
+  <table class="table table-bordered" style="font-size: 1.6rem;background-color: #232323">
     <thead>
     <tr>
       <th>Exercise</th>
@@ -51,12 +51,12 @@
             <td th:text="${set.restTime != null ? set.restTime : ''}"></td>
             <td>
               <span th:text="${set.completed} ? 'Completed' : 'Not completed'"></span>
-              <span class="rest-timer"
+              <span class="rest-timer text-white"
                     th:attr="data-rest-duration=${set.restTime != null ? set.restTime*1000 : 60000}"
                     th:if="${set.completed}"></span>
             </td>
             <td>
-              <!-- ВАЖНО! Добавяме скрито поле за restTime -->
+
               <input type="hidden" name="restTime" th:value="${set.restTime != null ? set.restTime : 60}" />
               <button type="submit"  style="background-color: #1c7430"
                       th:if="${!set.completed and workout.startTime != null and workout.endTime == null}">
@@ -84,7 +84,10 @@
     </th:block>
     </tbody>
   </table>
-  <a th:href="@{/workouts}" class="btn">Return to list</a>
+  <a th:href="@{/workouts}" class="btn"
+     th:if="${workout.startTime == null or workout.endTime != null}">
+    Return to list
+  </a>
 </div>
 <div th:replace="~{fragments/bootstrap-js::bootstrap-js}"></div>
 
@@ -109,7 +112,7 @@
           var now = to ? new Date(to) : new Date();
           var diff = now - new Date(from);
           if (diff < 0 || isNaN(diff)) diff = 0;
-          timerDiv.innerHTML = "<b>Time: </b>" + formatTime(diff);
+          timerDiv.innerHTML = '<b style="color: #fff;">Time: </b>' + formatTime(diff);
         }
 
         update();
@@ -119,7 +122,7 @@
 
       startTimer(startTime, (endTime && endTime !== "") ? endTime : null);
     } else {
-      timerDiv.innerHTML = "<b>Time: </b>00:00:00";
+      timerDiv.innerHTML = "<b style=\"color: #fff;\">Time: </b>00:00:00";
     }
   });
 
@@ -132,8 +135,8 @@
       let t = Math.floor(remaining / 1000),
               min = Math.floor(t / 60),
               sec = t % 60;
-      el.innerHTML = "<b>Rest:</b> " + min.toString().padStart(2, '0') + ':' + sec.toString().padStart(2, '0');
-      if (remaining === 0) el.innerHTML = "<b>Rest:</b> Done!";
+      el.innerHTML = " <b style=\"color: #fff;\">Rest:</b> " + min.toString().padStart(2, '0') + ':' + sec.toString().padStart(2, '0');
+      if (remaining === 0) el.innerHTML = " <b style=\"color: #fff;\">Rest:</b> Done!";
     });
   }
   setInterval(updateAllRestTimers, 1000);

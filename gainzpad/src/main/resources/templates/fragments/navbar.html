@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head th:replace="~{fragments/head :: head}"></head>
-<body style="background-color: #000000">
+<body>
 
 <div th:fragment="navbar">
-    <div class="container-fluid bg-dark">
+    <div class="container-fluid" style="background-color: #232323">
         <div class="row align-items-center">
             <!-- Logo -->
             <div class="col-xl-2 col-lg-2 col-md-1">
@@ -30,9 +30,9 @@
                             </ul>
                         </nav>
                     </div>
-                    <div class="header-right-btn f-right d-none d-lg-block ms-3">
-                        <a th:href="@{/logout}" class="btn">Logout</a>
-                    </div>
+                    <form th:action="@{/logout}" method="post" style="display:inline;">
+                        <button type="submit" class="btn header-btn">Logout</button>
+                    </form>
                 </div>
             </div>
             <!-- Mobile Menu -->

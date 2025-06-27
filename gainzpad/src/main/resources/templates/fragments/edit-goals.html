@@ -1,22 +1,34 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-<body>
+<body style="background-color:#232323;" class="text-white">
 <div class="modal fade" id="editGoalsModal" tabindex="-1" aria-labelledby="editGoalsModalLabel" aria-hidden="true">
   <div class="modal-dialog">
-    <div class="modal-content">
+    <div class="modal-content" style="background-color:#232323; font-size:1.6rem">
       <form th:action="@{/tracker/set-goals}" th:object="${macroGoals}" method="post">
         <div class="modal-header">
-          <h5 class="modal-title" id="editGoalsModalLabel">Edit your macronutrients</h5>
+          <h1 class="modal-title text-white" id="editGoalsModalLabel">Edit your macronutrients</h1>
         </div>
         <div class="modal-body">
-          <label>Calories: <input type="number" th:field="*{goalCalories}" min="0"></label><br>
-          <label>Carbs (g): <input type="number" th:field="*{goalCarbs}" min="0"></label><br>
-          <label>Protein (g): <input type="number" th:field="*{goalProtein}" min="0"></label><br>
-          <label>Fats (g): <input type="number" th:field="*{goalFat}" min="0"></label><br>
+
+          <!-- Note Section START -->
+          <div class="alert alert-info p-2 mb-4" style="background-color: #353535; color: #f7d354; font-size:1.25rem; border:none;">
+            <b style="color:#fff">Note:</b> Make sure your calorie target equals:
+            <span style="color: #fff">4 × protein</span> +
+            <span style="color: #fff">4 × carbs</span> +
+            <span style="color: #fff">9 × fat</span> (all in grams).
+            <br>
+            <span style="color: #bbb;">Use a calorie calculator for best results.</span>
+          </div>
+          <!-- Note Section END -->
+
+          <label class="text-white">Calories: <input type="number" th:field="*{goalCalories}" min="0"></label><br>
+          <label class="text-white">Carbs (g): <input type="number" th:field="*{goalCarbs}" min="0"></label><br>
+          <label class="text-white">Protein (g): <input type="number" th:field="*{goalProtein}" min="0"></label><br>
+          <label class="text-white">Fats (g): <input type="number" th:field="*{goalFat}" min="0"></label><br>
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-          <button type="submit" class="btn btn-primary">Save</button>
+          <button type="button" class="btn" data-bs-dismiss="modal">Close</button>
+          <button type="submit" class="btn">Save</button>
         </div>
       </form>
     </div>

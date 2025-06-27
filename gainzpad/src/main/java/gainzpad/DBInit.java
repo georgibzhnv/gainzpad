@@ -49,8 +49,10 @@ public class DBInit implements CommandLineRunner {
                     .setEmail("gbozhinov17@gmail.com")
                     .setUsername("gbozhinov")
                     .setPassword(passwordEncoder.encode("topsecret"));
+
             RoleEntity adminRole = new RoleEntity().setRole(UserRoleEnum.ADMIN);
             RoleEntity userRole  = new RoleEntity().setRole(UserRoleEnum.USER);
+            RoleEntity trainersRole = new RoleEntity().setRole(UserRoleEnum.TRAINER);
             admin.setRoles(Set.of(adminRole, userRole));
 
             UserEntity user = new UserEntity()
@@ -59,7 +61,13 @@ public class DBInit implements CommandLineRunner {
                     .setPassword(passwordEncoder.encode("1234"))
                     .setRoles(Set.of(userRole));
 
-            userRepository.saveAll(List.of(admin, user));
+            UserEntity cbum = new UserEntity()
+                    .setEmail("cbum@gmail.com")
+                    .setUsername("Chris Bumstead")
+                    .setPassword(passwordEncoder.encode("12345"))
+                    .setRoles(Set.of(trainersRole));
+
+            userRepository.saveAll(List.of(admin, user,cbum));
         }
     }
 

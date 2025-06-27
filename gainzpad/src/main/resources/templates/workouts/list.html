@@ -1,13 +1,13 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" lang="en">
 <head th:replace="~{fragments/head :: head}"></head>
-<body>
+<body class="text-white" style="background-image: url('/img/gallery/loginbg.jpg'); background-size: auto; background-position: center; background-repeat: no-repeat">
 
 <div th:replace="~{fragments/navbar :: navbar}"></div>
 <div th:replace="~{fragments/delete-confirm :: deleteModal}"></div>
 
 <div class="container mt-4">
-    <h1>Workouts</h1>
+    <h1 class="text-white">Workouts</h1>
     <br>
     <a th:href="@{/workouts/new}" class="btn mb-3">Add workout</a>
     <table class="table table-striped" style="font-size: 1.6rem">
@@ -17,7 +17,7 @@
             <th>Actions</th>
         </tr>
         </thead>
-        <tbody>
+        <tbody style="background-color: #232323">
         <tr th:each="workout : ${workouts}">
             <td th:text="${workout.workoutName}" style="font-size: 1.5rem">Workout Name</td>
             <td>

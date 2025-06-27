@@ -3,21 +3,27 @@
 <head th:replace="~{fragments/head :: head}">
 </head>
 
-<body>
+<body style="background-image: url('/img/gallery/loginbg.jpg'); background-size: auto; background-position: center; background-repeat: no-repeat">
+<style>
+    .progress-bar {
+        color: #111 !important;
+        text-shadow: none !important;
+    }
+</style>
+
 <div th:replace="~{fragments/navbar :: navbar}"></div>
 
 <div class="container my-5">
-    <!-- DAILY INTAKE CARD -->
-    <div class="card shadow mb-5 mx-auto" style="max-width: 800px; font-size: 1.6rem">
+    <div class="card shadow mb-5 mx-auto text-white" style="max-width: 800px; font-size: 1.6rem; background-color: #232323">
         <div class="card-body">
-            <h1 class="card-title text-center mb-4">
+            <h1 class="card-title text-center mb-4 text-white">
                 <i class="bi bi-bar-chart-fill" style="color:#f7d354"></i> Your Daily Intake
             </h1>
             <div class="mb-3">
                 <div class="d-flex justify-content-between align-items-center " style="font-size: 1.3rem">
                     <span class="fw-bold">Calories</span>
                     <span>
-                        <b th:text="${totalCal}"></b> /
+                        <b style="color:#FFFFFF;" th:text="${totalCal}"></b> /
                         <span th:text="${goalCalories}"></span> kcal
                     </span>
                 </div>
@@ -32,7 +38,7 @@
                 <div class="d-flex justify-content-between align-items-center" style="font-size: 1.3rem">
                     <span class="fw-bold">Carbohydrates</span>
                     <span>
-                        <b th:text="${totalCarbs}"></b> /
+                        <b style="color:#FFFFFF;;" th:text="${totalCarbs}"></b> /
                         <span th:text="${goalCarbs}"></span> g
                     </span>
                 </div>
@@ -47,7 +53,7 @@
                 <div class="d-flex justify-content-between align-items-center" style="font-size: 1.3rem">
                     <span class="fw-bold">Protein</span>
                     <span>
-                        <b th:text="${totalProtein}"></b> /
+                        <b style="color:#FFFFFF;" th:text="${totalProtein}"></b> /
                         <span th:text="${goalProtein}"></span> g
                     </span>
                 </div>
@@ -62,7 +68,7 @@
                 <div class="d-flex justify-content-between align-items-center" style="font-size: 1.3rem">
                     <span class="fw-bold">Fats</span>
                     <span>
-                        <b th:text="${totalFats}"></b> /
+                        <b style="color:#FFFFFF;" th:text="${totalFats}"></b> /
                         <span th:text="${goalFats}"></span> g
                     </span>
                 </div>
@@ -79,65 +85,67 @@
                     <i class="bi bi-sliders"></i> Edit macronutrients
                 </button>
             </div>
+            <br>
+            <br>
+            <div class="text-center mb-5">
+                <button class="btn" data-bs-toggle="modal" data-bs-target="#addFoodModal">
+                    <i class="bi bi-plus-circle"></i> Add Food
+                </button>
+            </div>
         </div>
     </div>
 
-    <div class="text-center mb-5">
-        <button class="btn" data-bs-toggle="modal" data-bs-target="#addFoodModal">
-            <i class="bi bi-plus-circle"></i> Add Food
-        </button>
-    </div>
 
     <!-- Add Food Modal -->
     <div class="modal fade" id="addFoodModal" tabindex="-1" aria-labelledby="addFoodModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content p-2">
+            <div class="modal-content p-2" style="background-color: #232323">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="addFoodModalLabel">Add Food</h5>
+                    <h1 class="modal-title text-white" id="addFoodModalLabel">Add Food</h1>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <form th:action="@{/tracker/add}" method="post" th:object="${foodEntryDTO}">
-                    <div class="modal-body">
+                    <div class="modal-body" style="background-color: #232323;font-size: 1.5rem">
                         <div class="mb-3">
-                            <label for="foodName" class="form-label fw-bold">Food name</label>
-                            <input type="text" th:field="*{foodName}" class="form-control" id="foodName" placeholder="Food name" required>
+                            <label for="foodName" class="form-label fw-bold text-white">Food name</label>
+                            <input type="text" th:field="*{foodName}" class="form-control" id="foodName" placeholder="Food name" style="font-size: 1.5rem" required>
                         </div>
                         <div class="row">
                             <div class="col-6 mb-3">
-                                <label for="calories" class="form-label">Calories (100g)</label>
-                                <input type="number" th:field="*{calories}" class="form-control" id="calories" min="0" required>
+                                <label for="calories" class="form-label text-white">Calories (100g)</label>
+                                <input type="number" th:field="*{calories}" class="form-control" id="calories" min="0" style="font-size: 1.5rem" required>
                             </div>
                             <div class="col-6 mb-3">
-                                <label for="weightInGrams" class="form-label">Weight (g)</label>
-                                <input type="number" th:field="*{weightInGrams}" class="form-control" id="weightInGrams" min="0" required>
+                                <label for="weightInGrams" class="form-label text-white">Weight (g)</label>
+                                <input type="number" th:field="*{weightInGrams}" class="form-control" id="weightInGrams" min="0" style="font-size: 1.5rem" required>
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-4 mb-3">
-                                <label for="carbs" class="form-label">Carbs (100g)</label>
-                                <input type="number" th:field="*{carbs}" class="form-control" id="carbs" min="0" required>
+                                <label for="carbs" class="form-label text-white">Carbs (100g)</label>
+                                <input type="number" th:field="*{carbs}" class="form-control" id="carbs" min="0" style="font-size: 1.5rem" required>
                             </div>
                             <div class="col-4 mb-3">
-                                <label for="protein" class="form-label">Protein (100g)</label>
-                                <input type="number" th:field="*{protein}" class="form-control" id="protein" min="0" required>
+                                <label for="protein" class="form-label text-white">Protein (100g)</label>
+                                <input type="number" th:field="*{protein}" class="form-control" id="protein" min="0" style="font-size: 1.5rem" required>
                             </div>
                             <div class="col-4 mb-3">
-                                <label for="fats" class="form-label">Fats (100g)</label>
-                                <input type="number" th:field="*{fats}" class="form-control" id="fats" min="0" required>
+                                <label for="fats" class="form-label text-white">Fats (100g)</label>
+                                <input type="number" th:field="*{fats}" class="form-control" id="fats" min="0" style="font-size: 1.5rem" required>
                             </div>
                         </div>
                         <div class="mb-4">
-                            <label for="mealTime" class="form-label">Meal Time</label>
-                            <select th:field="*{mealTime}" class="form-select" id="mealTime" required>
-                                <option th:value="BREAKFAST">Breakfast</option>
-                                <option th:value="LUNCH">Lunch</option>
-                                <option th:value="DINNER">Dinner</option>
-                                <option th:value="SNACK">Snack</option>
+                            <label for="mealTime" class="form-label text-white">Meal Time</label>
+                            <select th:field="*{mealTime}" class="form-select" id="mealTime" style="color: #000000" required>
+                                <option  th:value="BREAKFAST">Breakfast</option>
+                                <option  th:value="LUNCH">Lunch</option>
+                                <option  th:value="DINNER">Dinner</option>
+                                <option  th:value="SNACK">Snack</option>
                             </select>
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button type="submit" class="btn btn-dark fw-bold w-100">
+                        <button type="submit" class="btn">
                             <i class="bi bi-plus-circle"></i> Add
                         </button>
                     </div>
@@ -146,26 +154,22 @@
         </div>
     </div>
 
+
     <!-- FOOD LIST BY MEAL -->
-    <div class="my-5">
-        <div th:each="mealTime : ${mealTimes}" class="mx-auto" style="max-width: 600px;">
-            <h2 class="mt-4 mb-2 text-center" th:text="${mealTime}"></h2>
+    <div class="my-5 text-white">
+        <div th:each="mealTime : ${mealTimes}" class="mx-auto" style="max-width: 800px;background-color: #232323">
+            <h2 class="mt-4 mb-2 text-center text-white" th:text="${mealTime}"></h2>
             <ul class="list-group">
-                <li class="list-group-item" th:each="entry : ${mealsMap[T(gainzpad.model.enums.MealTimeEnum).valueOf(mealTime)]}" style="font-size: 1.5rem">
+                <li class="list-group-item" th:each="entry : ${mealsMap[T(gainzpad.model.enums.MealTimeEnum).valueOf(mealTime)]}" style="font-size: 1.5rem;background-color: #323232">
                     <span th:text="${entry.foodName}"></span>
                     (<span th:text="${entry.weightInGrams}"></span> g,
                     <span th:text="${#numbers.formatDecimal(entry.calories * entry.weightInGrams / 100, 1, 1)}"></span> kcal,
                     <span th:text="${#numbers.formatDecimal(entry.protein * entry.weightInGrams / 100, 1, 1)}"></span> g protein,
                     <span th:text="${#numbers.formatDecimal(entry.carbs * entry.weightInGrams / 100, 1, 1)}"></span> g carbs,
-                    <span th:text="${#numbers.formatDecimal(entry.fats * entry.weightInGrams / 100, 1, 1)}"></span> g fat
-                    <form th:action="@{'/tracker/delete/' + ${entry.id}}" method="post" style="display:inline;">
-                        <button type="submit" class="btn btn-sm btn-link text-danger" onclick="return confirm('Are you sure you want to delete?')">
-                            <i class="bi bi-x-circle"></i>
-                        </button>
-                    </form>
+                    <span th:text="${#numbers.formatDecimal(entry.fats * entry.weightInGrams / 100, 1, 1)}"></span> g fat)
                     <button
                             type="button"
-                            class="btn btn-sm btn-outline-secondary"
+                            class="btn"
                             data-bs-toggle="modal"
                             data-bs-target="#editModal"
                             th:attr="data-id=${entry.id},
@@ -177,15 +181,21 @@
                                  data-weightInGrams=${entry.weightInGrams},
                                  data-mealTime=${entry.mealTime}">
                         <i class="bi bi-pencil-square"></i>
+                        Edit
                     </button>
+                    <form th:action="@{'/tracker/delete/' + ${entry.id}}" method="post" style="display:inline;">
+                        <button type="submit" class="btn" onclick="return confirm('Are you sure you want to delete?')">
+                            <i class="bi bi-x-circle"></i>
+                            Delete
+                        </button>
+                    </form>
                 </li>
-                <li th:if="${#lists.isEmpty(mealsMap[T(gainzpad.model.enums.MealTimeEnum).valueOf(mealTime)])}"
-                    class="list-group-item text-center text-muted" style="font-size: 1.4rem">
+                <li th:if="${#lists.isEmpty(mealsMap[T(gainzpad.model.enums.MealTimeEnum).valueOf(mealTime)])}" class="list-group-item text-center text-white" style="font-size: 1.4rem ;background-color: #323232">
                     No foods added.
                 </li>
             </ul>
             <div class="text-center mt-2" style="font-size: 1.4rem">
-                <b>Total for <span th:text="${mealTime}"></span>:</b>
+                <b style="color:#FFFFFF;">Total for <span style="color: #FFFFFF" th:text="${mealTime}"></span>:</b>
                 <span th:text="${macrosByMeal[mealTime] != null ? #numbers.formatDecimal(macrosByMeal[mealTime][0], 1, 'POINT') : 0}"></span> kcal,
                 <span th:text="${macrosByMeal[mealTime] != null ? #numbers.formatDecimal(macrosByMeal[mealTime][2], 1, 'POINT') : 0}"></span> g protein,
                 <span th:text="${macrosByMeal[mealTime] != null ? #numbers.formatDecimal(macrosByMeal[mealTime][1], 1, 'POINT') : 0}"></span> g carbs,
