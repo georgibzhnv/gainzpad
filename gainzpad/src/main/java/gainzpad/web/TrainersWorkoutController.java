@@ -1,5 +1,6 @@
 package gainzpad.web;
 
+import gainzpad.model.dto.ExerciseSetDTO;
 import gainzpad.model.dto.TrainersWorkoutDTO;
 import gainzpad.service.TrainersWorkoutService;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -26,7 +27,9 @@ public class TrainersWorkoutController {
     @PreAuthorize("hasRole('ADMIN') or hasRole('TRAINER')")
     @GetMapping("/new")
     public String newWorkout(Model model){
-        model.addAttribute("trainersWorkoutDTO", new TrainersWorkoutDTO());
+        TrainersWorkoutDTO dto = new TrainersWorkoutDTO();
+        dto.getExerciseSets().add(new ExerciseSetDTO());
+        model.addAttribute("trainersWorkoutDTO", dto);
         return "workouts/new-trainers";
     }
 

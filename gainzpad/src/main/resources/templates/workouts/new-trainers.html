@@ -20,10 +20,10 @@
         <div id="exercises">
             <div class="row mb-2 exercise-row" th:each="exercise, iterStat : ${trainersWorkoutDTO.exerciseSets} ">
                 <div class="col">
-                    <input type="text" th:field="*{exerciseSets[${iterStat.index}].exerciseName}" placeholder="Exercise name" class="form-control" style="font-size: 1.4rem" required>
+                    <input type="text" th:field="*{exerciseSets[__${iterStat.index}__].exerciseName}" placeholder="Exercise name" class="form-control" style="font-size: 1.4rem" required>
                 </div>
                 <div class="col">
-                    <input type="text" th:field="*{exerciseSets[${iterStat.index}].sets}" placeholder="Sets (e.g. 3x12, 2 Warm-up)" class="form-control" style="font-size: 1.4rem" required>
+                    <input type="text" th:field="*{exerciseSets[__${iterStat.index}__].sets}" placeholder="Sets (e.g. 3x12, 2 Warm-up)" class="form-control" style="font-size: 1.4rem" required>
                 </div>
                 <div class="col-auto">
                     <button type="button" style="background-color: #bd2130" onclick="removeExercise(this)">X</button>

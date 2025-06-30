@@ -1,13 +1,13 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" lang="en">
 <head th:replace="~{fragments/head :: head}"></head>
-<body>
+<body style="background-image: url('/img/gallery/loginbg.jpg'); background-size: auto; background-position: center; background-repeat: no-repeat">
 <div class="container mt-4">
-    <h1>Add new routine</h1>
+    <h1 class="text-white">Add new routine</h1>
     <br>
     <form th:action="@{/workouts/new}" th:object="${workout}" method="post">
         <div class="mb-3">
-            <label for="workoutName" class="form-label" style="font-size: 1.6rem">Workout Name</label>
+            <label for="workoutName" class="form-label text-white" style="font-size: 1.6rem">Workout Name</label>
             <input
                     type="text"
                     th:field="*{workoutName}"
@@ -19,21 +19,21 @@
             />
         </div>
         <br>
-        <h2>Exercises</h2>
+        <h2 class="text-white">Exercises</h2>
         <div id="exercises-container" style="font-size: 1.5rem">
             <div class="exercise-item mb-3 border p-3 rounded"
                  th:each="exercise, stat : *{exercises}"
                  th:data-index="${stat.index}">
                 <!-- Избор на упражнение -->
-                <div class="mb-2" style="font-size: 1.5rem">
-                    <label class="form-label">Choose an exercise (optional)</label>
+                <div class="mb-2" style="color:#000000;font-size: 1.5rem">
+                    <label class="form-label text-white">Choose an exercise (optional)</label>
                     <select th:field="*{exercises[__${stat.index}__].exerciseId}" class="form-select">
                         <option value="">-- Optional: existing exercise --</option>
                         <option th:each="ex : ${allExercises}" th:value="${ex.id}" th:text="${ex.name}"></option>
                     </select>
                 </div>
                 <div class="mb-2" style="font-size: 1.5rem">
-                    <label class="form-label">Or add new exercise</label>
+                    <label class="form-label text-white">Or add new exercise</label>
                     <input type="text"
                            th:field="*{exercises[__${stat.index}__].newExerciseName}"
                            placeholder="Name of new exercise"
@@ -41,7 +41,7 @@
                     style="font-size: 1.5rem"/>
                 </div>
                 <!-- Таблица със серии -->
-                <table class="table table-bordered mb-2" style="font-size: 1.5rem">
+                <table class="table table-bordered mb-2 text-white" style="font-size: 1.5rem">
                     <thead>
                     <tr>
                         <th>#</th>
