@@ -111,6 +111,7 @@ public class WorkoutServiceImpl implements WorkoutService {
         WorkoutEntity workoutEntity = workoutRepository.findById(id)
                 .orElseThrow(()->new IllegalArgumentException("Workout with id=" + id + " not found"));
         workoutEntity.setStartTime(LocalDateTime.now());
+        workoutEntity.setEndTime(null);
         workoutEntity.setActive(true);
 
         workoutRepository.save(workoutEntity);
@@ -184,6 +185,23 @@ public class WorkoutServiceImpl implements WorkoutService {
     @Override
     public void deleteWorkout(Long id) {
         workoutRepository.deleteById(id);
+    }
+
+    @Override
+    public void undoSet(Long workoutId, Long exerciseId, Long setId) {
+        WorkoutEntity workoutEntity = workoutRepository.findById(workoutId)
+                .orElseThrow(()->new IllegalArgumentException("Workout with id=" + workoutId +"not found"));
+        WorkoutExercise workoutExercise = workoutEntity.getWorkoutExercises().stream()
+                .filter(we->we.getId().equals(exerciseId))
+                .findFirst()
+                .orElseThrow(()->new IllegalArgumentException("Exercise not found."));
+        SetEntity setEntity = workoutExercise.getSets().stream()
+                .filter(set->set.getId().equals(setId))
+                .findFirst()
+                .orElseThrow(()->new IllegalArgumentException("Set not found."));
+
+        setEntity.setCompleted(false);
+        workoutRepository.save(workoutEntity);
     }
 
 

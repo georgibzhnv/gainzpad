@@ -4,6 +4,7 @@ package gainzpad.service.impl;
 import gainzpad.model.dto.FoodEntryDTO;
 import gainzpad.model.entity.FoodEntryEntity;
 import gainzpad.model.entity.user.UserEntity;
+import gainzpad.model.enums.MealTimeEnum;
 import gainzpad.model.mapper.FoodEntryMapper;
 import gainzpad.repository.FoodEntryRepository;
 import gainzpad.repository.UserRepository;
@@ -13,8 +14,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class FoodEntryServiceImpl implements FoodEntryService {
@@ -33,6 +33,21 @@ public class FoodEntryServiceImpl implements FoodEntryService {
         this.foodEntryMapper = foodEntryMapper;
     }
 
+
+    @Override
+    public Map<MealTimeEnum, List<FoodEntryDTO>> getMealsMap(UserEntity user, LocalDate date) {
+        List<FoodEntryDTO>entries = getEntriesByUserAndDate(user,date);
+        Map<MealTimeEnum, List<FoodEntryDTO>> mealsMap = new EnumMap<>(MealTimeEnum.class);
+        for (MealTimeEnum meal : MealTimeEnum.values()) {
+            mealsMap.put(meal,new ArrayList<>());
+        }
+        for (FoodEntryDTO entry: entries){
+            mealsMap.get(entry.getMealTime());
+        }
+        return mealsMap;
+    }
+
+
     @Override
     public void addFoodEntry(FoodEntryDTO dto) {
         FoodEntryEntity entity = foodEntryMapper.toEntity(dto);
@@ -41,8 +56,8 @@ public class FoodEntryServiceImpl implements FoodEntryService {
 
     @Override
     public List<FoodEntryDTO> getEntriesByUserAndDate(UserEntity user, LocalDate date) {
-        List<FoodEntryEntity> entities = foodEntryRepository.findAllByUserAndDate(user, date);
-        return entities.stream().map(foodEntryMapper::toDto).toList();
+        return foodEntryRepository.findAllByUserAndDate(user, date)
+                .stream().map(foodEntryMapper::toDto).toList();
     }
 
     @Override

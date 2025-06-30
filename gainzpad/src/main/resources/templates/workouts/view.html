@@ -13,13 +13,17 @@
   </div>
 
   <div class="mb-3">
+    <form th:action="@{/workouts/start/{id}(id=${workout.id})}" method="post"
+          th:if="${workout.endTime != null}">
+      <button type="submit" class="btn">Restart routine</button>
+    </form>
     <form th:action="@{/workouts/start/{id}(id=${workout.id})}" method="post" th:if="${workout.startTime == null}">
       <button type="submit" class="btn">Start routine</button>
     </form>
     <form th:action="@{/workouts/finish/{id}(id=${workout.id})}" method="post" th:if="${workout.startTime != null and workout.endTime == null}">
       <button type="submit" class="btn ">Finish</button>
     </form>
-    <span th:if="${workout.endTime != null}" class="badge bg-success" style="font-size: 1.5rem">Routine is finished.</span>
+<!--    <span th:if="${workout.endTime != null}" class="badge bg-success" style="font-size: 1.5rem">Routine is finished.</span>-->
   </div>
 
   <table class="table table-bordered" style="font-size: 1.6rem;background-color: #232323">
@@ -63,6 +67,13 @@
                 Done
               </button>
         </form>
+        <span th:if="${set.completed}" class="text-success">✔</span>
+        <form th:action="@{/workouts/{workoutId}/exercise/{exerciseId}/undoSet(workoutId=${workout.id},exerciseId=${we.id})}"
+              method="post" style="display:inline;"
+              th:if="${set.completed and workout.startTime != null and workout.endTime == null}">
+          <input type="hidden" name="setId" th:value="${set.id}" />
+          <button type="submit" style="background-color: #ffae42; color: #232323;">Undo</button>
+        </form>
         <form th:action="@{/workouts/{workoutId}/exercise/{exerciseId}/removeSet(workoutId=${workout.id},exerciseId=${we.exerciseId})}" method="post"
               style="display:inline;">
           <input type="hidden" name="setId" th:value="${set.id}" />
@@ -70,7 +81,6 @@
                   th:if="${workout.startTime != null and workout.endTime == null}">
             Remove set</button>
         </form>
-        <span th:if="${set.completed}" class="text-success">✔</span>
         </td>
         </tr>
       </th:block>

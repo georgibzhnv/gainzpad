@@ -28,4 +28,6 @@ public interface WorkoutService {
     void removeSet(Long workoutId, Long exerciseId, Long setId);
 
     void deleteWorkout(Long id);
+
+    void undoSet(Long workoutId, Long exerciseId, Long setId);
 }

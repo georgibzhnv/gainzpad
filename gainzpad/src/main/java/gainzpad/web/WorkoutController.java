@@ -168,4 +168,13 @@ public class WorkoutController {
         return "redirect:/workouts/" + workoutId;
     }
 
+    @PostMapping("/{workoutId}/exercise/{exerciseId}/undoSet")
+    public String undoSet(@PathVariable Long workoutId,
+                          @PathVariable Long exerciseId,
+                          @RequestParam Long setId) {
+        workoutService.undoSet(workoutId, exerciseId, setId);
+        return "redirect:/workouts/" + workoutId;
+    }
+
+
 }
