@@ -72,16 +72,16 @@
                                    min="0" step="1" placeholder="60"  style="font-size: 1.5rem"/>
                         </td>
                         <td>
-                            <button type="button" style="background-color: #bd2130">Remove</button>
+                            <button type="button" class="remove-set-btn" style="background-color: #bd2130">Remove</button>
                         </td>
                     </tr>
                     </tbody>
                 </table>
-                <button type="button" style="background-color: #0b0b0b">Add set</button>
-                <button type="button" style="background-color: #bd2130">Remove exercise</button>
+                <button type="button" class="add-set-btn" style="background-color: #0b0b0b">Add set</button>
+                <button type="button" class="remove-exercise-btn" style="background-color: #bd2130">Remove exercise</button>
             </div>
         </div>
-        <button type="button" id="add-exercise-btn" class="btn btn-secondary mb-3">Add exercise</button>
+        <button type="button" id="add-exercise-btn" class="btn">Add exercise</button>
         <div class="d-flex justify-content-end gap-2">
             <br>
             <br>
@@ -159,9 +159,12 @@
         }
         // Добавяне на серия (set)
         if (e.target.classList.contains('add-set-btn')) {
-            const tbody = e.target.closest('.exercise-item').querySelector('tbody');
+            const exerciseItem = e.target.closest('.exercise-item');
+            const tbody = exerciseItem.querySelector('tbody');
             const firstRow = tbody.querySelector('tr');
             const newRow = firstRow.cloneNode(true);
+
+            // Изчисти стойностите на новия ред
             newRow.querySelectorAll('input').forEach(i => i.value = '');
             tbody.appendChild(newRow);
             updateIndices();

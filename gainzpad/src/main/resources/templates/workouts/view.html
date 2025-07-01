@@ -4,7 +4,7 @@
 <body class="text-white" style="background-image: url('/img/gallery/loginbg.jpg'); background-size: auto; background-position: center; background-repeat: no-repeat">
 <div class="container mt-4">
   <h1 th:text="${workout.workoutName}" class="text-white">Workout Name</h1>
-<br>
+  <br>
   <div th:if="${error}" class="alert alert-danger" th:text="${error}" style="font-size: 1.5rem"></div>
 
   <div id="timer"
@@ -23,7 +23,6 @@
     <form th:action="@{/workouts/finish/{id}(id=${workout.id})}" method="post" th:if="${workout.startTime != null and workout.endTime == null}">
       <button type="submit" class="btn ">Finish</button>
     </form>
-<!--    <span th:if="${workout.endTime != null}" class="badge bg-success" style="font-size: 1.5rem">Routine is finished.</span>-->
   </div>
 
   <table class="table table-bordered" style="font-size: 1.6rem;background-color: #232323">
@@ -60,7 +59,6 @@
                     th:if="${set.completed}"></span>
             </td>
             <td>
-
               <input type="hidden" name="restTime" th:value="${set.restTime != null ? set.restTime : 60}" />
               <button type="submit"  style="background-color: #1c7430"
                       th:if="${!set.completed and workout.startTime != null and workout.endTime == null}">
@@ -74,7 +72,7 @@
           <input type="hidden" name="setId" th:value="${set.id}" />
           <button type="submit" style="background-color: #ffae42; color: #232323;">Undo</button>
         </form>
-        <form th:action="@{/workouts/{workoutId}/exercise/{exerciseId}/removeSet(workoutId=${workout.id},exerciseId=${we.exerciseId})}" method="post"
+        <form th:action="@{/workouts/{workoutId}/exercise/{exerciseId}/removeSet(workoutId=${workout.id},exerciseId=${we.id})}" method="post"
               style="display:inline;">
           <input type="hidden" name="setId" th:value="${set.id}" />
           <button type="submit" style="background-color: #bd2130"
@@ -86,7 +84,7 @@
       </th:block>
       <tr th:if="${workout.startTime != null and workout.endTime == null}">
         <td colspan="7">
-          <form th:action="@{/workouts/{workoutId}/exercise/{exerciseId}/addSet(workoutId=${workout.id},exerciseId=${we.exerciseId})}" method="post">
+          <form th:action="@{/workouts/{workoutId}/exercise/{exerciseId}/addSet(workoutId=${workout.id},exerciseId=${we.id})}" method="post">
             <button type="submit" style="background-color: #0b0b0b">Add set</button>
           </form>
         </td>
