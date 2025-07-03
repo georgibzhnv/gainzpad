@@ -18,6 +18,12 @@
                     <div class="main-menu f-right d-none d-lg-block">
                         <nav>
                             <ul id="navigation" class="d-flex navbar-links">
+                                <li>
+                                                <span class="navbar-text text-white" th:if="${username}">
+                                                    <i class="fa fa-user"></i>
+                                                <i style="color:#FFFFFF;font-size: 1.3rem" th:text="${username}"></i>
+                                                </span>
+                                </li>
                                 <li >
                                     <a th:href="@{/trainers-workouts}" class="text-white" style="padding: 39px 15px;font:20px Teko, sans-serif"  >Trainers' Routines</a>
                                 </li>

@@ -67,6 +67,12 @@
                                 <div class="main-menu f-right d-none d-lg-block">
                                     <nav>
                                         <ul id="navigation">
+                                            <li>
+                                                <span class="navbar-text text-white" th:if="${username}">
+                                                    <i class="fa fa-user"></i>
+                                                <i style="color:#FFFFFF;font-size: 1.3rem" th:text="${username}"></i>
+                                                </span>
+                                            </li>
                                             <li><a href="trainers-workouts">Trainers' Routines</a></li>
                                             <li><a href="workouts">My Workouts</a></li>
                                             <li><a href="tracker">Calorie Tracker</a></li>

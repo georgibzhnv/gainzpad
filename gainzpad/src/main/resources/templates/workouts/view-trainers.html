@@ -3,6 +3,19 @@
 <head th:replace="~{fragments/head :: head}"></head>
 <body class="text-white" style="background-image: url('/img/gallery/loginbg.jpg'); background-size: auto; background-position: center; background-repeat: no-repeat">
 
+<!-- ? Preloader Start -->
+<div id="preloader-active">
+    <div class="preloader d-flex align-items-center justify-content-center">
+        <div class="preloader-inner position-relative">
+            <div class="preloader-circle"></div>
+            <div class="preloader-img pere-text">
+                <img src="/img/logo/loder.png" alt="">
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Preloader Start -->
+
 <div th:replace="~{fragments/navbar :: navbar}"></div>
 
 <div class="container mt-4" >
