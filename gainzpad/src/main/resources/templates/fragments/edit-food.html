@@ -10,20 +10,27 @@
                         <h1 class="modal-title text-white" id="editModalLabel">Edit food</h1>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
-                    <div class="modal-body">
+                    <div class="modal-body" style="font-size:1.5rem">
                         <input type="hidden" name="id" id="editId"/>
+                        <label for="editCalories" class="form-label text-white">Food Name</label>
                         <input type="text" name="foodName" id="editFoodName" class="form-control mb-2" style="font-size:1.5rem" placeholder="Food"/>
+                        <label for="editCalories" class="form-label text-white">Calories</label>
                         <input type="number" name="calories" id="editCalories" class="form-control mb-2" style="font-size:1.5rem" placeholder="Calories (100g)"/>
+                        <label for="editCarbs" class="form-label text-white">Carbs</label>
                         <input type="number" name="carbs" id="editCarbs" class="form-control mb-2" style="font-size:1.5rem" placeholder="Carbs (100g)"/>
+                        <label for="editProtein" class="form-label text-white">Protein</label>
                         <input type="number" name="protein" id="editProtein" class="form-control mb-2" style="font-size:1.5rem" placeholder="Protein (100g)"/>
+                        <label for="editFats" class="form-label text-white">Fats</label>
                         <input type="number" name="fats" id="editFats" class="form-control mb-2" style="font-size:1.5rem" placeholder="Fats (100g)"/>
+                        <label for="editWeightInGrams" class="form-label text-white">Weight (g)</label>
                         <input type="number" name="weightInGrams" id="editWeightInGrams" class="form-control mb-2" style="font-size:1.5rem" placeholder="Consumed (g)"/>
-                        <select name="mealTime" id="editMealTime" class="form-control mb-2" style="font-size:1.5rem">
-                            <option value="BREAKFAST" class="text-black">Breakfast</option>
-                            <option value="LUNCH" class="text-black">Lunch</option>
-                            <option value="DINNER" class="text-black">Dinner</option>
-                            <option value="SNACK" class="text-black">Snack</option>
-                        </select>
+
+<!--                        <select name="mealTime" id="editMealTime" class="form-control mb-2" style="font-size:1.5rem">-->
+<!--                            <option value="BREAKFAST" class="text-black">Breakfast</option>-->
+<!--                            <option value="LUNCH" class="text-black">Lunch</option>-->
+<!--                            <option value="DINNER" class="text-black">Dinner</option>-->
+<!--                            <option value="SNACK" class="text-black">Snack</option>-->
+<!--                        </select>-->
                     </div>
                     <div class="modal-footer">
                         <button type="submit" class="btn">Save</button>

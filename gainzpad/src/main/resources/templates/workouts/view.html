@@ -62,7 +62,7 @@
               <input type="number" name="reps" th:value="${set.reps}" min="0" class="form-control form-control-sm"  style="font-size: 1.5rem"/>
             </td>
             <td>
-              <input type="number" name="weight" th:value="${set.weight}" min="0" class="form-control form-control-sm" style="font-size: 1.5rem"/>
+              <input type="number" name="weight" step=0.1 th:value="${set.weight}" min="0" class="form-control form-control-sm" style="font-size: 1.5rem"/>
             </td>
             <td th:text="${set.restTime != null ? set.restTime : ''}"></td>
             <td>
@@ -148,7 +148,7 @@
   });
 
   function updateAllRestTimers() {
-    document.querySelectorAll('.rest-timer').forEach(function(el) {
+    document.querySelectorAll('.rest-timer').forEach(function (el) {
       var duration = parseInt(el.getAttribute('data-rest-duration')) || 60000;
       if (!el.__started) el.__started = Date.now();
       var elapsed = Date.now() - el.__started;
@@ -160,8 +160,22 @@
       if (remaining === 0) el.innerHTML = " <b style=\"color: #fff;\">Rest:</b> Done!";
     });
   }
+
   setInterval(updateAllRestTimers, 1000);
   updateAllRestTimers();
+
+    // Автоматично сменя запетая с точка във всички полета тип number при въвеждане
+    document.addEventListener('DOMContentLoaded', function() {
+    document.querySelectorAll('input[type="number"]').forEach(function (input) {
+      input.addEventListener('input', function () {
+        // Само ако има запетая, я сменя с точка
+        if (this.value.includes(',')) {
+          this.value = this.value.replace(',', '.');
+        }
+      });
+    });
+  });
+
 </script>
 </body>
 </html>

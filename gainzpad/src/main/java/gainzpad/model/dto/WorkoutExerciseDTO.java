@@ -9,7 +9,7 @@ public class WorkoutExerciseDTO {
 
     private Long id;
     private Long workoutId;
-    @NotNull(message = "exerciseId не може да е null")
+    @NotNull(message = "exerciseId cannot be null")
     private Long exerciseId;
 
     private String newExerciseName;

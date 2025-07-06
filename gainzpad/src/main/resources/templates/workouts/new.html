@@ -57,7 +57,7 @@
                 <table class="table table-bordered mb-2 text-white" style="font-size: 1.5rem">
                     <thead>
                     <tr>
-                        <th>#</th>
+<!--                        <th>#</th>-->
                         <th>Reps</th>
                         <th>Weight (kg)</th>
                         <th>Rest (sec)</th>
@@ -66,7 +66,7 @@
                     </thead>
                     <tbody>
                     <tr th:each="set, setStat : *{exercises[__${stat.index}__].sets}">
-                        <td th:text="${setStat.index + 1}"></td>
+<!--                        <td th:text="${setStat.index + 1}"></td>-->
                         <td>
                             <input type="number"
                                    th:field="*{exercises[__${stat.index}__].sets[__${setStat.index}__].reps}"
